@@ -47,16 +47,28 @@ const displayRows = computed(() => {
   return out
 })
 
-// Etiquetas distintas que tuvo esta opción a lo largo de los años, en orden de aparición.
+// Minúsculas, sin acentos, sin puntuación y con espacios colapsados.
+function normalizeLabel(label) {
+  const key = label
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+
+  return key || label.trim()
+}
+
+// Etiquetas distintas que tuvo esta opción a lo largo de los años, en orden de
+// aparición. Se comparan normalizadas, pero se muestra la primera forma vista.
 function distinctLabels(entry) {
-  const seen = []
+  const seen = new Map()
   for (const v of Object.values(entry.years)) {
-    if (v && v.label && !seen.includes(v.label)) {
-      // TODO: Normalizar texto de respuesta (ej. "NO" debería ser lo mismo que "No").
-      seen.push(v.label)
-    }
+    if (!v || !v.label) continue
+    const key = normalizeLabel(v.label)
+    if (!seen.has(key)) seen.set(key, v.label)
   }
-  return seen
+  return [...seen.values()]
 }
 
 // Tooltip de los distintos tipos de respuesta (ej. "Hombre | Masculino").
