@@ -172,7 +172,8 @@ Por cada ola verifica, y **aborta el build** si algo falla:
    entre años — ver [conceptos.md](conceptos.md).
 4. Reconstruir: `.venv/bin/python db/build_db.py`.
 5. Correr tests: `.venv/bin/pytest`.
-6. Commitear la BD reconstruida (Render la sirve desde el archivo commiteado).
+6. Commitear los insumos (CSVs de la ola, `build_db.py`, CSVs de conceptos), nunca
+   el `.duckdb`: Render reconstruye la BD en su build (ver [desarrollo.md](desarrollo.md)).
 
 Ver también: [arquitectura.md](arquitectura.md) · [conceptos.md](conceptos.md)
 · [desarrollo.md](desarrollo.md).
