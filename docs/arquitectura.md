@@ -29,7 +29,7 @@ estáticos, así que todo es un solo servicio.
 | Frontend       | Vue 3 · Vite · Tailwind CSS v4                      |
 | Gráficas       | Chart.js                                            |
 | Tests          | pytest — 138 tests                                  |
-| Deploy         | Render.com (`render.yaml`)                          |
+| Deploy         | Render.com (dashboard; `render.yaml` es referencia) |
 
 ## Esquema de datos (EAV multi-año)
 
@@ -56,6 +56,12 @@ La etiqueta legible de un `option_id` vive en `options`. Los filtros
 demográficos viven en `respondent_attributes`, donde `attribute` es un nombre
 amigable (`sexo`) keyeado a un `question_id` de la encuesta, y `value` es el
 `option_id` cuya etiqueta está en `options`.
+
+Un filtro puede ser un atributo (`{"attribute": "sexo", "value": 1}`, o
+`city_id`) o **cualquier pregunta categórica** (`{"question": "p52", "value":
+[1, 2]}`), que se resuelve con un JOIN sobre `answers`. Los atributos son, en el
+fondo, preguntas con nombre amigable, así que entre olas las dos formas se
+traducen igual (ver *Filtros entre olas* abajo).
 
 ### Por qué `answers` no tiene PK ni FK
 
@@ -172,14 +178,36 @@ Helpers compartidos que arman el SQL y las tablas:
 pregunta y reutiliza el camino plano en cada ola, alineando opciones por
 `concept_option_id` (ver [conceptos.md](conceptos.md)).
 
+### Filtros entre olas (`services/dimension_service.py`)
+
+Los filtros llegan en la codificación de la ola base y se reexpresan en cada ola:
+el código baja a su `concept_option_id` y vuelve a subir en la pregunta
+equivalente de la ola destino (la que respalda el atributo en esa ola, o el
+miembro del mismo concepto si es un filtro por pregunta). Un `concept_option_id`
+puede agrupar varios códigos de una ola (los "Otro"), y el filtro los trae
+todos, también en la ola base.
+
+La traducción es **estricta**: si un valor no tiene equivalente en alguna ola,
+la consulta da 400 nombrando las olas que faltan. Antes se aplicaba el código
+crudo, lo que filtraba otra categoría en silencio (`modo_transporte` 2025 no
+tiene opciones canónicas). La edad viaja tal cual (es numérica) y `city_id`
+también (los municipios no se recodifican).
+
+Todo sale de tres catálogos cacheados (preguntas, opciones armonizadas y
+atributo → pregunta por ola; ~15k filas), así que validar un filtro son
+búsquedas en diccionarios, no consultas. `GET /api/dimensions` usa los mismos
+catálogos para decirle a la UI qué atributos y preguntas cubren todas las olas
+de la pregunta consultada.
+
 ## Decisiones de diseño
 
 - **DuckDB embebida y de solo lectura.** Los datos son referencia fija, no
-  transaccional. Columnar → escaneos agregados rápidos sobre 1.1M filas. Se
-  versiona como **un archivo** commiteado; cada conexión abre `read_only=True`.
+  transaccional. Columnar → escaneos agregados rápidos sobre 1.1M filas. Es
+  **un archivo** que no se versiona: se reconstruye en el build a partir de los
+  insumos versionados; cada conexión abre `read_only=True`.
 - **SQL generado con validación por allowlist, no ORM.** Las consultas se
   componen dinámicamente. Cada identificador del usuario (`question_id`,
-  `group_by`, cada `attribute` de filtro) se valida contra una allowlist
+  `group_by`, cada `attribute` o `question` de filtro) se valida contra una allowlist
   derivada de la BD **antes** de construir cualquier string SQL; los valores son
   enteros coaccionados por Pydantic. SQL dinámico con superficie de
   inyección **cero**, y el SQL generado se devuelve al cliente (transparencia).
@@ -214,6 +242,7 @@ pregunta y reutiliza el camino plano en cada ola, alineando opciones por
 | GET    | `/api/attributes`  | Atributos de filtro + etiquetas         |
 | GET    | `/api/cities`      | Municipios distintos                    |
 | GET    | `/api/waves`       | Olas disponibles (marca la default)     |
+| GET    | `/api/dimensions`  | Por qué se puede filtrar una pregunta (`mode=wave\|year`) |
 | GET    | `/api/recodes`     | Definiciones de recode                  |
 | GET    | `/api/presets`     | Recetas de análisis (group_by+filtros)  |
 | POST   | `/api/query`       | Corre una consulta → JSON               |

@@ -31,6 +31,35 @@ def test_cities(client):
     assert any(c["name"] == "Monterrey" for c in data)
 
 
+def test_dimensions_year_mode_respects_coverage(client):
+    r = client.get("/api/dimensions?question_id=p114&wave=2025&mode=year")
+    assert r.status_code == 200
+    body = r.json()
+    assert {"2021", "2022", "2023", "2024", "2025"} <= set(body["member_waves"])
+    attributes = {a["attribute"]: a for a in body["attributes"]}
+    assert attributes["sexo"]["available"]
+    assert not attributes["modo_transporte"]["available"]
+    assert "2021" in attributes["modo_transporte"]["missing_waves"]
+    # sólo preguntas presentes en todas las olas, nunca la consultada
+    assert body["questions"]
+    assert all(q["q_id"] != "p114" for q in body["questions"])
+
+
+def test_dimensions_wave_mode_lists_all_categorical(client):
+    body = client.get("/api/dimensions?question_id=p114&wave=2025").json()
+    assert body["mode"] == "wave"
+    assert all(a["available"] for a in body["attributes"])
+    year_body = client.get(
+        "/api/dimensions?question_id=p114&wave=2025&mode=year"
+    ).json()
+    assert len(body["questions"]) > len(year_body["questions"])
+
+
+def test_dimensions_rejects_bad_mode(client):
+    r = client.get("/api/dimensions?question_id=p114&mode=x")
+    assert r.status_code == 400
+
+
 def test_recodes(client):
     r = client.get("/api/recodes")
     assert r.status_code == 200

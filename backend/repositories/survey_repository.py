@@ -168,3 +168,28 @@ def fetch_question_concept_id(conn, wave: str, question_id: str) -> str | None:
         [wave, question_id],
     ).fetchone()
     return row[0] if row else None
+
+
+def fetch_all_questions_with_concept(conn) -> list[tuple]:
+    """(wave_id, q_id, q_type, concept_id, q_text) de TODAS las olas.
+
+    El catálogo de filtros entre olas lo necesita completo (~2,600 filas):
+    resolver la pregunta equivalente de cada ola con un lookup por filtro
+    haría una consulta de una fila por (ola, filtro).
+    """
+    return conn.execute(
+        "SELECT wave_id, q_id, q_type, concept_id, q_text FROM questions "
+        "ORDER BY wave_id, q_id"
+    ).fetchall()
+
+
+def fetch_all_option_concepts(conn) -> list[tuple]:
+    """(wave_id, question_id, option_id, concept_option_id) de las opciones
+    armonizadas de TODAS las olas (~12,000 filas, se cachean una vez)."""
+    return conn.execute(
+        """
+        SELECT wave_id, question_id, option_id, concept_option_id FROM options
+        WHERE concept_option_id IS NOT NULL
+        ORDER BY wave_id, question_id, option_id
+        """
+    ).fetchall()

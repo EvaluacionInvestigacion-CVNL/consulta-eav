@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from services import catalog_service, wave_service
+from services import catalog_service, dimension_service, wave_service
 
 router = APIRouter(prefix="/api", tags=["catálogo"])
 
@@ -17,6 +17,15 @@ def list_questions(wave: str | None = None):
 def list_attributes(wave: str | None = None):
     """Atributos demográficos de una ola con sus valores posibles."""
     return catalog_service.get_attributes(wave)
+
+
+@router.get("/dimensions")
+def list_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"):
+    """Atributos y preguntas por los que se puede filtrar `question_id`.
+
+    `mode=year` deja sólo lo que existe en todas las olas de la pregunta.
+    """
+    return dimension_service.get_dimensions(question_id, wave, mode)
 
 
 @router.get("/recodes")

@@ -5,16 +5,11 @@ Sólo funciona para preguntas con `concept_id` poblado.
 """
 
 from dataclasses import dataclass
-from functools import lru_cache
-
 from fastapi import HTTPException
 
 from db_runtime import get_conn
-from repositories import (
-    concepts_repository,
-    responses_repository,
-    survey_repository,
-)
+from repositories import concepts_repository, survey_repository
+from services.dimension_service import translate_filters_across_waves
 from services.query.models import QueryRequest
 from services.query.pivot import format_numeric_label
 from services.query.sentinels import YEAR_VIEW_SENTINEL_CODES, is_sentinel_label
@@ -90,6 +85,7 @@ def compare_across_waves(request: QueryRequest, run_flat_query) -> dict:
 
 # ---------------------------------------------------------------------------
 # Carga: concepto, miembros, catálogo canónico y filtros traducidos
+# (la traducción de filtros vive en `services.dimension_service`)
 # ---------------------------------------------------------------------------
 
 
@@ -143,87 +139,10 @@ def _load_comparison(conn, request: QueryRequest) -> ConceptComparison:
         wording_by_wave=wording_by_wave,
         canonical_options=concepts_repository.fetch_concept_options(conn, concept_id),
         canonical_option_by_wave_option=canonical_option_by_wave_option,
-        filters_by_wave=_translate_filters_per_wave(
-            request.filters, base_wave, member_waves
+        filters_by_wave=translate_filters_across_waves(
+            request.filters, base_wave, member_waves, concept_id
         ),
     )
-
-
-@lru_cache(maxsize=1)
-def _attribute_option_maps() -> tuple[dict, dict]:
-    """Los dos sentidos de (ola, atributo, código) ↔ opción canónica.
-
-    Traducir un filtro costaba dos consultas de una fila por (ola, filtro,
-    valor): un filtro de edad de 18 a 79 disparaba ~250 de ellas antes de tocar
-    los datos. El catálogo completo de los atributos son ~600 filas, así que se
-    trae entero una vez y se cachea como el resto de los metadatos — la base es
-    un archivo de sólo lectura que no muta en runtime.
-    """
-    with get_conn() as conn:
-        rows = responses_repository.fetch_attribute_option_map(conn)
-    canonical_by_option, option_by_canonical = {}, {}
-    for wave, attribute, option_id, concept_option_id in rows:
-        canonical_by_option[(wave, attribute, option_id)] = concept_option_id
-        if concept_option_id is not None:
-            # `setdefault` + el ORDER BY del repo: si dos códigos de una ola
-            # apuntan a la misma opción canónica, gana siempre el menor.
-            option_by_canonical.setdefault(
-                (wave, attribute, concept_option_id), option_id
-            )
-    return canonical_by_option, option_by_canonical
-
-
-def _option_key(value):
-    """`options.option_id` es BIGINT; un filtro puede llegar como "1" desde JSON.
-
-    Antes lo resolvía el cast implícito de DuckDB al comparar el parámetro; con
-    la búsqueda en memoria hay que normalizar aquí o el valor no se traduciría.
-    """
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return value
-
-
-def _translate_filters_per_wave(
-    filters: list[dict], base_wave: str, member_waves: list[str]
-) -> dict[str, list[dict]]:
-    """Reexpresa los filtros en la codificación de cada ola.
-
-    Los valores llegan en la codificación de la ola base. Si un atributo se
-    recodificó entre años (sexo 1/2 en 2022 vs 0/1 en 2025), aplicar el valor
-    crudo en otra ola filtraría la categoría equivocada o daría cero filas, así
-    que se baja a la opción canónica y se vuelve a subir en la ola destino.
-    """
-    canonical_by_option, option_by_canonical = _attribute_option_maps()
-
-    filters_by_wave = {}
-    for wave in member_waves:
-        translated_filters = []
-        for filter_spec in filters:
-            attribute = filter_spec["attribute"]
-            # `city_id` no vive en el catálogo de opciones y no se recodifica.
-            if attribute == "city_id" or wave == base_wave:
-                translated_filters.append(filter_spec)
-                continue
-            raw_value = filter_spec["value"]
-            values = raw_value if isinstance(raw_value, list) else [raw_value]
-            translated_values = []
-            for value in values:
-                canonical = canonical_by_option.get(
-                    (base_wave, attribute, _option_key(value))
-                )
-                in_wave = (
-                    option_by_canonical.get((wave, attribute, canonical))
-                    if canonical is not None
-                    else None
-                )
-                translated_values.append(in_wave if in_wave is not None else value)
-            translated_filters.append(
-                {"attribute": attribute, "value": translated_values}
-            )
-        filters_by_wave[wave] = translated_filters
-    return filters_by_wave
 
 
 def _sql_listing(comparison: ConceptComparison, result_by_wave: dict) -> str:

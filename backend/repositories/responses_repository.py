@@ -44,23 +44,13 @@ def fetch_city_ids(conn, wave: str) -> list[int]:
     return [r[0] for r in rows]
 
 
-def fetch_attribute_option_map(conn) -> list[tuple]:
-    """(wave_id, attribute, option_id, concept_option_id) de TODAS las olas.
-
-    El catálogo entero de los atributos de filtro, en una sola consulta. La
-    vista Año lo necesita completo para traducir filtros entre olas: resolverlo
-    con un lookup por (ola, atributo, valor) hacía cientos de consultas de una
-    fila cuando el filtro traía muchos valores.
-    """
+def fetch_attribute_questions(conn) -> list[tuple]:
+    """(wave_id, attribute, question_id): qué pregunta respalda cada atributo
+    amigable en cada ola (`sexo` → `cp2` en 2025, `genero` en 2016)."""
     return conn.execute(
         """
-        SELECT ra.wave_id, ra.attribute, o.option_id, o.concept_option_id
-        FROM (
-            SELECT DISTINCT wave_id, attribute, question_id
-            FROM respondent_attributes
-        ) ra
-        JOIN options o ON o.wave_id = ra.wave_id
-            AND o.question_id = ra.question_id
-        ORDER BY ra.wave_id, ra.attribute, o.option_id
+        SELECT DISTINCT wave_id, attribute, question_id
+        FROM respondent_attributes
+        ORDER BY wave_id, attribute
         """
     ).fetchall()

@@ -132,7 +132,7 @@ deferred imports and no load-order significance:
 
 ```
 routers/       HTTP only: thin endpoints, zero logic   (catalog, query, health)
-services/      reglas, orquestación y los lru_cache    (catalog_service, wave_service, ordering)
+services/      reglas, orquestación y los lru_cache    (catalog_service, wave_service, dimension_service, ordering)
 services/query/  el motor de consultas (ver abajo)
 services/chat/   el modo IA (ver abajo)
 repositories/  el único lugar con texto SQL FIJO       (survey, responses, concepts, answers)
@@ -194,8 +194,16 @@ that bucket an existing attribute's option codes — served by `/api/recodes`,
 compiled by `_recode_case_sql`), and `PRESETS` (canned breakdowns the sidebar
 offers). New buckets/orderings belong here, not in query code.
 
+Filters are `{"attribute": …}` (a friendly attribute or `city_id`) or
+`{"question": <any categorical q_id>}` (an extra JOIN on `answers`). In the year
+view `services/dimension_service.py` translates them per wave through
+`concept_option_id` and is **strict**: a value with no equivalent in some wave
+is a 400 naming the missing waves, never a silent fallback to the raw code.
+`GET /api/dimensions?question_id=…&mode=year` tells the UI which attributes and
+questions cover every wave of the selected question.
+
 Every user-supplied identifier (`question_id`, `group_by`, filter
-`attribute`s) is validated against an allowlist derived from the DB itself
+`attribute`s and `question`s) is validated against an allowlist derived from the DB itself
 before any SQL string is built — this is a hand-rolled safe-SQL-builder
 pattern, not an ORM, and it's why there's no parametrization gap to watch for
 when extending query params. `initial_only` (default true) restricts to

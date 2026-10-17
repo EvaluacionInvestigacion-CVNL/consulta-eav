@@ -60,7 +60,7 @@ def recode_bucket_case_sql(recode_key: str, value_column: str) -> str:
 def answer_scope_sql(
     wave,
     question_id,
-    attribute_joins,
+    filter_joins,
     initial_respondent_filter,
     city_filter_sql,
     extra_where="",
@@ -86,7 +86,7 @@ def answer_scope_sql(
     return f"""
         FROM answers a
         INNER JOIN responses r ON r.respondent_id = a.respondent_id AND r.wave_id = '{wave}'{option_join}
-        {attribute_joins}
+        {filter_joins}
         WHERE a.wave_id = '{wave}' AND a.question_id = '{question_id}'
           {extra_where}
           {initial_respondent_filter}
@@ -105,6 +105,20 @@ def attribute_join_sql(alias: str, wave: str, attribute: str, value) -> str:
                 AND {alias}.wave_id = '{wave}'
                 AND {alias}.attribute = '{attribute}'
                 AND {value_match_clause(f"{alias}.value", value)}"""
+
+
+def question_filter_join_sql(alias: str, wave: str, question_id: str, value) -> str:
+    """INNER JOIN que restringe a quienes dieron cierta respuesta a otra pregunta.
+
+    Mismo patrón que `attribute_join_sql`, pero sobre `answers`. Ninguna pregunta
+    guarda más de un renglón por respondiente, así que el JOIN no duplica filas.
+    """
+    return f"""
+            INNER JOIN answers {alias}
+                ON {alias}.respondent_id = r.respondent_id
+                AND {alias}.wave_id = '{wave}'
+                AND {alias}.question_id = '{question_id}'
+                AND {value_match_clause(f"{alias}.option_id", value)}"""
 
 
 def group_expression_sql(group_by: str, wave: str) -> str:

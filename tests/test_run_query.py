@@ -273,6 +273,136 @@ def test_filter_reduces_total(categorical_qid):
     assert 0 < filtered <= full
 
 
+# ── filtros por pregunta ────────────────────────────────────────────────────
+# `p114` es categórica y existe en todas las olas; `cp2` es la pregunta que respalda
+# el atributo `sexo` en 2025, así que filtrar por una u otro debe ser idéntico.
+YEAR_QID = "p114"
+
+
+def _bases(result):
+    return [(b["year"], b["base"]) for b in result["year_bases"]]
+
+
+def test_question_filter_equals_attribute_filter():
+    by_attribute = run_query(
+        QueryRequest(question_id=YEAR_QID, filters=[{"attribute": "sexo", "value": 1}])
+    )
+    by_question = run_query(
+        QueryRequest(question_id=YEAR_QID, filters=[{"question": "cp2", "value": [1]}])
+    )
+    assert by_question["total_respondents"] == by_attribute["total_respondents"] > 0
+    assert by_question["rows"] == by_attribute["rows"]
+
+
+def test_question_filter_matches_crosstab_column():
+    """Filtrar por P=v da la misma base que la columna v del cross-tab por P."""
+    crosstab = run_query(QueryRequest(question_id=YEAR_QID, group_by="cp2"))
+    filtered = run_query(
+        QueryRequest(question_id=YEAR_QID, filters=[{"question": "cp2", "value": [1]}])
+    )
+    counts = crosstab["counts"]
+    total_row = next(row for row in counts["rows"] if row[0] == "Total")
+    mujer = total_row[counts["columns"].index("Mujer")]
+    assert sum(row[2] for row in filtered["rows"]) == pytest.approx(mujer, abs=5)
+
+
+@pytest.mark.parametrize(
+    "filter_spec",
+    [
+        {"question": "p12' OR '1'='1", "value": [1]},  # inyección
+        {"question": "cp4_1", "value": [30]},  # numérica (edad)
+        {"question": YEAR_QID, "value": [1]},  # la pregunta misma
+        {"attribute": "sexo", "question": "cp2", "value": 1},  # ambas llaves
+        {"value": 1},  # ninguna
+        {"question": "cp2"},  # sin valor
+    ],
+)
+def test_invalid_question_filter_raises_400(filter_spec):
+    with pytest.raises(HTTPException) as exc:
+        run_query(QueryRequest(question_id=YEAR_QID, filters=[filter_spec]))
+    assert exc.value.status_code == 400
+
+
+def test_attribute_missing_in_wave_raises_400():
+    """`modo_transporte` no existe en 2021: antes daba cero filas en silencio."""
+    with pytest.raises(HTTPException) as exc:
+        run_query(
+            QueryRequest(
+                question_id="p1",
+                wave_id="2021",
+                filters=[{"attribute": "modo_transporte", "value": [1]}],
+            )
+        )
+    assert exc.value.status_code == 400
+
+
+def test_year_filter_without_equivalence_raises_400():
+    """Regresión: `modo_transporte` 2025 no tiene opciones canónicas y antes se
+    aplicaba el código crudo en las demás olas, filtrando otra categoría."""
+    with pytest.raises(HTTPException) as exc:
+        run_query(
+            QueryRequest(
+                question_id=YEAR_QID,
+                group_by="year",
+                filters=[{"attribute": "modo_transporte", "value": [1]}],
+            )
+        )
+    assert exc.value.status_code == 400
+    assert "2024" in exc.value.detail
+
+
+def test_year_question_filter_equals_attribute_filter():
+    by_attribute = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            group_by="year",
+            filters=[{"attribute": "sexo", "value": 1}],
+        )
+    )
+    by_question = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            group_by="year",
+            filters=[{"question": "cp2", "value": [1]}],
+        )
+    )
+    assert _bases(by_question) == _bases(by_attribute)
+    assert len(_bases(by_question)) >= 5
+
+
+def test_year_question_filter_uses_each_waves_question_id():
+    """El filtro llega con el q_id de 2025 y en cada ola debe aplicarse sobre la
+    pregunta equivalente, que no siempre se llama igual (`cp2` es `cp2_1` en
+    2021 y 2022)."""
+    result = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            group_by="year",
+            filters=[{"question": "cp2", "value": [1]}],
+        )
+    )
+    assert "question_id = 'cp2_1'" in result["sql"]
+    assert "question_id = 'cp2'" in result["sql"]
+    assert all(base > 0 for _, base in _bases(result))
+
+
+def test_year_question_filter_without_concept_raises_400():
+    with get_conn() as conn:
+        orphan = conn.execute(
+            "SELECT q_id FROM questions WHERE wave_id = '2025' "
+            "AND q_type != 'numerica' AND concept_id IS NULL LIMIT 1"
+        ).fetchone()[0]
+    with pytest.raises(HTTPException) as exc:
+        run_query(
+            QueryRequest(
+                question_id=YEAR_QID,
+                group_by="year",
+                filters=[{"question": orphan, "value": [1]}],
+            )
+        )
+    assert exc.value.status_code == 400
+
+
 # ── year comparison: transparencia del crudo por año ────────────────────────
 def test_year_option_map_exposes_raw_per_year():
     """La comparación por año alinea por opción canónica, pero `year_option_map`

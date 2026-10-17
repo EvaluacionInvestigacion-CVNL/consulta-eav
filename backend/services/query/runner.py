@@ -24,6 +24,7 @@ from db_runtime import get_conn
 from metadata import ATTRIBUTE_TO_ORDER_KEY, DESIRED_ORDERS, RECODES
 from repositories import survey_repository
 from services.catalog_service import get_attributes
+from services.dimension_service import CITY_ATTRIBUTE, filter_dimension
 from services.ordering import order_by_desired
 from services.query import year_comparison
 from services.query.models import QueryRequest
@@ -37,6 +38,7 @@ from services.query.sql_builder import (
     answer_scope_sql,
     attribute_join_sql,
     group_expression_sql,
+    question_filter_join_sql,
     value_match_clause,
 )
 from services.wave_service import categorical_question_ids, default_wave, wave_ids
@@ -54,7 +56,7 @@ class QueryContext:
     wave: str
     question_type: str
     question_text: str
-    attribute_joins: str
+    filter_joins: str
     city_filter: dict | None
     city_filter_sql: str
     sentinel_exclusion_sql: str
@@ -105,7 +107,7 @@ class QueryContext:
         return answer_scope_sql(
             self.wave,
             self.question_id,
-            self.attribute_joins,
+            self.filter_joins,
             self.initial_respondent_filter,
             self.city_filter_sql,
             extra_where=extra_where,
@@ -148,13 +150,37 @@ def _require_question(conn, wave: str, question_id: str) -> tuple[str, str]:
     return question
 
 
-def _validate_filters(filters: list[dict], valid_attributes: set[str]) -> None:
-    """Rechaza cualquier atributo fuera de la allowlist (guard de inyección)."""
-    for filter_spec in filters:
-        attribute = filter_spec.get("attribute")
-        if attribute != "city_id" and attribute not in valid_attributes:
+def _validate_filters(
+    conn,
+    request: QueryRequest,
+    wave: str,
+    valid_attributes: set[str],
+    categorical_qids: frozenset,
+) -> None:
+    """Rechaza cualquier atributo o pregunta fuera de la allowlist (guard de
+    inyección) y los filtros que no tienen sentido en esta ola."""
+    for filter_spec in request.filters:
+        kind, name = filter_dimension(filter_spec)
+        if kind == "attribute":
+            if name != CITY_ATTRIBUTE and name not in valid_attributes:
+                raise HTTPException(
+                    status_code=400, detail=f"Unknown filter attribute: {name}"
+                )
+            continue
+        if name not in categorical_qids:
+            # Igual que en `group_by`: una numérica merece un mensaje claro.
+            if survey_repository.question_is_numeric(conn, wave, name):
+                raise HTTPException(
+                    status_code=400,
+                    detail="No se puede filtrar por una pregunta numérica.",
+                )
             raise HTTPException(
-                status_code=400, detail=f"Unknown filter attribute: {attribute}"
+                status_code=400, detail=f"Unknown filter question: {name}"
+            )
+        if name == request.question_id:
+            raise HTTPException(
+                status_code=400,
+                detail="No se puede filtrar una pregunta por sí misma.",
             )
 
 
@@ -196,22 +222,28 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
     wave = _resolve_wave(request)
     question_type, question_text = _require_question(conn, wave, request.question_id)
 
-    valid_attributes = {attribute["attribute"] for attribute in get_attributes()}
-    _validate_filters(request.filters, valid_attributes)
+    # La allowlist es la de ESTA ola: un atributo que no existe en ella (p. ej.
+    # `modo_transporte` en 2016) daría cero filas en vez de un error.
+    valid_attributes = {attribute["attribute"] for attribute in get_attributes(wave)}
     categorical_qids = categorical_question_ids(wave)
+    _validate_filters(conn, request, wave, valid_attributes, categorical_qids)
     _validate_group_by(conn, request, wave, valid_attributes, categorical_qids)
 
-    # Cada filtro demográfico es un JOIN; el de ciudad es un WHERE sobre
-    # `responses`, porque `city_id` vive ahí y no en `respondent_attributes`.
-    attribute_filters = [f for f in request.filters if f["attribute"] != "city_id"]
-    attribute_joins = "".join(
+    # Cada filtro de atributo o de pregunta es un JOIN; el de ciudad es un WHERE
+    # sobre `responses`, porque `city_id` vive ahí y no en `respondent_attributes`.
+    filter_joins = "".join(
         attribute_join_sql(
             f"ra{index}", wave, filter_spec["attribute"], filter_spec["value"]
         )
-        for index, filter_spec in enumerate(attribute_filters)
+        if "attribute" in filter_spec
+        else question_filter_join_sql(
+            f"qf{index}", wave, filter_spec["question"], filter_spec["value"]
+        )
+        for index, filter_spec in enumerate(request.filters)
+        if filter_spec.get("attribute") != CITY_ATTRIBUTE
     )
     city_filter = next(
-        (f for f in request.filters if f["attribute"] == "city_id"), None
+        (f for f in request.filters if f.get("attribute") == CITY_ATTRIBUTE), None
     )
     city_filter_sql = (
         "AND " + value_match_clause("r.city_id", city_filter["value"])
@@ -234,7 +266,7 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
         wave=wave,
         question_type=question_type,
         question_text=question_text,
-        attribute_joins=attribute_joins,
+        filter_joins=filter_joins,
         city_filter=city_filter,
         city_filter_sql=city_filter_sql,
         sentinel_exclusion_sql=sentinel_exclusion_sql,
