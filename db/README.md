@@ -42,8 +42,8 @@ Escribe `data/encuesta_multianual.duckdb` cargando cada ola desde su fuente:
 - **2024** y **2023** — desde `data/waves/<año>/*.csv`.
 
 Valida unicidad de claves e integridad EAV por ola; aborta si algo no cuadra.
-El backend (`main.py`), los tests (`conftest.py`) y `render.yaml` apuntan a
-`encuesta_multianual.duckdb`.
+El backend (`config.py`), los tests (`conftest.py`) y el `DB_PATH` del servicio
+en Render apuntan a `encuesta_multianual.duckdb`.
 
 ## De dónde salen los CSV de una ola (ETL)
 

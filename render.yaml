@@ -1,16 +1,13 @@
+# REFERENCIA, NO CONFIG ACTIVA: el servicio de Render se configura en el
+# dashboard y Render no aplica este archivo. Mantenerlo a mano igual al
+# dashboard. Ver docs/desarrollo.md.
 services:
   - type: web
     name: encuesta-nl
     runtime: python
     plan: free
     region: oregon
-    buildCommand: |
-      set -o errexit
-      pip install -r requirements.txt
-      python db/build_db.py
-      cd frontend
-      npm install
-      npm run build
+    buildCommand: pip install -r requirements.txt && python db/build_db.py && cd frontend && npm install && npm run build
     startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DB_PATH

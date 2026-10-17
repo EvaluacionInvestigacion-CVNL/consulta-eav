@@ -22,7 +22,7 @@ DuckDB (FastAPI backend) + Vue 3 frontend.
 | Frontend      | Vue 3 (Composition API) · Vite · Tailwind CSS v4   |
 | Visualization | Chart.js                                           |
 | Tests         | pytest (FastAPI TestClient) — 138 tests            |
-| Deployment    | Render.com (`render.yaml`)                          |
+| Deployment    | Render.com (dashboard; `render.yaml` is reference)  |
 
 ---
 
@@ -63,7 +63,7 @@ The data is stored entity-attribute-value: each `(respondent, question)` pair is
 ## Design decisions
 
 ### DuckDB as an embedded, read-only file
-The dataset is fixed reference data, not transactional. An embedded columnar database removes the need for a separate DB server, makes aggregate scans over 1.1M rows fast, and ships as one committed file (~7.8 MB). Every connection is opened `read_only=True`; the file is never mutated at runtime, which also makes the deployment immutable and trivially reproducible.
+The dataset is fixed reference data, not transactional. An embedded columnar database removes the need for a separate DB server, makes aggregate scans over 1.1M rows fast, and is a single file (~57 MB) that isn't committed: the deploy build rebuilds it from committed inputs with `db/build_db.py`. Every connection is opened `read_only=True`; the file is never mutated at runtime, which also makes the deployment immutable and trivially reproducible.
 
 ### EAV schema
 Survey instruments are sparse and irregular — questions appear and disappear across sections, many are conditional, and answer sets differ per question. A wide one-column-per-question table would be mostly nulls and would require migrations as the instrument changes. EAV keeps the storage uniform and lets the query layer treat every question identically.
@@ -159,6 +159,6 @@ eav-queries/
 ├── frontend/
 │   └── src/           # Vue 3 + Vite SPA (components, store, API client)
 ├── tests/             # pytest suite (query engine + endpoints)
-├── data/              # Embedded DuckDB database (committed, never mutated)
-└── render.yaml        # Deployment blueprint
+├── data/              # Wave inputs (committed) + built DuckDB file (gitignored, never mutated)
+└── render.yaml        # Reference copy of the Render config (not applied; set in the dashboard)
 ```

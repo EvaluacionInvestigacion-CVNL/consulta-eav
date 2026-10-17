@@ -73,16 +73,30 @@ Ver [conceptos.md](conceptos.md).
 
 ## Deploy (Render.com)
 
-`render.yaml` es un Blueprint: Render hace **auto-deploy** al hacer push a la
-rama `main`. El servicio instala deps de Python, **construye la BD** con
-`db/build_db.py` (la BD no se versiona; sus insumos sí, y tarda unos segundos),
-compila el frontend y arranca uvicorn.
+El servicio se configura **en el dashboard de Render** (Settings), no con
+`render.yaml`: Render no aplica ese archivo a este servicio. `render.yaml` se
+conserva como copia de referencia y hay que mantenerlo a mano igual al dashboard.
+
+| Campo (Settings) | Valor |
+|------------------|-------|
+| Build Command    | `pip install -r requirements.txt && python db/build_db.py && cd frontend && npm install && npm run build` |
+| Start Command    | `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT` |
+| `DB_PATH`        | `/opt/render/project/src/data/encuesta_multianual.duckdb` |
+
+La BD no se versiona: el build la construye con `db/build_db.py` a partir de los
+insumos versionados (tarda unos segundos). El Build Command va en **una sola
+línea** encadenada con `&&`, así el build se detiene en el primer paso que falle.
+Sin eso, un `build_db.py` fallido no tumba el build: el deploy pasa sin BD y la
+app truena al arrancar con `database does not exist`.
+
+Las variables de entorno (`DB_PATH`, `STATIC_DIR`, `GEMINI_API_KEY`, límites del
+chat) también viven en el dashboard; `render.yaml` lista los valores de referencia.
 
 Flujo típico:
 1. Hacer cambios, reconstruir la BD y correr tests localmente.
 2. Commitear los insumos que cambiaron (CSVs de olas, overlays, conceptos) — nunca el `.duckdb`.
-3. `git push` a `main` → Render redeploya solo (o hacer redeploy manual al último commit).
-4. `GEMINI_API_KEY` se configura en el dashboard de Render.
+3. `git push` a `main`; si Render no arranca el deploy solo, **Manual Deploy → Deploy latest commit**.
+4. Si cambia el build, el arranque o una variable, actualizar el dashboard **y** `render.yaml`.
 
 ## Estructura del repo
 
@@ -113,7 +127,7 @@ eav-queries/
 │   └── encuesta_multianual.duckdb   # BD multi-año que lee la app (build_db.py)
 ├── docs/                # Documentación
 ├── tests/               # Suite pytest
-└── render.yaml          # Blueprint de deploy
+└── render.yaml          # Referencia de la config de Render (no se aplica; ver Deploy)
 ```
 
 Ver también: [arquitectura.md](arquitectura.md) ·

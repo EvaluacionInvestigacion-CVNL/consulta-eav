@@ -66,9 +66,12 @@ concept CSVs) *is* committed, so a clean checkout can rebuild it. There
 is no live migration path: any change to `db/schema.sql`, `db/build_db.py`, wave
 CSVs, or the concepts CSVs means rebuilding the file.
 
-Render does the same: `render.yaml`'s `buildCommand` runs `db/build_db.py`
-before building the frontend, writing the DB where `DB_PATH` points. Ask before
-touching the deploy path.
+Render rebuilds it too, but the service is configured in the **Render
+dashboard**, not by `render.yaml` — Render doesn't apply that file; it's a
+reference copy kept in sync by hand. The dashboard Build Command runs
+`python db/build_db.py` before the frontend build, chained with `&&` so a failed
+DB build fails the deploy instead of shipping an app with no DB (see
+`docs/desarrollo.md`). Ask before touching the deploy path.
 
 Two more paths are gitignored on purpose and nothing in the build touches them:
 `drafts/etl<year>/` (self-contained, in-progress ETLs for waves 2016–2019 that
@@ -87,7 +90,7 @@ Vue 3 SPA (Vite, Tailwind v4, Chart.js)  ──/api/*──►  FastAPI (main.py
 ```
 
 In production FastAPI also serves the built SPA (`STATIC_DIR`), so it's one
-deployable service (`render.yaml`, Render.com, auto-deploy on push to `main`).
+deployable service (Render.com, configured in the dashboard — see above).
 
 ### Data model (EAV, multi-year)
 
@@ -268,7 +271,8 @@ deliberately **no `LLMProvider` interface**: one provider, so an abstraction ove
 it would be ceremony — `gemini.py` *is* the seam.
 
 `ratelimit.py` enforces per-IP and global daily caps (`CHAT_RATE_PER_MIN`,
-`CHAT_DAILY_GLOBAL`, etc. — free-tier defaults live in `render.yaml`).
+`CHAT_DAILY_GLOBAL`, etc. — set in the Render dashboard; `render.yaml` lists the
+free-tier reference values).
 
 ### Frontend (`frontend/src/`)
 

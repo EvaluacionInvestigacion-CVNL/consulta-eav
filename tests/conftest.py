@@ -1,7 +1,7 @@
 """Shared pytest fixtures.
 
 The backend reads DB_PATH at import time and resolves it relative to its own
-working dir, so we pin it to the committed database (absolute path) BEFORE
+working dir, so we pin it to the built database (absolute path) BEFORE
 importing `main`, and add backend/ to sys.path so `import main` works from the
 repo root.
 """

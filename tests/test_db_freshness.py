@@ -1,6 +1,6 @@
-"""La BD commiteada refleja los insumos hechos a mano.
+"""La BD construida refleja los insumos hechos a mano.
 
-`data/encuesta_multianual.duckdb` es un binario commiteado que se reconstruye a
+`data/encuesta_multianual.duckdb` es un binario no versionado que se reconstruye a
 mano (`db/build_db.py`). Es fácil editar un CSV de insumo y olvidar reconstruir:
 la app y los tests siguen leyendo la BD vieja y el desfase no avisa. Peor, hace
 que otros tests fallen con mensajes que parecen bugs de datos.
