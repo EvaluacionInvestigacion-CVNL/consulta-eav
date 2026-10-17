@@ -664,7 +664,7 @@ def main() -> None:
     if DST.exists():
         DST.unlink()  # reconstrucción limpia
 
-    con = duckdb.connect(str(DST))
+    con = duckdb.connect(str(DST), config={"memory_limit": "256MB", "threads": 2})
     try:
         _run_schema(con)
         con.execute(f"ATTACH '{SRC_2025}' AS src (READ_ONLY)")
