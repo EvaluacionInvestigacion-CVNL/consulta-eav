@@ -8,6 +8,12 @@ export async function fetchWaves() {
   return res.json()
 }
 
+export async function fetchFeatures() {
+  const res = await fetch(`${API}/features`)
+  if (!res.ok) throw new Error('Error al cargar features')
+  return res.json()
+}
+
 export async function fetchQuestions(wave) {
   const res = await fetch(`${API}/questions${waveQuery(wave)}`)
   if (!res.ok) throw new Error('Error al cargar preguntas')

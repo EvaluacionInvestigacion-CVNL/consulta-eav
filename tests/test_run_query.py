@@ -14,6 +14,7 @@ from csv_export import _csv_fill_empty
 from db_runtime import get_conn
 from services.query.models import QueryRequest
 from services.query.runner import run_query
+from services.wave_service import wave_ids
 
 SENTINELS = {7777, 8888, 9999}
 
@@ -463,9 +464,13 @@ _EQUIV = _Path(__file__).resolve().parents[1] / "db" / "concepts" / "concept_equ
 
 
 def _pairs(decision):
+    """Pares con ambas olas cargadas."""
+    loaded = wave_ids()
     with open(_EQUIV) as f:
         return [(r["wave_a"], r["q_a"], r["wave_b"], r["q_b"])
-                for r in _csv.DictReader(f) if r["decision"] == decision]
+                for r in _csv.DictReader(f)
+                if r["decision"] == decision
+                and r["wave_a"] in loaded and r["wave_b"] in loaded]
 
 
 def _concept_of(wave, qid):

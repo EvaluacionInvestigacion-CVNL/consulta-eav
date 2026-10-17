@@ -9,12 +9,25 @@ Reconstruye la BD nueva desde cero en cada ejecución.
 """
 
 import csv
+import os
 import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
 import duckdb
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Feature flags temporales: el registro (y cómo quitar uno) vive en
+# backend/config.py::KNOWN_FEATURES; el build no importa el backend.
+FEATURES = {f.strip() for f in os.getenv("FEATURES", "").split(",") if f.strip()}
+
+
+def feature(name: str) -> bool:
+    return name in FEATURES
+
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -475,8 +488,12 @@ def load_concepts(con: duckdb.DuckDBPyConnection) -> None:
 
     # --- recodes aprobados ----------------------------------------------------
     recodes: dict[tuple[str, str, str], list[tuple[int, str]]] = defaultdict(list)
+    skipped_recodes = 0
     if recodes_dir.exists():
         for r in csv.DictReader(recodes_dir.open()):
+            if (r["wave_id"], r["q_id"]) not in qtype:
+                skipped_recodes += 1  # ola/pregunta aún no cargada, como los pares
+                continue
             recodes[(r["concept_id"], r["wave_id"], r["q_id"])].append(
                 (int(r["option_id"]), r["concept_option_id"])
             )
@@ -588,7 +605,7 @@ def load_concepts(con: duckdb.DuckDBPyConnection) -> None:
     by_type = Counter(c["q_type"] for c in concepts.values())
     print(
         f"  pares: {len(rows)} renglones ({skipped} de olas no cargadas, "
-        f"{len(excluded_pairs)} excluidos)"
+        f"{len(excluded_pairs)} excluidos; {skipped_recodes} recodes de olas no cargadas)"
     )
     print(
         f"  conceptos={len(concepts)} ({dict(by_type)})  preguntas enlazadas={n_linked}  "
@@ -675,6 +692,13 @@ def main() -> None:
         load_wave_csv(con, "2023", 2023, "Así Vamos 2023")
         load_wave_csv(con, "2022", 2022, "Así Vamos 2022")
         load_wave_csv(con, "2021", 2021, "Así Vamos 2021")
+        if feature("olas_2016_2019"):
+            load_wave_csv(con, "2019", 2019, "Así Vamos 2019")
+            load_wave_csv(con, "2018", 2018, "Así Vamos 2018")
+            load_wave_csv(con, "2017", 2017, "Así Vamos 2017")
+            load_wave_csv(con, "2016", 2016, "Así Vamos 2016")
+        else:
+            print("\n· Olas 2016–2019 omitidas (flag olas_2016_2019 apagado)")
 
         apply_question_fixes(con)
         apply_option_fixes(con)

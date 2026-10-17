@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter
 
+from config import FEATURES
 from services import catalog_service, dimension_service, wave_service
 
 router = APIRouter(prefix="/api", tags=["catálogo"])
@@ -50,3 +51,9 @@ def list_cities(wave: str | None = None):
 def list_waves():
     """Encuestas disponibles. `is_default` marca la ola a cargar."""
     return wave_service.list_waves()
+
+
+@router.get("/features")
+def list_features():
+    """Feature flags prendidos (ver `config.KNOWN_FEATURES`)."""
+    return sorted(FEATURES)

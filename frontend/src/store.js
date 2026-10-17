@@ -3,6 +3,7 @@ import * as api from './api.js'
 
 // Tracks state of query, UI and chat history
 export const state = reactive({
+  features: [],
   waves: [],
   waveId: '',
   questions: [],
@@ -254,11 +255,13 @@ async function loadCatalog() {
 
 export async function init() {
   try {
-    const [waves, recodes, catalog] = await Promise.all([
+    const [waves, recodes, catalog, features] = await Promise.all([
       api.fetchWaves(),
       api.fetchRecodes(),
       fetchCatalog(),
+      api.fetchFeatures(),
     ])
+    state.features = features
     state.waves = waves
     state.waveId =
       (waves.find((w) => w.is_default) || waves[0] || {}).wave_id || ''
@@ -291,6 +294,11 @@ export async function setWave(waveId) {
   } finally {
     state.loading = false
   }
+}
+
+// Feature flags prendidos.
+export function hasFeature(name) {
+  return state.features.includes(name)
 }
 
 export const currentWave = computed(

@@ -36,13 +36,18 @@ export GEMINI_API_KEY=key   # sin esto, la app corre en modo manual
 
 ## Variables de entorno
 
-| Variable         | Default                                | Uso                                        |
-|------------------|----------------------------------------|--------------------------------------------|
-| `DB_PATH`        | `../data/encuesta_multianual.duckdb`   | Ruta a la BD DuckDB                        |
-| `STATIC_DIR`     | `../frontend/dist`                     | SPA compilada                              |
-| `GEMINI_API_KEY` | — (sin default)                        | Habilita el modo IA                        |
+| Variable         | Default                              | Uso                                         |
+| ---------------- | ------------------------------------ | ------------------------------------------- |
+| `DB_PATH`        | `../data/encuesta_multianual.duckdb` | Ruta a la BD DuckDB                         |
+| `STATIC_DIR`     | `../frontend/dist`                   | SPA compilada                               |
+| `GEMINI_API_KEY` | — (sin default)                      | Habilita el modo IA                         |
+| `FEATURES`       | — (vacío: todo apagado)              | Feature flags prendidos, separados por coma |
 
 > `DB_PATH` es relativo a `backend/`.
+
+## Feature flags
+
+Se prenden con `FEATURES=a,b` en `.env` (local) o en el dashboard de Render.
 
 ## Tests
 
@@ -51,6 +56,7 @@ export GEMINI_API_KEY=key   # sin esto, la app corre en modo manual
 ```
 
 Suites en `tests/`:
+
 - `test_run_query.py` — las 4 formas del motor + invariantes (base Capa A,
   centinelas, ponderación, colapso de ciudades, guard de inyección).
 - `test_endpoints.py` — endpoints de la API.
@@ -77,11 +83,11 @@ El servicio se configura **en el dashboard de Render** (Settings), no con
 `render.yaml`: Render no aplica ese archivo a este servicio. `render.yaml` se
 conserva como copia de referencia y hay que mantenerlo a mano igual al dashboard.
 
-| Campo (Settings) | Valor |
-|------------------|-------|
+| Campo (Settings) | Valor                                                                                                     |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
 | Build Command    | `pip install -r requirements.txt && python db/build_db.py && cd frontend && npm install && npm run build` |
-| Start Command    | `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT` |
-| `DB_PATH`        | `/opt/render/project/src/data/encuesta_multianual.duckdb` |
+| Start Command    | `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT`                                              |
+| `DB_PATH`        | `/opt/render/project/src/data/encuesta_multianual.duckdb`                                                 |
 
 La BD no se versiona: el build la construye con `db/build_db.py` a partir de los
 insumos versionados (tarda unos segundos). El Build Command va en **una sola
@@ -89,10 +95,11 @@ línea** encadenada con `&&`, así el build se detiene en el primer paso que fal
 Sin eso, un `build_db.py` fallido no tumba el build: el deploy pasa sin BD y la
 app truena al arrancar con `database does not exist`.
 
-Las variables de entorno (`DB_PATH`, `STATIC_DIR`, `GEMINI_API_KEY`, límites del
-chat) también viven en el dashboard; `render.yaml` lista los valores de referencia.
+Las variables de entorno (`DB_PATH`, `STATIC_DIR`, `GEMINI_API_KEY`, `FEATURES`,
+límites del chat) también viven en el dashboard; `render.yaml` lista los valores de referencia.
 
 Flujo típico:
+
 1. Hacer cambios, reconstruir la BD y correr tests localmente.
 2. Commitear los insumos que cambiaron (CSVs de olas, overlays, conceptos) — nunca el `.duckdb`.
 3. `git push` a `main`; si Render no arranca el deploy solo, **Manual Deploy → Deploy latest commit**.

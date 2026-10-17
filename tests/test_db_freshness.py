@@ -209,8 +209,11 @@ def test_recodes_applied(conn):
     `options.concept_option_id` (es lo que alinea códigos recodificados entre olas)."""
     if not RECODES.exists():
         pytest.skip("sin recodes aprobados")
+    loaded = {w for (w,) in conn.execute("SELECT wave_id FROM waves").fetchall()}
     bad = []
     for r in _rows(RECODES):
+        if r["wave_id"] not in loaded:
+            continue  # ola apagada por feature flag: el build la omite
         row = conn.execute(
             "SELECT concept_option_id FROM options "
             "WHERE wave_id = ? AND question_id = ? AND option_id = ?",

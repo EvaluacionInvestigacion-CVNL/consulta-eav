@@ -22,7 +22,8 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: "gemini-2.5-flash"
-      # Controles de abuso del chat (ver backend/ratelimit.py). Defaults free-tier.
+      - key: FEATURES
+        value: ""
       - key: CHAT_RATE_PER_MIN
         value: "5"
       - key: CHAT_DAILY_GLOBAL

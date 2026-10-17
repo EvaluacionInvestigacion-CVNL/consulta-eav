@@ -73,6 +73,13 @@ reference copy kept in sync by hand. The dashboard Build Command runs
 DB build fails the deploy instead of shipping an app with no DB (see
 `docs/desarrollo.md`). Ask before touching the deploy path.
 
+**Feature flags** (`FEATURES=a,b`, registry `KNOWN_FEATURES` in
+`backend/config.py`) are *temporary*: they hide work that's done but not yet
+delivered, and must stay trivial to remove — each use is a greppable
+`if feature("x")` / `v-if="hasFeature(…)"`, nothing else. `olas_2016_2019` makes
+`build_db.py` skip those waves; tests pass with and without each flag. See
+`docs/desarrollo.md`.
+
 Two more paths are gitignored on purpose and nothing in the build touches them:
 `drafts/etl<year>/` (self-contained, in-progress ETLs for waves 2016–2019 that
 only emit CSVs — those waves are **not** loaded) and

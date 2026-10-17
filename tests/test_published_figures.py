@@ -33,8 +33,11 @@ from pathlib import Path
 
 import pytest
 
+from db_runtime import get_conn
+from repositories import survey_repository
 from services.query.models import QueryRequest
 from services.query.runner import run_query
+from services.wave_service import wave_ids
 
 FIXTURES = Path(__file__).parent / "published_figures.csv"
 
@@ -66,6 +69,7 @@ def _id_match(row_id, target):
 
 
 CASES = _load_cases()
+CASE_WAVES = {c["wave_id"] for c in CASES}
 
 
 @pytest.mark.published
@@ -79,6 +83,18 @@ CASES = _load_cases()
     ],
 )
 def test_published_figure(case):
+    loaded = wave_ids()
+    if case["wave_id"] not in loaded or (
+        case["group_by"] == "year" and case.get("group_value") not in loaded
+    ):
+        pytest.skip("ola no cargada en esta BD")
+    if case["group_by"] == "year" and loaded < CASE_WAVES:
+        # Sin las olas apagadas, la pregunta puede quedarse sin pareja entre años.
+        with get_conn() as conn:
+            if not survey_repository.fetch_question_concept_id(
+                conn, case["wave_id"], case["question_id"]
+            ):
+                pytest.skip("sin concepto entre las olas cargadas")
     r = run_query(
         QueryRequest(
             question_id=case["question_id"],

@@ -299,8 +299,11 @@ def test_recodes_exhaustivos(hechos):
     una opción vacía no produce renglón."""
     if not RECODES.exists():
         pytest.skip("sin recodes aprobados")
+    loaded = {w for w, _ in hechos["qtype"]}
     declarado = defaultdict(set)
     for r in _rows(RECODES):
+        if r["wave_id"] not in loaded:
+            continue  # ola apagada por feature flag: el build la omite
         declarado[(r["concept_id"], r["wave_id"], r["q_id"])].add(int(r["option_id"]))
 
     faltantes = []
