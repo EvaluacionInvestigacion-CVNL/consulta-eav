@@ -1,0 +1,209 @@
+q_id,q_text,q_section,q_type,q_notes
+p1,"P1. Durante la semana pasada, ¿cuál fue su principal actividad laboral? (Seleccione una)",general,categorica,
+p10a,P10. ¿Cuánto tiempo de ida tardó en el medio que lo transportó a su destino principal (P3)? (horas),movilidad,numerica,"El cuestionario captura horas y minutos en dos columnas; se cargan como dos preguntas, sin combinarlas."
+p10b,P10. ¿Cuánto tiempo de ida tardó en el medio que lo transportó a su destino principal (P3)? (minutos),movilidad,numerica,Ver p10a.
+p11a,P11. ¿Cuánto tiempo tardó de vuelta en el medio que lo transportó a su destino principal (P3)? (horas),movilidad,numerica,Ver p10a.
+p11b,P11. ¿Cuánto tiempo tardó de vuelta en el medio que lo transportó a su destino principal (P3)? (minutos),movilidad,numerica,Ver p10a.
+p12_1,P12. Cuando camina en su municipio considera que: ¿Los cruces peatonales le permiten desplazarse con seguridad?,movilidad,categorica,Ítem 1 de la batería P12. ítem de batería
+p12_2,P12. Cuando camina en su municipio considera que: ¿Las rampas para personas con discapacidad están en buen estado?,movilidad,categorica,Ítem 2 de la batería P12. ítem de batería
+p12_3,P12. Cuando camina en su municipio considera que: ¿Las banquetas son suficientes para llegar a su destino?,movilidad,categorica,Ítem 3 de la batería P12. ítem de batería
+p12_4,P12. Cuando camina en su municipio considera que: ¿Las banquetas son amplias para que circulen dos personas en silla de ruedas o carriolas?,movilidad,categorica,Ítem 4 de la batería P12. ítem de batería
+p12_5,"P12. Cuando camina en su municipio considera que: ¿Las banquetas están llenas de obstáculos? (como cabinas telefónicas, postes, árboles, carros estacionados, negocios informales)",movilidad,categorica,Ítem 5 de la batería P12. ítem de batería
+p12_6,P12. Cuando camina en su municipio considera que: ¿Las banquetas están dañadas?,movilidad,categorica,Ítem 6 de la batería P12. ítem de batería
+p12_7,"P12. Cuando camina en su municipio considera que: ¿Las banquetas permiten el desplazamiento de personas con discapacidad (ciegas, débiles visuales, en silla de ruedas)?",movilidad,categorica,Ítem 7 de la batería P12. ítem de batería
+p13,"P13. Del 1 al 10 ¿Cómo califica la calidad y estado de las banquetas en su municipio? Donde 1 es lo más bajo (lo peor) y 10, lo más alto (lo mejor)",movilidad,numerica,
+p14a,P14. ¿Cuánto tiempo esperó para tomar su principal medio de transporte? (horas),movilidad,numerica,Ver p10a.
+p14b,P14. ¿Cuánto tiempo esperó para tomar su principal medio de transporte? (minutos),movilidad,numerica,Ver p10a.
+p15,P15. ¿Realizó algún transbordo en su viaje de ida?,movilidad,categorica,
+p15a,P15a. ¿Cuántos transbordos realizó en su viaje de ida? 1. Uno 2. Dos 3. Tres 4. Cuatro 5. Cinco o Más,movilidad,categorica,
+p16a,P16a. ¿Cuál fue el COSTO TOTAL de su viaje principal de IDA a su destino? $,movilidad,numerica,
+p16b,P16b. ¿Cuál fue el COSTO TOTAL de su viaje principal de REGRESO a su casa? $,movilidad,numerica,
+p17_1,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿El tiempo de espera por unidades es siempre el mismo?,movilidad,categorica,Ítem 1 de la batería P17. ítem de batería
+p17_2,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: Si necesita viajar a zonas que normalmente no visita,movilidad,categorica,Ítem 2 de la batería P17. ítem de batería
+p17_3,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿Se siente seguro viajando en el transporte público?,movilidad,categorica,Ítem 3 de la batería P17. ítem de batería
+p17_4,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: En su viaje,movilidad,categorica,Ítem 4 de la batería P17. ítem de batería
+p17_5,"P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿Las unidades que normalmente utiliza, presentan fallas físicas o mecánicas?",movilidad,categorica,Ítem 5 de la batería P17. ítem de batería
+p17_6,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿El comportamiento de los choferes es respetuoso?,movilidad,categorica,Ítem 6 de la batería P17. ítem de batería
+p17_7,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿Los choferes manejan en forma prudente y segura?,movilidad,categorica,Ítem 7 de la batería P17. ítem de batería
+p17_8,P17. Vamos a evaluar la calidad del servicio de transporte público.Conteste las siguientes preguntas según su experiencia: ¿Considera que la tarifa del transporte público es adecuada?,movilidad,categorica,Ítem 8 de la batería P17. ítem de batería
+p18_1,P18. Las unidades del transporte público presentan las siguientes fallas: Asientos dañados o sucios,movilidad,categorica,Ítem 1 de la batería P18_1. ítem de batería
+p18_10,P18. Las unidades del transporte público presentan las siguientes fallas: Inadecuada iluminación en el interior de la unidad,movilidad,categorica,Ítem 10 de la batería P18_1. ítem de batería
+p18_2,P18. Las unidades del transporte público presentan las siguientes fallas: Vidrios rotos,movilidad,categorica,Ítem 2 de la batería P18_1. ítem de batería
+p18_3,P18. Las unidades del transporte público presentan las siguientes fallas: Grafiti y rayones,movilidad,categorica,Ítem 3 de la batería P18_1. ítem de batería
+p18_4,"P18. Las unidades del transporte público presentan las siguientes fallas: Ruidoso, escandaloso",movilidad,categorica,Ítem 4 de la batería P18_1. ítem de batería
+p18_5,P18. Las unidades del transporte público presentan las siguientes fallas: Echa humo contaminante,movilidad,categorica,Ítem 5 de la batería P18_1. ítem de batería
+p18_6,P18. Las unidades del transporte público presentan las siguientes fallas: Puertas o ventanas que no cierran adecuadamente,movilidad,categorica,Ítem 6 de la batería P18_1. ítem de batería
+p18_7,P18. Las unidades del transporte público presentan las siguientes fallas: Timbre no funciona,movilidad,categorica,Ítem 7 de la batería P18_1. ítem de batería
+p18_8,P18. Las unidades del transporte público presentan las siguientes fallas: Goteras en época de lluvia,movilidad,categorica,Ítem 8 de la batería P18_1. ítem de batería
+p18_9,P18. Las unidades del transporte público presentan las siguientes fallas: Aparatos validadores de tarjeta dañados,movilidad,categorica,Ítem 9 de la batería P18_1. ítem de batería
+p19,"P19. Tomando en cuenta las preguntas previas: Evalúe del 1 al 10 qué tan satisfecho está con el SERVICIO DE TRANSPORTE,donde 1 es lo más bajo (lo peor) y lo más alto es 10 (lo mejor)",movilidad,numerica,
+p20,"P20. De acuerdo con su percepción, mencione cuál es el principal problema con el que se enfrenta cuando SE MUEVE por el ÁreaMetropolitana. (8. NS 9. NC 99. NO APLICA)",movilidad,categorica,
+p21_1,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Clínica o consultorio médico,desarrollo_urbano,categorica,Ítem 1 de la batería P21. ítem de batería
+p21_10,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Bares,desarrollo_urbano,categorica,Ítem 10 de la batería P21. ítem de batería
+p21_11,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Farmacias,desarrollo_urbano,categorica,Ítem 11 de la batería P21. ítem de batería
+p21_2,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Escuelas,desarrollo_urbano,categorica,Ítem 2 de la batería P21. ítem de batería
+p21_3,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Trabajo,desarrollo_urbano,categorica,Ítem 3 de la batería P21. ítem de batería
+p21_4,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Tiendas de conveniencia o supermercados,desarrollo_urbano,categorica,Ítem 4 de la batería P21. ítem de batería
+p21_5,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Bancos,desarrollo_urbano,categorica,Ítem 5 de la batería P21. ítem de batería
+p21_6,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Lugar para ejercitarse público,desarrollo_urbano,categorica,Ítem 6 de la batería P21. ítem de batería
+p21_7,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Parada de transporte público,desarrollo_urbano,categorica,Ítem 7 de la batería P21. ítem de batería
+p21_8,"P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Lugares recreativos (cine, centro comercial, parque, teatro)",desarrollo_urbano,categorica,Ítem 8 de la batería P21. ítem de batería
+p21_9,P21. ¿Cuál de los siguientes servicios se encuentra A MENOS DE 1 kilómetro o MENOS DE 15 minutos caminando?: Lugares para comer,desarrollo_urbano,categorica,Ítem 9 de la batería P21. ítem de batería
+p22,"P22. En su opinión, ¿cuál es el principal problema de DESARROLLO URBANO que se vive en su municipio?",desarrollo_urbano,categorica,
+p23_1,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Alumbrado público",desarrollo_urbano,numerica,Ítem 1 de la batería P23_1. ítem de batería
+p23_2,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Condición de las calles y avenidas",desarrollo_urbano,numerica,Ítem 2 de la batería P23_1. ítem de batería
+p23_3,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Señalización y semáforos",desarrollo_urbano,numerica,Ítem 3 de la batería P23_1. ítem de batería
+p23_4,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Mantenimiento de parques, plazas y áreas verdes",desarrollo_urbano,numerica,Ítem 4 de la batería P23_1. ítem de batería
+p23_5,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Drenaje pluvial",desarrollo_urbano,numerica,Ítem 5 de la batería P23_1. ítem de batería
+p23_6,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Recolección de basura",desarrollo_urbano,numerica,Ítem 6 de la batería P23_1. ítem de batería
+p23_7,"P23. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos: Perros y gatos abandonados / en la calle",desarrollo_urbano,numerica,Ítem 7 de la batería P23_1. ítem de batería
+p24,"P24. De acuerdo con su percepción, mencione el principal PROBLEMA AMBIENTAL que se vive en su municipio",desarrollo_urbano,categorica,
+p25_1,P25. Los parques y jardines de su municipio: Se encuentran cerca (menos de 15 min. caminando),desarrollo_urbano,categorica,Ítem 1 de la batería P25. ítem de batería
+p25_2,P25. Los parques y jardines de su municipio: Están limpios y tienen buena imagen,desarrollo_urbano,categorica,Ítem 2 de la batería P25. ítem de batería
+p25_3,P25. Los parques y jardines de su municipio: Son seguros para usted y su familia,desarrollo_urbano,categorica,Ítem 3 de la batería P25. ítem de batería
+p25_4,P25. Los parques y jardines de su municipio: Cuentan con espacios para hacer ejercicio,desarrollo_urbano,categorica,Ítem 4 de la batería P25. ítem de batería
+p25_5,P25. Los parques y jardines de su municipio: Cuentan con suficientes árboles,desarrollo_urbano,categorica,Ítem 5 de la batería P25. ítem de batería
+p25_6,"P25. Los parques y jardines de su municipio: Cuentan con infraestructura necesaria (bancas, bebederos, luminarias funcionando)",desarrollo_urbano,categorica,Ítem 6 de la batería P25. ítem de batería
+p26,P26. Considera que la calidad del aire en el estado es: 1. Pésima 2. Mala 3. Regular 4. Buena 5. Excelente 8. NS 9. NC,desarrollo_urbano,categorica,
+p27_1,"P27. Para combatir el problema de la mala calidad del aire, usted estaría de acuerdo en: Implementar verificación vehicular",desarrollo_urbano,categorica,Ítem 1 de la batería P27. ítem de batería
+p27_2,"P27. Para combatir el problema de la mala calidad del aire, usted estaría de acuerdo en: Implementar ""Hoy no circula""",desarrollo_urbano,categorica,Ítem 2 de la batería P27. ítem de batería
+p27_3,"P27. Para combatir el problema de la mala calidad del aire, usted estaría de acuerdo en: Retirar de circulación a vehículos contaminantes",desarrollo_urbano,categorica,Ítem 3 de la batería P27. ítem de batería
+p27_4,"P27. Para combatir el problema de la mala calidad del aire, usted estaría de acuerdo en: Invertir más en transporte público y menos en infraestructura para el automóvil",desarrollo_urbano,categorica,Ítem 4 de la batería P27. ítem de batería
+p27_5,"P27. Para combatir el problema de la mala calidad del aire, usted estaría de acuerdo en: Sancionar a empresas que contaminen, aunque implique su clausura. __",desarrollo_urbano,categorica,Ítem 5 de la batería P27. ítem de batería
+p28,P28. ¿Cómo describiría usted la SITUACIÓN económica DE SU HOGAR comparada con la de HACE 12 MESES?,percepcion_y_expectativas,categorica,
+p29,P29. ¿Y cómo cree usted que será la SITUACIÓN económica DE SU HOGAR DENTRO DE 12 MESES respecto de la actual?,percepcion_y_expectativas,categorica,
+p2a,"P2a. Si contestó “empleado” o “negocio propio/ independiente”, ¿cuántas horas trabaja al día? (considerando el tiempo de comida)",general,numerica,
+p2b,"P2b. Si contestó “empleado” o “negocio propio/ independiente”, ¿cuántos días a la semana trabaja?",general,numerica,
+p2c,"P2c. En la mayor parte del tiempo, ¿le gusta el trabajo que desempeña? (sólo para los que trabajan) 1. SÍ 0. NO 8. NS 9. NC",general,categorica,
+p3,"P3. Durante el día de ayer, ¿cuál fue el principal motivo para trasladarse fuera de su casa? Nota: Cuando la entrevista sea realizadaen DOMINGO o LUNES entonces preguntar por viaje del VIERNES",movilidad,categorica,
+p30,"P30. Con el TOTAL DEL INGRESO DEL HOGAR, diría usted que…",percepcion_y_expectativas,categorica,
+p31_1,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por ser mujer/hombre,pobreza_y_desigualdad,categorica,Ítem 1 de la batería P31. ítem de batería
+p31_10,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por tener sobrepeso u obesidad,pobreza_y_desigualdad,categorica,Ítem 10 de la batería P31. ítem de batería
+p31_11,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por tener alguna enfermedad,pobreza_y_desigualdad,categorica,Ítem 11 de la batería P31. ítem de batería
+p31_12,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por ser migrante,pobreza_y_desigualdad,categorica,Ítem 12 de la batería P31. ítem de batería
+p31_13,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Otro,pobreza_y_desigualdad,categorica,Ítem 13 de la batería P31. ítem de batería
+p31_2,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por su embarazo,pobreza_y_desigualdad,categorica,Ítem 2 de la batería P31. ítem de batería
+p31_3,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por su edad,pobreza_y_desigualdad,categorica,Ítem 3 de la batería P31. ítem de batería
+p31_4,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por ser pobre,pobreza_y_desigualdad,categorica,Ítem 4 de la batería P31. ítem de batería
+p31_5,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por ser indígena,pobreza_y_desigualdad,categorica,Ítem 5 de la batería P31. ítem de batería
+p31_6,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por ser persona con discapacidad,pobreza_y_desigualdad,categorica,Ítem 6 de la batería P31. ítem de batería
+p31_7,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por su orientación sexual,pobreza_y_desigualdad,categorica,Ítem 7 de la batería P31. ítem de batería
+p31_8,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por su color de piel,pobreza_y_desigualdad,categorica,Ítem 8 de la batería P31. ítem de batería
+p31_9,P31. ¿Cree que en Nuevo León es frecuente que se discrimine a la gente por: Por tener algún tatuaje,pobreza_y_desigualdad,categorica,Ítem 9 de la batería P31. ítem de batería
+p32,"P32. En los últimos 12 meses, ¿usted ha notado un mayor flujo migratorio hacia el Estado de Nuevo León de personas?",pobreza_y_desigualdad,categorica,
+p33_1,P33. Mencione sí o no a las siguientes afirmaciones relacionadas con migrantes: México debería admitir a más migrantes al país,pobreza_y_desigualdad,categorica,Ítem 1 de la batería P33. ítem de batería
+p33_2,P33. Mencione sí o no a las siguientes afirmaciones relacionadas con migrantes: A los migrantes se les debe dar la oportunidad de que consigan un empleo en Nuevo León,pobreza_y_desigualdad,categorica,Ítem 2 de la batería P33. ítem de batería
+p33_3,"P33. Mencione sí o no a las siguientes afirmaciones relacionadas con migrantes: Si son migrantes que van a Estados Unidos, se les debería proporcionar apoyo durante su estancia en el Estado",pobreza_y_desigualdad,categorica,Ítem 3 de la batería P33. ítem de batería
+p33_4,P33. Mencione sí o no a las siguientes afirmaciones relacionadas con migrantes: El flujo migratorio en el estado está relacionado con el incremento de la inseguridad que se ha observado en los últimos años,pobreza_y_desigualdad,categorica,Ítem 4 de la batería P33. ítem de batería
+p34,"P34. Durante los últimos 12 meses, ¿Cuándo fue la última vez que se atendió por algún problema de salud?",pobreza_y_desigualdad,categorica,
+p35,P35. ¿En dónde se atendió?,pobreza_y_desigualdad,categorica,
+p36,P36. Si utilizó SERVICIOS PÚBLICOS DE SALUD: ¿Qué tan común es que pueda surtir su receta completa?,pobreza_y_desigualdad,categorica,
+p37,P37. Su última visita fue,pobreza_y_desigualdad,categorica,
+p38,"P38. En esta última consulta, ¿cuánto tiempo esperó para ser atendido?",pobreza_y_desigualdad,categorica,
+p38a,"P38. En esta última consulta, ¿cuánto tiempo esperó para ser atendido? (minutos)",pobreza_y_desigualdad,numerica,"Minutos declarados en la opción 1 de P38 (""Si lo atendieron y tardaron ___ minutos"")."
+p39,P39. ¿Cómo calificaría las INSTALACIONES HOSPITALARIAS?,pobreza_y_desigualdad,categorica,
+p4,P4. ¿Cuántas veces a la semana se dirige a este destino?,movilidad,numerica,
+p40_1,P40. ¿Cómo calificaría los siguientes aspectos de ATENCIÓN DE SERVICIOS DE SALUD?: Trato y atención por parte del personal médico,pobreza_y_desigualdad,categorica,Ítem 1 de la batería P40. ítem de batería
+p40_2,P40. ¿Cómo calificaría los siguientes aspectos de ATENCIÓN DE SERVICIOS DE SALUD?: Trato y atención de personal de enfermería y técnicos,pobreza_y_desigualdad,categorica,Ítem 2 de la batería P40. ítem de batería
+p40_3,P40. ¿Cómo calificaría los siguientes aspectos de ATENCIÓN DE SERVICIOS DE SALUD?: Atención y el servicio por parte del personal administrativo,pobreza_y_desigualdad,categorica,Ítem 3 de la batería P40. ítem de batería
+p40_4,P40. ¿Cómo calificaría los siguientes aspectos de ATENCIÓN DE SERVICIOS DE SALUD?: Horarios de atención,pobreza_y_desigualdad,categorica,Ítem 4 de la batería P40. ítem de batería
+p40_5,P40. ¿Cómo calificaría los siguientes aspectos de ATENCIÓN DE SERVICIOS DE SALUD?: Información recibida sobre el padecimiento,pobreza_y_desigualdad,categorica,Ítem 5 de la batería P40. ítem de batería
+p41,"P41. Tomando en cuenta las preguntas previas: Evalúe del 1 al 10 qué tan satisfecho está con el SERVICIO DE SALUD, donde 1 eslo más bajo (lo peor) y lo más alto es 10 (lo mejor)",pobreza_y_desigualdad,numerica,
+p42,P42. ¿Considera que sus hijos reciben una buena formación educativa por parte de sus maestros?,pobreza_y_desigualdad,categorica,
+p43,P43. ¿Cómo evaluaría las instalaciones de la escuela de su(s) hijo(s)?,pobreza_y_desigualdad,categorica,
+p44,"P44. Durante el último ciclo escolar, ¿se le solicitó el PAGO OBLIGATORIO de alguna cuota?",pobreza_y_desigualdad,categorica,
+p45,P45. ¿Qué tan frecuente considera los casos de BULLYING o ACOSO ESCOLAR en la escuela a la que asisten los estudiantes deesta casa?,pobreza_y_desigualdad,categorica,
+p46a,"P46. Tomando en cuenta las preguntas previas: en una escala del 1 al 10, donde 1 es ""nada satisfecho"" y 10 es ""completamentesatisfecho"", ¿qué tan satisfecho está con el SERVICIO EDUCATIVO? 98. NS/NC 99. No AplicaEstudiantes en: RespuestaA. Primaria",pobreza_y_desigualdad,numerica,
+p46b,"P46. Tomando en cuenta las preguntas previas: en una escala del 1 al 10, donde 1 es ""nada satisfecho"" y 10 es ""completamentesatisfecho"", ¿qué tan satisfecho está con el SERVICIO EDUCATIVO? 98. NS/NC 99. No AplicaEstudiantes en: RespuestaB. Secundaria",pobreza_y_desigualdad,numerica,
+p47,"P47. De acuerdo con su percepción, ¿Cuál es el principal problema de DESARROLLO SOCIAL que se vive en su municipio?",pobreza_y_desigualdad,categorica,
+p48,P48. ¿Qué tan seguro se siente en su municipio?,seguridad_justicia,categorica,
+p48a,"P48a. En el último año, usted o algún miembro del hogar ¿ha sido víctima de algún delito?",seguridad_justicia,categorica,
+p48b,"P48b. ¿Usted o la persona que fue víctima, denunció el delito?",seguridad_justicia,categorica,
+p48c,"P48c. Si contestó que sí a la pregunta anterior ¿Cómo califica la experiencia de su denuncia, del 1 al 10, en donde 1 es ""muy mala"" y10 ""muy buena""?",seguridad_justicia,numerica,
+p48d,"P48d. Si contestó NO, ¿por qué no denunció?",seguridad_justicia,categorica,
+p49,"P49. (Para todos los encuestados), ¿Qué tan probable considera que los delitos denunciados sean investigados y castigados por lasautoridades?",seguridad_justicia,categorica,
+p5,P5. Para su principal motivo de traslado que nos mencionó ¿cuál fue el municipio y la colonia de su destino?,movilidad,categorica,
+p50_1,P50. En el tema de SEGURIDAD considera que: ¿La presencia de policías en su colonia es suficiente?,seguridad_justicia,categorica,Ítem 1 de la batería P50. ítem de batería
+p50_2,P50. En el tema de SEGURIDAD considera que: ¿La policía de su colonia lo hace sentir más seguro?,seguridad_justicia,categorica,Ítem 2 de la batería P50. ítem de batería
+p50_3,P50. En el tema de SEGURIDAD considera que: ¿Confía en la policía de su colonia?,seguridad_justicia,categorica,Ítem 3 de la batería P50. ítem de batería
+p50_4,P50. En el tema de SEGURIDAD considera que: ¿El trato del policía al ciudadano es de forma respetuosa?,seguridad_justicia,categorica,Ítem 4 de la batería P50. ítem de batería
+p50_5,P50. En el tema de SEGURIDAD considera que: ¿El trato del ciudadano al policía es de forma respetuosa?,seguridad_justicia,categorica,Ítem 5 de la batería P50. ítem de batería
+p50_6,P50. En el tema de SEGURIDAD considera que: ¿Los ciudadanos colaboran con la policía para reducir la incidencia delictiva en la colonia?,seguridad_justicia,categorica,Ítem 6 de la batería P50. ítem de batería
+p50_7,P50. En el tema de SEGURIDAD considera que: ¿La policía es justa al tomar decisiones?,seguridad_justicia,categorica,Ítem 7 de la batería P50. ítem de batería
+p51_1,"P51. ¿Cómo evalúa el desempeño de los servicios de seguridad? En una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muybueno"" (98. No Sabe, 99. No Contestó) califique: Policía de su Municipio y Barrio",seguridad_justicia,numerica,Ítem 1 de la batería P51. ítem de batería
+p51_2,"P51. ¿Cómo evalúa el desempeño de los servicios de seguridad? En una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muybueno"" (98. No Sabe, 99. No Contestó) califique: Fuerza Civil",seguridad_justicia,numerica,Ítem 2 de la batería P51. ítem de batería
+p51_3,"P51. ¿Cómo evalúa el desempeño de los servicios de seguridad? En una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muybueno"" (98. No Sabe, 99. No Contestó) califique: Policía Federal",seguridad_justicia,numerica,Ítem 3 de la batería P51. ítem de batería
+p51_4,"P51. ¿Cómo evalúa el desempeño de los servicios de seguridad? En una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muybueno"" (98. No Sabe, 99. No Contestó) califique: Ejército y Marina",seguridad_justicia,numerica,Ítem 4 de la batería P51. ítem de batería
+p51_5,"P51. ¿Cómo evalúa el desempeño de los servicios de seguridad? En una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muybueno"" (98. No Sabe, 99. No Contestó) califique: Tránsito",seguridad_justicia,numerica,Ítem 5 de la batería P51. ítem de batería
+p52,"P52. Durante el último año, ¿ha tenido contacto con la policía o ha requerido de ella?",seguridad_justicia,categorica,
+p53_1,"P53. Si respondió que sí a la pregunta anterior, diría que: La policía cumplió con su labor",seguridad_justicia,categorica,Ítem 1 de la batería P53_1. ítem de batería
+p53_2,"P53. Si respondió que sí a la pregunta anterior, diría que: La policía solicitó una mordida o moche",seguridad_justicia,categorica,Ítem 2 de la batería P53_1. ítem de batería
+p54,P54. ¿Cuál de las siguientes características es la MÁS IMPORTANTE para que un POLICÍA LE GENERE CONFIANZA?,seguridad_justicia,categorica,
+p54a,P54a. Considera que la violencia hacia las mujeres en el estado de Nuevo León,seguridad_justicia,categorica,
+p54b_1,P54b. ¿Está de acuerdo con las siguientes afirmaciones?: Los piropos en la calle / transporte público hacia las mujeres son ofensivos,seguridad_justicia,categorica,Ítem 1 de la batería P54b. ítem de batería
+p54b_2,P54b. ¿Está de acuerdo con las siguientes afirmaciones?: Las mujeres pueden salir solas de noche,seguridad_justicia,categorica,Ítem 2 de la batería P54b. ítem de batería
+p54b_3,P54b. ¿Está de acuerdo con las siguientes afirmaciones?: Los hombres pueden salir solos de noche,seguridad_justicia,categorica,Ítem 3 de la batería P54b. ítem de batería
+p54b_4,P54b. ¿Está de acuerdo con las siguientes afirmaciones?: Una de las razones por las que las mujeres son agredidas sexualmente es por su forma de vestir,seguridad_justicia,categorica,Ítem 4 de la batería P54b. ítem de batería
+p54b_5,P54b. ¿Está de acuerdo con las siguientes afirmaciones?: Las mujeres tienen un mayor riesgo de ser agredidas que los hombres,seguridad_justicia,categorica,Ítem 5 de la batería P54b. ítem de batería
+p55,"P55. De acuerdo con su percepción, ¿Mencione cuál es el principal problema de SEGURIDAD que se vive en su municipio?",seguridad_justicia,categorica,
+p56,P56. ¿Cómo se entera de los temas de interés público y todo lo relacionado con gobierno?,seguridad_justicia,categorica,
+p57,P57. Si respondió que no se entera en la pregunta anterior ¿por qué no lo hace?,seguridad_justicia,categorica,
+p58,P58. ¿Considera que el gobierno MUNICIPAL hace un buen uso de los recursos públicos?,seguridad_justicia,categorica,
+p59,P59. ¿Considera que el gobierno ESTATAL hace un buen uso de los recursos públicos?,seguridad_justicia,categorica,
+p6,P6. Durante el día de ayer: ¿Cuál fue el principal medio de transporte usted utilizó para llegar a su destino? Cuando la entrevista searealizada en DOMINGO o LUNES entonces preguntar por el viaje más importante del VIERNES anterior,movilidad,categorica,
+p60,"P60. La corrupción consiste en el abuso de poder para beneficio propio. En su opinión, en el estado de Nuevo León la corrupción esuna práctica",seguridad_justicia,categorica,
+p61,"P61. En su opinión, en su municipio la corrupción es una práctica",seguridad_justicia,categorica,
+p62,"P62. De acuerdo con su percepción, ¿quién es más CORRUPTO?",seguridad_justicia,categorica,
+p63,P63. En su opinión: ¿cuál es el principal problema que enfrenta el ciudadano PARA CONFIAR EN SU GOBIERNO?,seguridad_justicia,categorica,
+p64_1,P64. Considera que su ALCALDE/ALCALDESA: ¿Es un gobernante honesto(a)?,participacion_ciudadana,categorica,Ítem 1 de la batería P64. ítem de batería
+p64_2,P64. Considera que su ALCALDE/ALCALDESA: ¿Es capaz de resolver los problemas del municipio?,participacion_ciudadana,categorica,Ítem 2 de la batería P64. ítem de batería
+p64_3,P64. Considera que su ALCALDE/ALCALDESA: ¿Es receptivo a la crítica?,participacion_ciudadana,categorica,Ítem 3 de la batería P64. ítem de batería
+p64_4,P64. Considera que su ALCALDE/ALCALDESA: ¿Cuenta con un equipo capacitado?,participacion_ciudadana,categorica,Ítem 4 de la batería P64. ítem de batería
+p64_5,P64. Considera que su ALCALDE/ALCALDESA: ¿Cumple con sus promesas de campaña/compromisos?,participacion_ciudadana,categorica,Ítem 5 de la batería P64. ítem de batería
+p65,P65. Usted considera que su ALCALDE/ALCALDESA toma la mayoría de sus decisiones (elegir una de las opciones mencionadas),participacion_ciudadana,categorica,
+p66,"P66. En términos generales, ¿aprueba o desaprueba el trabajo que está haciendo su ALCALDE/ALCALDESA?",participacion_ciudadana,categorica,
+p67_1,P67. Considera que su GOBERNADOR: ¿Es un gobernante honesto(a)?,participacion_ciudadana,categorica,Ítem 1 de la batería P67. ítem de batería
+p67_2,P67. Considera que su GOBERNADOR: ¿Es capaz de resolver los problemas del estado?,participacion_ciudadana,categorica,Ítem 2 de la batería P67. ítem de batería
+p67_3,P67. Considera que su GOBERNADOR: ¿Es receptivo a la crítica?,participacion_ciudadana,categorica,Ítem 3 de la batería P67. ítem de batería
+p67_4,P67. Considera que su GOBERNADOR: ¿Cuenta con un equipo capacitado?,participacion_ciudadana,categorica,Ítem 4 de la batería P67. ítem de batería
+p67_5,P67. Considera que su GOBERNADOR: ¿Cumple con sus promesas de campaña/compromisos?,participacion_ciudadana,categorica,Ítem 5 de la batería P67. ítem de batería
+p68,P68. Usted considera que el GOBERNADOR toma la mayoría de sus decisiones (elegir una),participacion_ciudadana,categorica,
+p69,"P69. En términos generales, ¿aprueba o desaprueba el trabajo que está haciendo su GOBERNADOR?",participacion_ciudadana,categorica,
+p6c,P6. ¿Cuántas personas viajan en el Taxi? (sin contar al conductor),movilidad,numerica,Subcampo de P6; el sufijo C corresponde a la opción 3 (Taxi).
+p6d,P6. ¿Cuántas personas viajan en el Uber? (sin contar al conductor),movilidad,numerica,Subcampo de P6; el sufijo D corresponde a la opción 4 (Uber u otra aplicación móvil).
+p6h,P6. ¿Cuántas personas viajan en el auto?,movilidad,numerica,Subcampo de P6; el sufijo H corresponde a la opción 8 (Automóvil / acompañante de automóvil).
+p7,"P7. Si contestó 3: Taxi, 4: Uber, 5: Motocicleta, 8: Automóvil, ¿Por qué no utiliza el transporte público? Razón más importante",movilidad,categorica,
+p70,P70. ¿Qué tanto cree usted que los ciudadanos pueden influir en las decisiones del gobierno?,participacion_ciudadana,categorica,
+p71,"P71. Si pudiera vivir fuera de Nuevo León, ¿lo haría?",participacion_ciudadana,categorica,
+p72_1,"P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Asistir a marchas, caminatas o manifestaciones",participacion_ciudadana,categorica,Ítem 1 de la batería P72. ítem de batería
+p72_10,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Otra (especificar),participacion_ciudadana,categorica,Ítem 10 de la batería P72. ítem de batería
+p72_2,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en Consejos Ciudadanos,participacion_ciudadana,categorica,Ítem 2 de la batería P72. ítem de batería
+p72_3,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Hacer voluntariado en una asociación civil o colectivo,participacion_ciudadana,categorica,Ítem 3 de la batería P72. ítem de batería
+p72_4,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en una junta de vecinos,participacion_ciudadana,categorica,Ítem 4 de la batería P72. ítem de batería
+p72_5,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en una asociación de padres de familia,participacion_ciudadana,categorica,Ítem 5 de la batería P72. ítem de batería
+p72_6,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Contactarse con los medios de comunicación,participacion_ciudadana,categorica,Ítem 6 de la batería P72. ítem de batería
+p72_7,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Firmar peticiones en línea,participacion_ciudadana,categorica,Ítem 7 de la batería P72. ítem de batería
+p72_8,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Contactar funcionarios vía redes sociales o correo electrónico,participacion_ciudadana,categorica,Ítem 8 de la batería P72. ítem de batería
+p72_9,P72. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Solicitar apoyo o presentar quejas a funcionarios o autoridades,participacion_ciudadana,categorica,Ítem 9 de la batería P72. ítem de batería
+p73_1,"P73. Ha escuchado hablar de la iniciativa: Cómo Vamos, Nuevo León",participacion_ciudadana,categorica,Ítem 1 de la batería P73. ítem de batería
+p73_2,"P73. Ha escuchado hablar de la iniciativa: Alcalde, Cómo Vamos?",participacion_ciudadana,categorica,Ítem 2 de la batería P73. ítem de batería
+p74,P74. ¿Sabe qué tipo de iniciativa es “Cómo Vamos? (Solo si contestó Sí en P73),participacion_ciudadana,categorica,
+p75,P75. Para concluir: ¿En qué ámbito está el PRINCIPAL PROBLEMA que enfrenta actualmente el ESTADO?,participacion_ciudadana,categorica,
+p76,"P76. FINALMENTE: ¿Cuál es el ingreso mensual total del hogar? $3,080.4 salario mínimo mensual para zona general (cifras redondeadas)",participacion_ciudadana,categorica,
+p8_1,"P8.1. ¿Cuál es su gasto promedio semanal en gasolina por auto? $ (Si tiene más de un auto, preguntar por el auto ""más usado"" de la casa)",movilidad,numerica,
+p8_2,P8.2. ¿Cuál es su gasto promedio semanal en gasolina por usar su motocicleta? $,movilidad,numerica,
+p9_1,P9.1. ¿Cuántos autos hay en el hogar?,movilidad,numerica,
+p9_2,P9.2. ¿Cuántas motocicletas hay en el hogar?,movilidad,numerica,
+v10,¿Cuántas personas viven en este hogar?,hogar,numerica,El cuestionario 2019 no documenta el bloque de hogar; texto inferido del contenido de la columna.
+v11,Sexo,hogar,categorica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v12,¿Cuántos años cumplidos tiene?,hogar,numerica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v13,¿Qué parentesco tiene con la jefa(e) del hogar?,hogar,categorica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v14,¿Estudia actualmente?,hogar,categorica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v15,¿Cuál es el nivel de estudios?,hogar,categorica,"Bloque de hogar sin documentar. 2019 trae UNA sola columna de nivel; 2021-2025 separan ""máximo terminado"" y ""actualmente cursando""."
+v16,Tipo de escuela,hogar,categorica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v17,¿Con cuál servicio médico cuenta?,hogar,categorica,Bloque de hogar sin documentar; se pregunta por cada integrante.
+v18_1,"Bloque de hogar sin documentar, ítem 1 (Sí/No)",hogar,categorica,PENDIENTE DE CONFIRMAR: batería de 5 ítems Sí/No por integrante. Análoga a cp9_1..cp9_4 de 2021 (padecimientos en los últimos 12 meses) pero con cinco ítems. El cuestionario 2019 no la documenta.
+v18_2,"Bloque de hogar sin documentar, ítem 2 (Sí/No)",hogar,categorica,PENDIENTE DE CONFIRMAR: ver v18_1.
+v18_3,"Bloque de hogar sin documentar, ítem 3 (Sí/No)",hogar,categorica,PENDIENTE DE CONFIRMAR: ver v18_1.
+v18_4,"Bloque de hogar sin documentar, ítem 4 (Sí/No)",hogar,categorica,PENDIENTE DE CONFIRMAR: ver v18_1.
+v18_5,"Bloque de hogar sin documentar, ítem 5 (Sí/No)",hogar,categorica,PENDIENTE DE CONFIRMAR: ver v18_1.

@@ -1,0 +1,1187 @@
+question_id,option_id,option_label
+cobertura_medica,1,IMSS
+cobertura_medica,2,"Hospital naval, militar o Pemex"
+cobertura_medica,3,ISSSTE Federal
+cobertura_medica,4,ISSSTE Estatal
+cobertura_medica,5,Seguro Popular
+cobertura_medica,6,Servicios médicos UANL
+cobertura_medica,7,Seguro médico privado
+cobertura_medica,8,Otra
+cobertura_medica,9,Ninguna institución
+cobertura_medica,8888,No sabe
+cobertura_medica,9999,No contesta
+educacion,1,Sí
+educacion,2,No
+educacion,8888,No sabe
+nivel,1,Primaria
+nivel,2,Secundaria
+nivel,3,Preparatoria
+nivel,4,Técnica
+nivel,5,Universidad
+nivel,6,Maestría
+nivel,7,Doctorado
+nivel,8,Otro
+nivel,8888,No sabe
+nivel,9999,No contesta
+p1,1,Empleado
+p1,2,Buscando empleo
+p1,3,Estudiante
+p1,4,Negocio propio / independiente
+p1,5,Ama de casa
+p1,6,Jubilado/Pensionado
+p1,7,"Ni estudia, ni trabaja, ni busca empleo"
+p1,8,Otro
+p1,9999,No contesta
+p12_a,0,NO
+p12_a,1,SÍ
+p12_a,3,NO HAY
+p12_a,7777,No aplica
+p12_a,8888,No sabe
+p12_a,9999,No contesta
+p12_b,0,NO
+p12_b,1,SÍ
+p12_b,3,NO HAY
+p12_b,7777,No aplica
+p12_b,8888,No sabe
+p12_b,9999,No contesta
+p12_c,0,NO
+p12_c,1,SÍ
+p12_c,3,NO HAY
+p12_c,7777,No aplica
+p12_c,8888,No sabe
+p12_c,9999,No contesta
+p12_d,0,NO
+p12_d,1,SÍ
+p12_d,3,NO HAY
+p12_d,7777,No aplica
+p12_d,8888,No sabe
+p12_d,9999,No contesta
+p12_e,0,NO
+p12_e,1,SÍ
+p12_e,3,NO HAY
+p12_e,7777,No aplica
+p12_e,8888,No sabe
+p12_e,9999,No contesta
+p12_f,0,NO
+p12_f,1,SÍ
+p12_f,3,NO HAY
+p12_f,7777,No aplica
+p12_f,8888,No sabe
+p12_f,9999,No contesta
+p15,0,No
+p15,1,Sí
+p15,9999,No contesta
+p15_a,1,1
+p15_a,2,2
+p15_a,3,3
+p15_a,9999,No contesta
+p17_a,0,NO
+p17_a,1,SÍ
+p17_a,8888,No sabe
+p17_a,9999,No contesta
+p17_b,0,NO
+p17_b,1,SÍ
+p17_b,8888,No sabe
+p17_b,9999,No contesta
+p17_c,0,NO
+p17_c,1,SÍ
+p17_c,8888,No sabe
+p17_c,9999,No contesta
+p17_d,0,NO
+p17_d,1,SÍ
+p17_d,8888,No sabe
+p17_d,9999,No contesta
+p17_e,0,NO
+p17_e,1,SÍ
+p17_e,8888,No sabe
+p17_e,9999,No contesta
+p17_f,0,NO
+p17_f,1,SÍ
+p17_f,8888,No sabe
+p17_f,9999,No contesta
+p17_g,0,NO
+p17_g,1,SÍ
+p17_g,9999,No contesta
+p18_a,0,NO
+p18_a,1,SÍ
+p18_a,8888,No sabe
+p18_a,9999,No contesta
+p18_b,0,NO
+p18_b,1,SÍ
+p18_b,8888,No sabe
+p18_b,9999,No contesta
+p18_c,0,NO
+p18_c,1,SÍ
+p18_c,8888,No sabe
+p18_c,9999,No contesta
+p18_d,0,NO
+p18_d,1,SÍ
+p18_d,8888,No sabe
+p18_d,9999,No contesta
+p19_a,0,NO
+p19_a,1,SÍ
+p19_a,9999,No contesta
+p19_b,0,NO
+p19_b,1,SÍ
+p19_b,9999,No contesta
+p19_c,0,NO
+p19_c,1,SÍ
+p19_c,9999,No contesta
+p19_d,0,NO
+p19_d,1,SÍ
+p19_d,9999,No contesta
+p19_e,0,NO
+p19_e,1,SÍ
+p19_e,8888,No sabe
+p19_e,9999,No contesta
+p19_f,0,NO
+p19_f,1,SÍ
+p19_f,9999,No contesta
+p19_g,0,NO
+p19_g,1,SÍ
+p19_g,9999,No contesta
+p19_h,0,NO
+p19_h,1,SÍ
+p19_h,8888,No sabe
+p19_h,9999,No contesta
+p19_i,0,NO
+p19_i,1,SÍ
+p19_i,7777,No aplica
+p19_i,8888,No sabe
+p19_i,9999,No contesta
+p21_1,1,"Transporte público: no hay rutas, son de mala calidad"
+p21_1,2,Congestión vehicular (Tráfico)
+p21_1,3,"Calidad de la infraestructura vial para automóviles: baches, semáforos descompuestos,deficiencias viales"
+p21_1,4,No hay infraestructura para peatones y ciclistas
+p21_1,5,Cultura vial: no se conduce de acuerdo al reglamento
+p21_1,6,Riesgo de choques
+p21_1,7,Otro
+p21_1,8888,No sabe
+p21_1,9999,No contesta
+p21_2,1,"Transporte público: no hay rutas, son de mala calidad"
+p21_2,2,Congestión vehicular (Tráfico)
+p21_2,3,"Calidad de la infraestructura vial para automóviles: baches, semáforos descompuestos,deficiencias viales"
+p21_2,4,No hay infraestructura para peatones y ciclistas
+p21_2,5,Cultura vial: no se conduce de acuerdo al reglamento
+p21_2,6,Riesgo de choques
+p21_2,7,Otro
+p21_2,9999,No contesta
+p21_3,1,"Transporte público: no hay rutas, son de mala calidad"
+p21_3,2,Congestión vehicular (Tráfico)
+p21_3,3,"Calidad de la infraestructura vial para automóviles: baches, semáforos descompuestos,deficiencias viales"
+p21_3,4,No hay infraestructura para peatones y ciclistas
+p21_3,5,Cultura vial: no se conduce de acuerdo al reglamento
+p21_3,6,Riesgo de choques
+p21_3,7,Otro
+p21_3,9999,No contesta
+p22_1,1,Me quedaría en esta misma zona
+p22_1,2,Cerca de familiares y/o amigos
+p22_1,3,Una zona más segura
+p22_1,4,"Una zona con servicios, comercios y facilidades a la que pueda llegar fácilmente"
+p22_1,5,Una zona cerca de mi trabajo o mi lugar de estudio
+p22_1,6,Una zona cerca de una buena escuela para mis hijos
+p22_1,7,Otro
+p22_1,9999,No contesta
+p22_2,1,Me quedaría en esta misma zona
+p22_2,2,Cerca de familiares y/o amigos
+p22_2,3,Una zona más segura
+p22_2,4,"Una zona con servicios, comercios y facilidades a la que pueda llegar fácilmente"
+p22_2,5,Una zona cerca de mi trabajo o mi lugar de estudio
+p22_2,6,Una zona cerca de una buena escuela para mis hijos
+p22_2,7,Otro
+p22_2,9999,No contesta
+p22_3,1,Me quedaría en esta misma zona
+p22_3,2,Cerca de familiares y/o amigos
+p22_3,3,Una zona más segura
+p22_3,4,"Una zona con servicios, comercios y facilidades a la que pueda llegar fácilmente"
+p22_3,5,Una zona cerca de mi trabajo o mi lugar de estudio
+p22_3,6,Una zona cerca de una buena escuela para mis hijos
+p22_3,7,Otro
+p22_3,9999,No contesta
+p23_1,0,NO
+p23_1,1,SÍ
+p23_1,7777,No aplica
+p23_1,8888,No sabe
+p23_1,9999,No contesta
+p23_10,0,NO
+p23_10,1,SÍ
+p23_10,7777,No aplica
+p23_10,8888,No sabe
+p23_10,9999,No contesta
+p23_11,0,NO
+p23_11,1,SÍ
+p23_11,8888,No sabe
+p23_11,9999,No contesta
+p23_2,0,NO
+p23_2,1,SÍ
+p23_2,7777,No aplica
+p23_2,8888,No sabe
+p23_2,9999,No contesta
+p23_3,0,NO
+p23_3,1,SÍ
+p23_3,7777,No aplica
+p23_3,8888,No sabe
+p23_3,9999,No contesta
+p23_4,0,NO
+p23_4,1,SÍ
+p23_4,8888,No sabe
+p23_4,9999,No contesta
+p23_5,0,NO
+p23_5,1,SÍ
+p23_5,7777,No aplica
+p23_5,8888,No sabe
+p23_5,9999,No contesta
+p23_6,0,NO
+p23_6,1,SÍ
+p23_6,7777,No aplica
+p23_6,8888,No sabe
+p23_6,9999,No contesta
+p23_7,0,NO
+p23_7,1,SÍ
+p23_7,7777,No aplica
+p23_7,8888,No sabe
+p23_7,9999,No contesta
+p23_8,0,NO
+p23_8,1,SÍ
+p23_8,7777,No aplica
+p23_8,8888,No sabe
+p23_8,9999,No contesta
+p23_9,0,NO
+p23_9,1,SÍ
+p23_9,8888,No sabe
+p23_9,9999,No contesta
+p24_1,1,Construcciones irregulares / sin permiso
+p24_1,2,Grandes distancias entre viviendas y servicios básicos
+p24_1,3,Falta de áreas verdes o deportivas
+p24_1,4,Invasión de áreas naturales/montañas por construcciones
+p24_1,5,"Servicios públicos deficientes (luminarias, recolección de basura)"
+p24_1,6,"Desorden, mala imagen urbana"
+p24_1,7,Otro
+p24_1,9999,No contesta
+p24_2,1,Construcciones irregulares / sin permiso
+p24_2,2,Grandes distancias entre viviendas y servicios básicos
+p24_2,3,Falta de áreas verdes o deportivas
+p24_2,4,Invasión de áreas naturales/montañas por construcciones
+p24_2,5,"Servicios públicos deficientes (luminarias, recolección de basura)"
+p24_2,6,"Desorden, mala imagen urbana"
+p24_2,7,Otro
+p24_2,9999,No contesta
+p24_3,1,Construcciones irregulares / sin permiso
+p24_3,2,Grandes distancias entre viviendas y servicios básicos
+p24_3,3,Falta de áreas verdes o deportivas
+p24_3,4,Invasión de áreas naturales/montañas por construcciones
+p24_3,5,"Servicios públicos deficientes (luminarias, recolección de basura)"
+p24_3,6,"Desorden, mala imagen urbana"
+p24_3,7,Otro
+p24_3,9999,No contesta
+p26_a,0,NO
+p26_a,1,SÍ
+p26_a,8888,No sabe
+p26_a,9999,No contesta
+p26_b,0,NO
+p26_b,1,SÍ
+p26_b,8888,No sabe
+p26_b,9999,No contesta
+p26_c,0,NO
+p26_c,1,SÍ
+p26_c,8888,No sabe
+p26_c,9999,No contesta
+p26_d,0,NO
+p26_d,1,SÍ
+p26_d,8888,No sabe
+p26_d,9999,No contesta
+p26_e,0,NO
+p26_e,1,SÍ
+p26_e,8888,No sabe
+p26_e,9999,No contesta
+p26_f,0,NO
+p26_f,1,SÍ
+p26_f,8888,No sabe
+p26_f,9999,No contesta
+p26_g,0,NO
+p26_g,1,SÍ
+p26_g,8888,No sabe
+p26_g,9999,No contesta
+p27,1,Conserve su ecosistema natural
+p27,2,Se utilice para construir canchas y ciclovías
+p27,8888,No sabe
+p27,9999,No contesta
+p28_1,1,Contaminación del aire
+p28_1,2,Contaminación de agua (ríos y arroyos)
+p28_1,3,Contaminación visual y panorámicos
+p28_1,4,Falta de árboles y mal estado de los ya existentes en la calle
+p28_1,5,Basura/escombro en las calles y en terrenos baldíos
+p28_1,6,Despilfarro del agua
+p28_1,7,Exceso de ruido
+p28_1,8,Falta de reciclaje
+p28_1,9,Perros y gatos abandonados
+p28_1,10,Otro
+p28_1,9999,No contesta
+p28_2,1,Contaminación del aire
+p28_2,2,Contaminación de agua (ríos y arroyos)
+p28_2,3,Contaminación visual y panorámicos
+p28_2,4,Falta de árboles y mal estado de los ya existentes en la calle
+p28_2,5,Basura/escombro en las calles y en terrenos baldíos
+p28_2,6,Despilfarro del agua
+p28_2,7,Exceso de ruido
+p28_2,8,Falta de reciclaje
+p28_2,9,Perros y gatos abandonados
+p28_2,10,Otro
+p28_2,9999,No contesta
+p28_3,1,Contaminación del aire
+p28_3,2,Contaminación de agua (ríos y arroyos)
+p28_3,3,Contaminación visual y panorámicos
+p28_3,4,Falta de árboles y mal estado de los ya existentes en la calle
+p28_3,5,Basura/escombro en las calles y en terrenos baldíos
+p28_3,6,Despilfarro del agua
+p28_3,7,Exceso de ruido
+p28_3,8,Falta de reciclaje
+p28_3,9,Perros y gatos abandonados
+p28_3,10,Otro
+p28_3,9999,No contesta
+p29a,1,Mejor
+p29a,2,Igual de bien
+p29a,3,Igual de mal
+p29a,4,Peor
+p29a,8888,No sabe
+p29a,9999,No contesta
+p29b,1,Mejor
+p29b,2,Igual de bien
+p29b,3,Igual de mal
+p29b,4,Peor
+p29b,8888,No sabe
+p29b,9999,No contesta
+p2c,0,NO
+p2c,1,SÍ
+p2c,8888,No sabe
+p2c,9999,No contesta
+p3,1,Trabajo
+p3,2,Escuela
+p3,3,Compras
+p3,4,"Médico, hospital"
+p3,5,Diversión
+p3,6,Llevar a alguien
+p3,7,"Banco, Pago de servicios"
+p3,8,Otro (especifique)
+p3,9,SIN VIAJE / NO
+p3,9999,No contesta
+p30,1,Les alcanza bien y pueden ahorrar
+p30,2,"Les alcanza justo, sin grandes dificultades"
+p30,3,No les alcanza y tienen dificultades
+p30,4,No les alcanza y tienen grandes dificultades
+p30,8888,No sabe
+p30,9999,No contesta
+p31a,0,NO
+p31a,1,SÍ
+p31a,8888,No sabe
+p31a,9999,No contesta
+p31b,0,NO
+p31b,1,SÍ
+p31b,8888,No sabe
+p31b,9999,No contesta
+p31c,0,NO
+p31c,1,SÍ
+p31c,8888,No sabe
+p31c,9999,No contesta
+p31d,0,NO
+p31d,1,SÍ
+p31d,8888,No sabe
+p31d,9999,No contesta
+p31e,0,NO
+p31e,1,SÍ
+p31e,8888,No sabe
+p31e,9999,No contesta
+p31f,0,NO
+p31f,1,SÍ
+p31f,8888,No sabe
+p31f,9999,No contesta
+p31g,0,NO
+p31g,1,SÍ
+p31g,8888,No sabe
+p31g,9999,No contesta
+p31h,0,NO
+p31h,1,SÍ
+p31h,8888,No sabe
+p31h,9999,No contesta
+p31i,0,NO
+p31i,1,SÍ
+p31i,8888,No sabe
+p31i,9999,No contesta
+p31j,0,NO
+p31j,1,SÍ
+p31j,8888,No sabe
+p31j,9999,No contesta
+p31k,0,NO
+p31k,1,SÍ
+p31k,8888,No sabe
+p31k,9999,No contesta
+p32,1,Hace una semana o menos
+p32,2,Hace más de una semana pero menos de un mes
+p32,3,Entre un mes y tres meses
+p32,4,Hace más de tres meses
+p32,5,No fue a consultar
+p32,8888,No sabe
+p32,9999,No contesta
+p33,1,IMSS
+p33,2,"Hospital naval, militar o PEMEX"
+p33,3,ISSSTE Federal
+p33,4,ISSSTELEON
+p33,5,Seguro Popular
+p33,6,Servicios médicos UANL
+p33,7,Hospital o consultorio privado
+p33,8,"Medicina tradicional (Curandero, hierbero) etc.)"
+p33,9,Medicina alternativa
+p33,10,Se automedica
+p33,11,Consultorio de farmacia
+p33,12,Otro
+p33,8888,No sabe
+p33,9999,No contesta
+p34,1,Siempre
+p34,2,La mayoría de las veces
+p34,3,Algunas veces
+p34,4,Nunca
+p34,7777,No aplica
+p34,8888,No sabe
+p34,9999,No contesta
+p35,1,Consulta programada (cita previa)
+p35,2,Consulta no programada
+p35,3,Urgencia
+p35,8888,No sabe
+p35,9999,No contesta
+p36b,0,No lo atendieron
+p36b,1,Sí lo atendieron
+p36b,9999,No contesta
+p37a,1,Pésima
+p37a,2,Mala
+p37a,3,Regular
+p37a,4,Buena
+p37a,5,Excelente
+p37a,7777,No aplica
+p37a,9999,No contesta
+p37b,1,Pésima
+p37b,2,Mala
+p37b,3,Regular
+p37b,4,Buena
+p37b,5,Excelente
+p37b,7777,No aplica
+p37b,9999,No contesta
+p37c,1,Pésima
+p37c,2,Mala
+p37c,3,Regular
+p37c,4,Buena
+p37c,5,Excelente
+p37c,7777,No aplica
+p37c,9999,No contesta
+p37d,1,Pésima
+p37d,2,Mala
+p37d,3,Regular
+p37d,4,Buena
+p37d,5,Excelente
+p37d,7777,No aplica
+p37d,9999,No contesta
+p37e,1,Pésima
+p37e,2,Mala
+p37e,3,Regular
+p37e,4,Buena
+p37e,5,Excelente
+p37e,7777,No aplica
+p37e,9999,No contesta
+p37f,1,Pésima
+p37f,2,Mala
+p37f,3,Regular
+p37f,4,Buena
+p37f,5,Excelente
+p37f,7777,No aplica
+p37f,9999,No contesta
+p38a,1,Pésima
+p38a,2,Mala
+p38a,3,Regular
+p38a,4,Buena
+p38a,5,Excelente
+p38a,7777,No aplica
+p38a,9999,No contesta
+p38b,1,Pésima
+p38b,2,Mala
+p38b,3,Regular
+p38b,4,Buena
+p38b,5,Excelente
+p38b,7777,No aplica
+p38b,9999,No contesta
+p38c,1,Pésima
+p38c,2,Mala
+p38c,3,Regular
+p38c,4,Buena
+p38c,5,Excelente
+p38c,7777,No aplica
+p38c,8888,No sabe
+p38c,9999,No contesta
+p38d,1,Pésima
+p38d,2,Mala
+p38d,3,Regular
+p38d,4,Buena
+p38d,5,Excelente
+p38d,7777,No aplica
+p38d,9999,No contesta
+p38e,1,Pésima
+p38e,2,Mala
+p38e,3,Regular
+p38e,4,Buena
+p38e,5,Excelente
+p38e,7777,No aplica
+p38e,9999,No contesta
+p40a,0,NO
+p40a,1,SÍ
+p40a,7777,No aplica
+p40a,8888,No sabe
+p40a,9999,No contesta
+p40b,0,NO
+p40b,1,SÍ
+p40b,7777,No aplica
+p40b,8888,No sabe
+p40b,9999,No contesta
+p41a_banos,1,Pésima
+p41a_banos,2,Mala
+p41a_banos,3,Regular
+p41a_banos,4,Buena
+p41a_banos,5,Excelente
+p41a_banos,98,NO HAY
+p41a_banos,7777,No aplica
+p41a_banos,8888,No sabe
+p41a_banos,9999,No contesta
+p41a_bebe,1,Pésima
+p41a_bebe,2,Mala
+p41a_bebe,3,Regular
+p41a_bebe,4,Buena
+p41a_bebe,5,Excelente
+p41a_bebe,98,NO HAY
+p41a_bebe,7777,No aplica
+p41a_bebe,8888,No sabe
+p41a_bebe,9999,No contesta
+p41a_comp,1,Pésima
+p41a_comp,2,Mala
+p41a_comp,3,Regular
+p41a_comp,4,Buena
+p41a_comp,5,Excelente
+p41a_comp,98,NO HAY
+p41a_comp,7777,No aplica
+p41a_comp,8888,No sabe
+p41a_comp,9999,No contesta
+p41a_inst_dep,1,Pésima
+p41a_inst_dep,2,Mala
+p41a_inst_dep,3,Regular
+p41a_inst_dep,4,Buena
+p41a_inst_dep,5,Excelente
+p41a_inst_dep,98,NO HAY
+p41a_inst_dep,7777,No aplica
+p41a_inst_dep,8888,No sabe
+p41a_inst_dep,9999,No contesta
+p41a_salones,1,Pésima
+p41a_salones,2,Mala
+p41a_salones,3,Regular
+p41a_salones,4,Buena
+p41a_salones,5,Excelente
+p41a_salones,98,NO HAY
+p41a_salones,7777,No aplica
+p41a_salones,8888,No sabe
+p41a_salones,9999,No contesta
+p41b_banos,1,Pésima
+p41b_banos,2,Mala
+p41b_banos,3,Regular
+p41b_banos,4,Buena
+p41b_banos,5,Excelente
+p41b_banos,98,NO HAY
+p41b_banos,7777,No aplica
+p41b_banos,8888,No sabe
+p41b_banos,9999,No contesta
+p41b_bebe,1,Pésima
+p41b_bebe,2,Mala
+p41b_bebe,3,Regular
+p41b_bebe,4,Buena
+p41b_bebe,5,Excelente
+p41b_bebe,98,NO HAY
+p41b_bebe,7777,No aplica
+p41b_bebe,8888,No sabe
+p41b_bebe,9999,No contesta
+p41b_comp,1,Pésima
+p41b_comp,2,Mala
+p41b_comp,3,Regular
+p41b_comp,4,Buena
+p41b_comp,5,Excelente
+p41b_comp,98,NO HAY
+p41b_comp,7777,No aplica
+p41b_comp,8888,No sabe
+p41b_comp,9999,No contesta
+p41b_inst_dep,1,Pésima
+p41b_inst_dep,2,Mala
+p41b_inst_dep,3,Regular
+p41b_inst_dep,4,Buena
+p41b_inst_dep,5,Excelente
+p41b_inst_dep,98,NO HAY
+p41b_inst_dep,7777,No aplica
+p41b_inst_dep,8888,No sabe
+p41b_inst_dep,9999,No contesta
+p41b_salones,1,Pésima
+p41b_salones,2,Mala
+p41b_salones,3,Regular
+p41b_salones,4,Buena
+p41b_salones,5,Excelente
+p41b_salones,98,NO HAY
+p41b_salones,7777,No aplica
+p41b_salones,8888,No sabe
+p41b_salones,9999,No contesta
+p42a,0,NO
+p42a,1,SÍ
+p42a,7777,No aplica
+p42a,8888,No sabe
+p42a,9999,No contesta
+p42b,0,NO
+p42b,1,SÍ
+p42b,7777,No aplica
+p42b,8888,No sabe
+p42b,9999,No contesta
+p43a,0,NO
+p43a,1,SÍ
+p43a,7777,No aplica
+p43a,8888,No sabe
+p43a,9999,No contesta
+p43b,0,NO
+p43b,1,SÍ
+p43b,7777,No aplica
+p43b,8888,No sabe
+p43b,9999,No contesta
+p44a,1,Muy frecuente
+p44a,2,Frecuente
+p44a,3,Poco frecuente
+p44a,4,No ocurre
+p44a,7777,No aplica
+p44a,8888,No sabe
+p44a,9999,No contesta
+p44b,1,Muy frecuente
+p44b,2,Frecuente
+p44b,3,Poco frecuente
+p44b,4,No ocurre
+p44b,7777,No aplica
+p44b,8888,No sabe
+p44b,9999,No contesta
+p46a,1,El ingreso familiar no es suficiente
+p46a,2,Pocas oportunidades laborales
+p46a,3,"Servicios de salud poco accesibles (lejanos, caros, insuficientes)"
+p46a,4,Mala calidad en los servicios de salud
+p46a,5,"Planteles educativos poco accesibles (lejanos, caros, cupo insuficiente)"
+p46a,6,Mala calidad del servicio educativo
+p46a,7,Otro
+p46a,8888,No sabe
+p46a,9999,No contesta
+p46b,1,El ingreso familiar no es suficiente
+p46b,2,Pocas oportunidades laborales
+p46b,3,"Servicios de salud poco accesibles (lejanos, caros, insuficientes)"
+p46b,4,Mala calidad en los servicios de salud
+p46b,5,"Planteles educativos poco accesibles (lejanos, caros, cupo insuficiente)"
+p46b,6,Mala calidad del servicio educativo
+p46b,7,Otro
+p46b,9999,No contesta
+p46c,1,El ingreso familiar no es suficiente
+p46c,2,Pocas oportunidades laborales
+p46c,3,"Servicios de salud poco accesibles (lejanos, caros, insuficientes)"
+p46c,4,Mala calidad en los servicios de salud
+p46c,5,"Planteles educativos poco accesibles (lejanos, caros, cupo insuficiente)"
+p46c,6,Mala calidad del servicio educativo
+p46c,7,Otro
+p47,0,NO
+p47,1,SÍ
+p47,8888,No sabe
+p47,9999,No contesta
+p47a,0,NO
+p47a,1,SÍ
+p47a,8888,No sabe
+p47a,9999,No contesta
+p47c,1,Temor a represalias / miedo a que me extorsionen
+p47c,2,Falta de confianza en que se resuelva mi caso
+p47c,3,Falta de información sobre dónde denunciar
+p47c,4,Proceso largo y difícil / muchos requisitos
+p47c,5,Mala actitud de la autoridad que atiende
+p47c,6,La autoridad me convenció de no hacer la denuncia
+p47c,7,Es un delito de menor importancia
+p47c,8,Falta de evidencia para denunciar
+p47c,9,Otro
+p47c,9999,No contesta
+p48,1,Muy probable
+p48,2,Probable
+p48,3,Poco probable
+p48,4,Improbable
+p48,8888,No sabe
+p48,9999,No contesta
+p49a,0,NO
+p49a,1,SÍ
+p49a,8888,No sabe
+p49a,9999,No contesta
+p49b,0,NO
+p49b,1,SÍ
+p49b,8888,No sabe
+p49b,9999,No contesta
+p49c,0,NO
+p49c,1,SÍ
+p49c,8888,No sabe
+p49c,9999,No contesta
+p49d,0,NO
+p49d,1,SÍ
+p49d,8888,No sabe
+p49d,9999,No contesta
+p49e,0,NO
+p49e,1,SÍ
+p49e,8888,No sabe
+p49e,9999,No contesta
+p49f,0,NO
+p49f,1,SÍ
+p49f,8888,No sabe
+p49f,9999,No contesta
+p5,1,Monterrey
+p5,2,Guadalupe
+p5,3,San Nicolás de los Garza
+p5,4,Apodaca
+p5,5,Escobedo
+p5,6,San Pedro Garza García
+p5,7,Santiago
+p5,8,Juárez
+p5,9,García
+p5,10,Santa Catarina
+p5,11,Cadereyta
+p5,12,Otro
+p5,9999,No contesta
+p51,1,Policía Regia
+p51,2,Fuerza Civil
+p51,8888,No sabe
+p51,9999,No contesta
+p52,0,NO
+p52,1,SÍ
+p52,9999,No contesta
+p53a,0,NO
+p53a,1,SÍ
+p53a,7777,No aplica
+p53a,9999,No contesta
+p53b,0,NO
+p53b,1,SÍ
+p53b,7777,No aplica
+p53b,8888,No sabe
+p53b,9999,No contesta
+p53c,0,NO
+p53c,1,SÍ
+p53c,7777,No aplica
+p53c,9999,No contesta
+p53d,0,NO
+p53d,1,SÍ
+p53d,7777,No aplica
+p53d,9999,No contesta
+p54,1,Que lo conozcan los vecinos del barrio
+p54,2,Que su apariencia física esté cuidada
+p54,3,Que cuente con equipo en buenas condiciones (uniforme/patrullas /armamento)
+p54,4,Que tenga un trato cordial y amable con los vecinos
+p54,5,Que muestre estar preparado para hacer su trabajo
+p54,6,Que tenga la capacidad de resolver conflictos entre vecinos
+p54,7,Otro
+p54,9999,No contesta
+p55a,1,"Delitos de alto impacto (homicidio, secuestro, violación)"
+p55a,2,"Robos patrimoniales (robo a casa, vehículo, negocio o persona)"
+p55a,3,"Delincuencia Organizada (venta de drogas, extorsiones, cobro de piso, presencia de grupos armados)"
+p55a,4,Violencia familiar
+p55a,5,"Violencia en la colonia (riñas, conflicto entre vecinos, pandillerismo)"
+p55a,6,Otro
+p55a,7,Ninguno
+p55a,9999,No contesta
+p55b,1,"Delitos de alto impacto (homicidio, secuestro, violación)"
+p55b,2,"Robos patrimoniales (robo a casa, vehículo, negocio o persona)"
+p55b,3,"Delincuencia Organizada (venta de drogas, extorsiones, cobro de piso, presencia de grupos armados)"
+p55b,4,Violencia familiar
+p55b,5,"Violencia en la colonia (riñas, conflicto entre vecinos, pandillerismo)"
+p55b,6,Otro
+p55b,7,Ninguno
+p55b,9999,No contesta
+p55c,1,"Delitos de alto impacto (homicidio, secuestro, violación)"
+p55c,2,"Robos patrimoniales (robo a casa, vehículo, negocio o persona)"
+p55c,3,"Delincuencia Organizada (venta de drogas, extorsiones, cobro de piso, presencia de grupos armados)"
+p55c,4,Violencia familiar
+p55c,5,"Violencia en la colonia (riñas, conflicto entre vecinos, pandillerismo)"
+p55c,6,Otro
+p55c,7,Ninguno
+p55c,9999,No contesta
+p56,0,No
+p56,1,Sí
+p56,9999,No contesta
+p57a,1,Redes sociales
+p57a,2,Periódico
+p57a,3,Televisión
+p57a,4,Radio
+p57a,5,Portal de noticias en internet
+p57a,6,Volanteo/perifoneo en la colonia
+p57a,7,Juntas de vecinos
+p57a,8,Otro
+p57a,9999,No contesta
+p57b,1,No me interesa
+p57b,2,No tengo acceso a esta información
+p57b,3,No tengo tiempo
+p57b,4,Otro
+p57b,8888,No sabe
+p57b,9999,No contesta
+p58,0,NO
+p58,1,SÍ
+p58,8888,No sabe
+p58,9999,No contesta
+p59,0,No
+p59,1,Sí
+p59,9999,No contesta
+p59a,1,Redes sociales
+p59a,2,Periódico
+p59a,3,Televisión
+p59a,4,Radio
+p59a,5,Portal de noticias en internet
+p59a,6,Volanteo/perifoneo en la colonia
+p59a,7,Juntas de vecinos
+p59a,8,Otro
+p59a,9999,No contesta
+p59b,1,No me interesa
+p59b,2,No tengo acceso a esta información
+p59b,3,No tengo tiempo
+p59b,4,Otro
+p59b,8888,No sabe
+p59b,9999,No contesta
+p60,0,NO
+p60,1,SÍ
+p60,8888,No sabe
+p60,9999,No contesta
+p61,1,Muy frecuente
+p61,2,Frecuente
+p61,3,Poco frecuente
+p61,4,No ocurre
+p61,8888,No sabe
+p61,9999,No contesta
+p62,1,Muy frecuente
+p62,2,Frecuente
+p62,3,Poco frecuente
+p62,4,No ocurre
+p62,8888,No sabe
+p62,9999,No contesta
+p63a_1,0,No
+p63a_1,1,Sí
+p63a_1,9999,No contesta
+p63a_2,0,No
+p63a_2,1,Sí
+p63a_3,0,No
+p63a_3,1,Sí
+p63b_1,0,No
+p63b_1,1,Sí
+p63b_1,9999,No contesta
+p63b_2,0,No
+p63b_2,1,Sí
+p63b_3,0,No
+p63b_3,1,Sí
+p63c_1,0,No
+p63c_1,1,Sí
+p63c_1,9999,No contesta
+p63c_2,0,No
+p63c_2,1,Sí
+p63c_3,0,No
+p63c_3,1,Sí
+p63d_1,0,No
+p63d_1,1,Sí
+p63d_1,9999,No contesta
+p63d_2,0,No
+p63d_2,1,Sí
+p63d_3,0,No
+p63d_3,1,Sí
+p63e_1,0,No
+p63e_1,1,Sí
+p63e_1,9999,No contesta
+p63e_2,0,No
+p63e_2,1,Sí
+p63e_3,0,No
+p63e_3,1,Sí
+p63f_1,0,No
+p63f_1,1,Sí
+p63f_1,9999,No contesta
+p63f_2,0,No
+p63f_2,1,Sí
+p63f_3,0,No
+p63f_3,1,Sí
+p64,1,El Gobierno
+p64,2,Los ciudadanos
+p64,3,Las empresas
+p64,4,Todos (incluyendo usted)
+p64,8888,No sabe
+p64,9999,No contesta
+p65a,1,El gobierno no atiende las demandas ciudadanas
+p65a,2,Los gobernantes no cumplen sus compromisos de campaña
+p65a,3,Los gobernantes hacen uso inadecuado de los recursos públicos
+p65a,4,No hay mecanismos efectivos de diálogo / participación ciudadana
+p65a,5,Los gobernantes son poco efectivos para resolver los problemas de la ciudad / estado
+p65a,6,Otros
+p65a,8888,No sabe
+p65a,9999,No contesta
+p65b,1,El gobierno no atiende las demandas ciudadanas
+p65b,2,Los gobernantes no cumplen sus compromisos de campaña
+p65b,3,Los gobernantes hacen uso inadecuado de los recursos públicos
+p65b,4,No hay mecanismos efectivos de diálogo / participación ciudadana
+p65b,5,Los gobernantes son poco efectivos para resolver los problemas de la ciudad / estado
+p65b,6,Otros
+p65c,1,El gobierno no atiende las demandas ciudadanas
+p65c,2,Los gobernantes no cumplen sus compromisos de campaña
+p65c,3,Los gobernantes hacen uso inadecuado de los recursos públicos
+p65c,4,No hay mecanismos efectivos de diálogo / participación ciudadana
+p65c,5,Los gobernantes son poco efectivos para resolver los problemas de la ciudad / estado
+p65c,6,Otros
+p66,1,Solo nombre
+p66,2,Solo apellido
+p66,3,Nombre y Apellido
+p66,4,Apodo
+p66,8888,No sabe
+p66,9999,No contesta
+p67a,0,NO
+p67a,1,SÍ
+p67a,8888,No sabe
+p67a,9999,No contesta
+p67b,0,NO
+p67b,1,SÍ
+p67b,8888,No sabe
+p67b,9999,No contesta
+p67c,0,NO
+p67c,1,SÍ
+p67c,8888,No sabe
+p67c,9999,No contesta
+p67d,0,NO
+p67d,1,SÍ
+p67d,8888,No sabe
+p67d,9999,No contesta
+p67e,0,NO
+p67e,1,SÍ
+p67e,8888,No sabe
+p67e,9999,No contesta
+p68,1,Pensando en el bienestar del municipio
+p68,2,Pensando en intereses particulares/personales
+p68,8888,No sabe
+p68,9999,No contesta
+p69,1,Aprueba
+p69,2,Desaprueba
+p69,8888,No sabe
+p69,9999,No contesta
+p6_1,1,Pie/camina/en silla de ruedas
+p6_1,2,"Camión, microbús"
+p6_1,3,Taxi
+p6_1,4,Uber u otra aplicación móvil similar
+p6_1,5,Motocicleta
+p6_1,6,Bicicleta
+p6_1,7,Metro
+p6_1,8,Automóvil/acompañante de automóvil
+p6_1,9,Transmetro
+p6_1,12,Transporte de trabajo
+p6_1,13,Autobús privado (tipo Senda)
+p6_1,14,Otro
+p6_1,9999,No contesta
+p6_2,1,Pie/camina/en silla de ruedas
+p6_2,2,"Camión, microbús"
+p6_2,3,Taxi
+p6_2,5,Motocicleta
+p6_2,6,Bicicleta
+p6_2,7,Metro
+p6_2,8,Automóvil/acompañante de automóvil
+p6_2,9,Transmetro
+p6_2,10,Ecovía
+p6_2,12,Transporte de trabajo
+p6_2,14,Otro
+p6_3,2,"Camión, microbús"
+p6_3,4,Uber u otra aplicación móvil similar
+p6_3,8,Automóvil/acompañante de automóvil
+p6_3,9,Transmetro
+p70,1,Ha retrocedido
+p70,2,Se ha mantenido igual
+p70,3,Ha avanzado
+p70,8888,No sabe
+p70,9999,No contesta
+p71,1,Solo nombre
+p71,2,Solo apellido
+p71,3,Nombre y Apellido
+p71,4,Apodo
+p71,8888,No sabe
+p71,9999,No contesta
+p72,1,Mejorará
+p72,2,Se quedará igual
+p72,3,Empeorará
+p72,8888,No sabe
+p72,9999,No contesta
+p73,1,Solo nombre
+p73,2,Solo apellido
+p73,3,Nombre y Apellido
+p73,4,Apodo
+p73,8888,No sabe
+p73,9999,No contesta
+p74a,0,NO
+p74a,1,SÍ
+p74a,8888,No sabe
+p74a,9999,No contesta
+p74b,0,NO
+p74b,1,SÍ
+p74b,8888,No sabe
+p74b,9999,No contesta
+p74c,0,NO
+p74c,1,SÍ
+p74c,8888,No sabe
+p74c,9999,No contesta
+p74d,0,NO
+p74d,1,SÍ
+p74d,8888,No sabe
+p74d,9999,No contesta
+p74e,0,NO
+p74e,1,SÍ
+p74e,8888,No sabe
+p74e,9999,No contesta
+p75,1,Pensando en el bienestar del estado
+p75,2,Pensando en intereses particulares/personales
+p75,8888,No sabe
+p75,9999,No contesta
+p76,1,Empeoró
+p76,2,Mejoro
+p76,3,Se mantuvo igual
+p76,8888,No sabe
+p76,9999,No contesta
+p77,0,Desaprueba
+p77,1,Aprueba
+p77,8888,No sabe
+p77,9999,No contesta
+p78,0,No
+p78,1,Sí
+p78,8888,No sabe
+p78,9999,No contesta
+p79,1,Mucho
+p79,2,Poco
+p79,3,Nada
+p79,8888,No sabe
+p79,9999,No contesta
+p7_1,1,La parada está lejos
+p7_1,2,No hay una ruta que me lleve a mi destino
+p7_1,3,Se tarda más tiempo que el transporte privado
+p7_1,4,El pasaje es muy caro
+p7_1,5,El transporte está feo/sucio
+p7_1,6,El transporte no me deja cerca de mi destino
+p7_1,7,El transporte es inseguro / da miedo usarlo
+p7_1,8,El transporte siempre va lleno
+p7_1,9,El transporte tarda mucho tiempo en pasar
+p7_1,10,"Mal servicio (choferes ebrios, groseros o que van jugando carreras)"
+p7_1,11,Comodidad
+p7_1,12,Otro
+p7_1,9999,No contesta
+p7_2,1,La parada está lejos
+p7_2,2,No hay una ruta que me lleve a mi destino
+p7_2,3,Se tarda más tiempo que el transporte privado
+p7_2,4,El pasaje es muy caro
+p7_2,5,El transporte está feo/sucio
+p7_2,6,El transporte no me deja cerca de mi destino
+p7_2,7,El transporte es inseguro / da miedo usarlo
+p7_2,8,El transporte siempre va lleno
+p7_2,9,El transporte tarda mucho tiempo en pasar
+p7_2,10,"Mal servicio (choferes ebrios, groseros o que van jugando carreras)"
+p7_2,11,Comodidad
+p7_2,12,Otro
+p7_2,9999,No contesta
+p7_3,1,La parada está lejos
+p7_3,2,No hay una ruta que me lleve a mi destino
+p7_3,3,Se tarda más tiempo que el transporte privado
+p7_3,4,El pasaje es muy caro
+p7_3,5,El transporte está feo/sucio
+p7_3,6,El transporte no me deja cerca de mi destino
+p7_3,7,El transporte es inseguro / da miedo usarlo
+p7_3,8,El transporte siempre va lleno
+p7_3,9,El transporte tarda mucho tiempo en pasar
+p7_3,10,"Mal servicio (choferes ebrios, groseros o que van jugando carreras)"
+p7_3,11,Comodidad
+p7_3,12,Otro
+p7_3,9999,No contesta
+p80a,0,No
+p80a,1,SÍ
+p80a,9999,No contesta
+p80b,0,No
+p80b,1,SÍ
+p80b,9999,No contesta
+p80c,0,No
+p80c,1,SÍ
+p80c,9999,No contesta
+p80d,0,No
+p80d,1,SÍ
+p80d,9999,No contesta
+p80e,0,No
+p80e,1,SÍ
+p80e,9999,No contesta
+p80f,0,No
+p80f,1,SÍ
+p80f,9999,No contesta
+p80h,0,No
+p80h,1,SÍ
+p80h,9999,No contesta
+p80i,0,No
+p80i,1,SÍ
+p80i,9999,No contesta
+p80j,0,No
+p80j,1,SÍ
+p80j,9999,No contesta
+p81a,0,NO
+p81a,1,SI
+p81a,8888,No sabe
+p81b,0,NO
+p81b,1,SI
+p81b,8888,No sabe
+p82,1,Iniciativa ciudadana
+p82,2,Iniciativa privada
+p82,3,Mismo gobierno
+p82,4,Otro
+p82,8888,No sabe
+p82,9999,No contesta
+p83a,1,"Movilidad (mala calidad de transporte público, congestión vehicular)"
+p83a,2,"Desarrollo Urbano (deficiencias en servicios públicos, dispersión de la ciudad)"
+p83a,3,"Medio Ambiente (contaminación, falta de árboles)"
+p83a,4,Desarrollo Social (desempleo/pobreza /discriminación/ educación/salud)
+p83a,5,Seguridad (incremento de índices delictivos/impunidad)
+p83a,6,Gobierno Eficiente (corrupción/mal uso de los recursos)
+p83a,8888,No sabe
+p83a,9999,No contesta
+p83b,1,"Movilidad (mala calidad de transporte público, congestión vehicular)"
+p83b,2,"Desarrollo Urbano (deficiencias en servicios públicos, dispersión de la ciudad)"
+p83b,3,"Medio Ambiente (contaminación, falta de árboles)"
+p83b,4,Desarrollo Social (desempleo/pobreza /discriminación/ educación/salud)
+p83b,5,Seguridad (incremento de índices delictivos/impunidad)
+p83b,6,Gobierno Eficiente (corrupción/mal uso de los recursos)
+p83b,8888,No sabe
+p83b,9999,No contesta
+p83c,1,"Movilidad (mala calidad de transporte público, congestión vehicular)"
+p83c,2,"Desarrollo Urbano (deficiencias en servicios públicos, dispersión de la ciudad)"
+p83c,3,"Medio Ambiente (contaminación, falta de árboles)"
+p83c,4,Desarrollo Social (desempleo/pobreza /discriminación/ educación/salud)
+p83c,5,Seguridad (incremento de índices delictivos/impunidad)
+p83c,6,Gobierno Eficiente (corrupción/mal uso de los recursos)
+p83c,9999,No contesta
+p84,1,Sin ingreso
+p84,2,"Menos de 1 SM ($1-$2,650)"
+p84,3,"1-2 SM (2,651 - 5,301)"
+p84,4,"2-3 SM (5,302 - 7,951)"
+p84,5,"3-4 SM (7,952 - 10,602)"
+p84,6,"4-5 SM (10,603 - 13,253)"
+p84,7,"5-6 SM (13,254 - 15,904)"
+p84,8,"6-7 SM (15,905 - 18,555)"
+p84,9,"7-8 SM (18,556 - 21,205)"
+p84,10,"8-9 SM (21,206 - 23,856)"
+p84,11,"9-10 SM (23,857 - 26,507)"
+p84,12,"10 o más SM (26,508 o más)"
+p84,8888,No sabe
+p84,9999,No contesta
+parentesco,1,Jefa(e)
+parentesco,2,Esposa(o) o pareja
+parentesco,3,Hija(o)
+parentesco,4,Nieta(o)
+parentesco,5,Nuera o yerno
+parentesco,6,Madre o padre
+parentesco,7,Suegra(o)
+parentesco,8,Otro (especificar)
+parentesco,9999,No contesta
+sexo,1,Hombre
+sexo,2,Mujer
+sexo,9999,No contesta
+tipo,1,Pública
+tipo,2,Privada
+tipo,8888,No sabe
+tipo,9999,No contesta

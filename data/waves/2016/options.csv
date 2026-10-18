@@ -1,0 +1,633 @@
+question_id,option_id,option_label
+genero,1,Hombre
+genero,2,Mujer
+p1,1,Empleado
+p1,2,Buscando empleo
+p1,3,Estudiante
+p1,4,Negocio propio / independiente
+p1,5,Ama de casa
+p1,6,Jubilado/Pensionado
+p1,7,"Ni estudia, ni trabaja, ni busca empleo"
+p10,1,"Propia, totalmente pagada (tiene escrituras)"
+p10,2,"Propia, la están pagando"
+p10,3,Rentada o sub-rentada
+p10,4,Es Prestada
+p10,5,Ocupante de hecho/posesionario
+p10,8888,No sabe
+p11_aa,1,Si
+p11_aa,2,NO
+p11_aa,8888,No sabe
+p11_ab,1,Si
+p11_ab,2,NO
+p11_ab,8888,No sabe
+p11_ac,1,Si
+p11_ac,2,NO
+p11_ac,8888,No sabe
+p11_ad,1,Si
+p11_ad,2,NO
+p11_ad,8888,No sabe
+p11_ae,1,Si
+p11_ae,2,NO
+p11_ae,8888,No sabe
+p11_af,1,Si
+p11_af,2,NO
+p11_af,8888,No sabe
+p11_ag,1,Si
+p11_ag,2,NO
+p11_ag,8888,No sabe
+p11_ah,1,Si
+p11_ah,2,NO
+p11_ah,8888,No sabe
+p11a,1,SI
+p11a,2,NO
+p11a,8888,No sabe
+p11b,1,SI
+p11b,2,NO
+p11b,8888,No sabe
+p11c,1,SI
+p11c,2,NO
+p11c,8888,No sabe
+p11d,1,SI
+p11d,2,NO
+p11d,8888,No sabe
+p11e,1,SI
+p11e,2,NO
+p11e,8888,No sabe
+p11f,1,SI
+p11f,2,NO
+p11f,8888,No sabe
+p11g,1,SI
+p11g,2,NO
+p11h,1,SI
+p11h,2,NO
+p11h,8888,No sabe
+p11i,1,SI
+p11i,2,NO
+p11i,8888,No sabe
+p13,1,Me gusta el entorno
+p13,2,Me queda cerca de mi trabajo o escuela
+p13,3,Me queda cerca de la escuela de mis hijos
+p13,4,Mi familia vive aquí
+p13,5,El crédito de Infonavit aquí me asignó
+p14,0,Ninguno
+p14,1,Congestión vehicular / tráfico
+p14,2,Mala calidad del transporte público
+p14,3,"Suciedad, desorden, mala imagen urbana"
+p14,4,Grandes distancias entre zonas habitacionales y de trabajo
+p14,5,La falta de áreas verdes adecuadas
+p14,6,Malas condiciones ambientales (contaminación de todos tipos)
+p14,7,"Problemas de convivencia entre las personas (falta de civilidad, de respecto, etc)"
+p14,8,OTRO
+p16a,1,SI
+p16a,2,NO
+p16a,8888,No sabe
+p16b,1,SI
+p16b,2,NO
+p16b,8888,No sabe
+p16c,1,SI
+p16c,2,NO
+p16c,8888,No sabe
+p17a,1,SI
+p17a,2,NO
+p17a,7777,No aplica
+p17a,8888,No sabe
+p17b,1,SI
+p17b,2,NO
+p17b,7777,No aplica
+p17b,8888,No sabe
+p17c,1,SI
+p17c,2,NO
+p17c,7777,No aplica
+p17c,8888,No sabe
+p17d,1,SI
+p17d,2,NO
+p17d,7777,No aplica
+p17d,8888,No sabe
+p17e,1,SI
+p17e,2,NO
+p17e,7777,No aplica
+p17e,8888,No sabe
+p17f,1,SI
+p17f,2,NO
+p17f,7777,No aplica
+p17f,8888,No sabe
+p17g,1,SI
+p17g,2,NO
+p17g,7777,No aplica
+p17g,8888,No sabe
+p17h,1,SI
+p17h,2,NO
+p17h,7777,No aplica
+p17h,8888,No sabe
+p19_1,0,Ninguno
+p19_1,1,congestión vehicular
+p19_1,2,nivel de ruido
+p19_1,3,calidad del aire
+p19_1,4,contaminación de las fuentes de agua
+p19_1,5,reciclaje
+p19_1,6,manejo de basura y residuos sólidos
+p19_1,7,arborización y zonas verdes
+p19_1,8,contaminación visual
+p19_1,9,tiraderos ilegales
+p19_2,0,Ninguno
+p19_2,1,congestión vehicular
+p19_2,2,nivel de ruido
+p19_2,3,calidad del aire
+p19_2,4,contaminación de las fuentes de agua
+p19_2,5,reciclaje
+p19_2,6,manejo de basura y residuos sólidos
+p19_2,7,arborización y zonas verdes
+p19_2,8,contaminación visual
+p19_2,9,tiraderos ilegales
+p19_3,0,Ninguno
+p19_3,1,congestión vehicular
+p19_3,2,nivel de ruido
+p19_3,3,calidad del aire
+p19_3,4,contaminación de las fuentes de agua
+p19_3,5,reciclaje
+p19_3,6,manejo de basura y residuos sólidos
+p19_3,7,arborización y zonas verdes
+p19_3,8,contaminación visual
+p19_3,9,tiraderos ilegales
+p19_3,10,Otro
+p2,0,Ninguno
+p2,1,Primaria
+p2,2,Secundaria
+p2,3,Media Superio
+p2,4,Técnico
+p2,5,Universitario
+p2,6,Post-grado
+p20a,1,SI
+p20a,2,NO
+p20b,1,SI
+p20b,2,NO
+p20ba,1,SI
+p20ba,2,NO
+p20bc,1,SI
+p20bc,2,NO
+p20c,1,SI
+p20c,2,NO
+p20d,1,SI
+p20d,2,NO
+p21,1,Mejor
+p21,2,Igual de bien
+p21,3,Igual de mal
+p21,4,Peor
+p21,8888,No sabe
+p22,1,Mejor
+p22,2,Igual de bien
+p22,3,Igual de mal
+p22,4,Peor
+p22,8888,No sabe
+p23,1,les alcanza bien y pueden ahorrar
+p23,2,"les alcanza justo, sin grandes dificultades"
+p23,3,no les alcanza y tienen dificultades
+p23,4,no les alcanza y tienen grandes dificultades
+p23,8888,No sabe
+p24,1,Si
+p24,2,No
+p24,8888,No sabe
+p24a,1,Una vez
+p24a,2,Más de un vez
+p24b,1,Una vez
+p24b,2,Más de un vez
+p24c,1,Una vez
+p24c,2,Más de un vez
+p24c,8888,No sabe
+p24d,1,Una vez
+p24d,2,Más de un vez
+p24f,1,Una vez
+p24f,2,Más de un vez
+p24g,1,Una vez
+p24h,1,Una vez
+p24i,1,Una vez
+p24j,1,Una vez
+p24l,1,Una vez
+p24l,2,Más de un vez
+p25,1,Si
+p25,2,No
+p25,8888,No sabe
+p25aa,1,Una vez
+p25aa,2,Más de un vez
+p25af,1,Una vez
+p25ag,1,Una vez
+p26,1,el IMSS
+p26,2,"hospital o clínica naval, militar o de Pemex"
+p26,3,ISSSTE Federal
+p26,4,el ISSSTE estatal
+p26,5,el Seguro Popular
+p26,6,otra
+p26,7,Ninguna institución
+p26,8,Servicios médicos UANL
+p27,1,IMSS
+p27,2,Secretaría de Salud
+p27,3,DIF estatal
+p27,4,DIF municipal
+p27,5,ISSSTE ESTATAL
+p27,6,Hospital o consultorio privado
+p27,7,Consultorio de farmacia
+p27,9,"Medicina alternativa (homeopatía, acupuntura, etc.)"
+p27,10,Se auto-medica
+p27,11,Seguro popular
+p27,12,Otro
+p27,13,Servicios Médicos UANL
+p29,1,Si
+p29,2,No
+p29,8888,No sabe
+p30,1,Si
+p30,2,No
+p30,8888,No sabe
+p30a,1,Si
+p30a,2,No
+p30a,8888,No sabe
+p31,1,Si
+p31,2,No
+p31,8888,No sabe
+p31_1,1,SI
+p31_1,2,NO
+p31_1,8888,No sabe
+p31_2,1,SI
+p31_2,2,NO
+p31_2,8888,No sabe
+p31_3,1,SI
+p31_3,2,NO
+p31_3,8888,No sabe
+p31_4,1,SI
+p31_4,2,NO
+p31_4,8888,No sabe
+p31_5,1,SI
+p31_5,2,NO
+p31_5,8888,No sabe
+p31_6,1,SI
+p31_6,2,NO
+p31_6,8888,No sabe
+p31_7,1,SI
+p31_7,2,NO
+p31_7,8888,No sabe
+p31_8,1,SI
+p31_8,2,NO
+p31_8,8888,No sabe
+p32,1,Si
+p32,2,No
+p32,8888,No sabe
+p32a,2,13-14
+p32a,3,15-16
+p32a,4,17-18
+p32a,5,19-20
+p32a,6,21-25
+p32a,7,26-30
+p32a,8,31-40 años
+p32a,9,Más de 40 años
+p33,1,Si
+p33,2,No
+p33a_1,1,Oportunidades/ Prospera
+p33a_1,2,Pensión para Adultos Mayores
+p33a_1,3,Seguro de Vida para Jefas de Familia
+p33a_1,5,Abasto Social de Leche LICONSA
+p33a_1,7,Despensas del DIF
+p33a_1,8,PRONABES
+p33a_1,10,Desayunos escolares (DIF)
+p33a_1,11,BECATE
+p33a_1,12,Programa Opciones Productivas
+p33a_1,13,Otro programa
+p33a_1,8888,No sabe
+p33a_2,2,Pensión para Adultos Mayores
+p33a_2,7,Despensas del DIF
+p33a_2,13,Otro programa
+p37_1,1,Sí
+p37_1,2,No
+p37_10a,2,No
+p37_11a,1,Sí
+p37_11a,2,No
+p37_11b,1,Sí
+p37_11b,2,No
+p37_1a,1,Sí
+p37_1a,2,No
+p37_1b,1,Sí
+p37_1b,2,No
+p37_2a,1,Sí
+p37_2a,2,No
+p37_2b,1,Sí
+p37_2b,2,No
+p37_3a,1,Sí
+p37_3a,2,No
+p37_3b,1,Sí
+p37_3b,2,No
+p37_4a,1,Sí
+p37_4a,2,No
+p37_4b,1,Sí
+p37_4b,2,No
+p37_5a,1,Sí
+p37_5a,2,No
+p37_5b,1,Sí
+p37_6a,1,Sí
+p37_6a,2,No
+p37_6b,1,Sí
+p37_7a,1,Sí
+p37_7a,2,No
+p37_7b,1,Sí
+p37_7b,2,No
+p37_8a,1,Sí
+p37_8a,2,No
+p37_8b,1,Sí
+p37_8b,2,No
+p37_9a,1,Sí
+p37_9a,2,No
+p37_9b,1,Sí
+p37_9b,2,No
+p37a,1,Sí
+p37a,2,No
+p37aa,1,Policía Municipal
+p37aa,2,Fuerza Civil
+p37aa,3,Ministerio Público
+p37b,1,Muy probable
+p37b,2,Probable
+p37b,3,Poco probable
+p37b,4,Improbable
+p39_1_1,1,Sí
+p39_1_1,2,No
+p39_1_2,1,Policía de su Municipio y Barrio
+p39_1_2,2,Fuerza Civil
+p39_1_2,4,Ejército y Marina
+p39_1_2,5,Policía Ministerial
+p39_1_2,7,Tránsito
+p39_2_1,1,Sí
+p39_2_1,2,No
+p39_2_2,1,Policía de su Municipio y Barrio
+p39_2_2,2,Fuerza Civil
+p39_2_2,3,Policía Federal
+p39_2_2,5,Policía Ministerial
+p39_2_2,7,Tránsito
+p39_3_1,1,Sí
+p39_3_1,2,No
+p39_3_2,1,Policía de su Municipio y Barrio
+p39_3_2,5,Policía Ministerial
+p39_4_1,1,Sí
+p39_4_1,2,No
+p39_4_2,1,Policía de su Municipio y Barrio
+p39_4_2,2,Fuerza Civil
+p39_4_2,4,Ejército y Marina
+p39_4_2,5,Policía Ministerial
+p39_4_2,7,Tránsito
+p39_5_1,1,Sí
+p39_5_1,2,No
+p39_5_2,1,Policía de su Municipio y Barrio
+p39_5_2,2,Fuerza Civil
+p39_5_2,7,Tránsito
+p39_6_1,2,No
+p39_7_1,1,Sí
+p39_7_2,1,Policía de su Municipio y Barrio
+p4,0,No salió
+p4,1,Monterrey
+p4,2,Guadalupe
+p4,3,San Nicolás de los Garza
+p4,4,Apodaca
+p4,5,Escobedo
+p4,6,San Pedro Garza García
+p4,7,Santiago
+p4,8,Juárez
+p4,9,García
+p4,10,Otro
+p40,1,Si
+p40,2,No
+p40a,1,Redes sociales
+p40a,2,Medios de comunicación
+p40a,3,Volanteo/perifoneo en la colonia
+p40a,4,Juntas de vecinos
+p40a,5,Otro
+p40b,1,No me interesa
+p40b,2,No tengo acceso a esta información
+p40b,3,Otro
+p40b,8888,No sabe
+p41,1,Sí
+p41,2,No
+p41,8888,No sabe
+p42,1,Sí
+p42,2,No
+p42a,1,Redes sociales
+p42a,2,Medios de comunicación
+p42a,3,Volanteo/perifoneo en la colonia
+p42a,4,Juntas de vecinos
+p42a,5,Otro
+p42b,1,No me interesa
+p42b,2,No tengo acceso a esta información
+p42b,3,Otro
+p42b,8888,No sabe
+p43,1,Sí
+p43,2,No
+p43,8888,No sabe
+p44,1,Sí
+p44,2,No
+p44,8888,No sabe
+p45_1,1,Sí
+p45_1,2,No
+p45_2,1,Sí
+p45_2,2,No
+p45_3,1,Sí
+p45_3,2,No
+p45_4,1,Sí
+p45_4,2,No
+p45_5,1,Sí
+p45_5,2,No
+p45_6,1,Sí
+p46,1,Muy frecuente
+p46,2,Frecuente
+p46,3,Poco frecuente
+p46,4,No ocurre
+p46,8888,No sabe
+p47,1,Muy frecuente
+p47,2,Frecuente
+p47,3,Poco frecuente
+p47,4,No ocurre
+p47,8888,No sabe
+p48,1,Sí
+p48,2,No
+p48,8888,No sabe
+p48a,1,Municipio
+p48a,2,Estado
+p48a,3,Federación
+p48b,1,Sí
+p48b,2,No
+p49,1,El Gobierno
+p49,2,Los ciudadanos
+p49,3,Las empresas
+p49,4,Todos (incluyendo usted)
+p49,8888,No sabe
+p50_1,1,Desempleo
+p50_1,2,Pobreza
+p50_1,3,Aumento de precios
+p50_1,4,Corrupción
+p50_1,5,Desigualdad
+p50_1,6,Contaminación
+p50_1,7,Tráfico
+p50_1,8,Inseguridad
+p50_1,9,Falta de justicia/impunidad
+p50_1,10,Otro
+p50_2,1,Desempleo
+p50_2,2,Pobreza
+p50_2,3,Aumento de precios
+p50_2,4,Corrupción
+p50_2,5,Desigualdad
+p50_2,6,Contaminación
+p50_2,7,Tráfico
+p50_2,8,Inseguridad
+p50_2,9,Falta de justicia/impunidad
+p50_2,10,Otro
+p50_3,1,Desempleo
+p50_3,2,Pobreza
+p50_3,3,Aumento de precios
+p50_3,4,Corrupción
+p50_3,5,Desigualdad
+p50_3,6,Contaminación
+p50_3,7,Tráfico
+p50_3,8,Inseguridad
+p50_3,9,Falta de justicia/impunidad
+p50_3,10,Otro
+p51a,1,Sí
+p51a,2,No
+p51b,1,Sí
+p51b,2,No
+p51c,1,Sí
+p51c,2,No
+p51d,1,Sí
+p51d,2,No
+p51e,1,Sí
+p51e,2,No
+p51f,1,Sí
+p51f,2,No
+p51g,1,Sí
+p51g,2,No
+p51h,1,Sí
+p51h,2,No
+p51i,1,Sí
+p51i,2,No
+p51j,1,Sí
+p51j,2,No
+p51k,1,Sí
+p51k,2,No
+p52_1,1,Sí
+p52_1,2,No
+p52_2,1,Sí
+p52_2,2,No
+p52_3,1,Sí
+p52_3,2,No
+p52_4,1,Sí
+p52_4,2,No
+p52_5,1,Sí
+p52_5,2,No
+p53a,1,Solo nombre
+p53a,2,Solo apellido
+p53a,3,Nombre y Apellido
+p53a,4,Apodo
+p53a,8888,No sabe
+p53b,1,Solo nombre
+p53b,2,Solo apellido
+p53b,3,Nombre y Apellido
+p53b,4,Apodo
+p53b,8888,No sabe
+p55,1,Sí
+p55,2,No
+p55,8888,No sabe
+p56,1,Mucho
+p56,2,Poco
+p56,3,Nada
+p56,8888,No sabe
+p57a,1,Si
+p57a,2,No
+p57b,1,Si
+p57b,2,No
+p57c,1,Si
+p57c,2,No
+p57d,1,Si
+p57d,2,No
+p57e,1,Si
+p57e,2,No
+p57f,1,Si
+p57f,2,No
+p57g,1,Si
+p57g,2,No
+p57h,1,Si
+p57h,2,No
+p57i,1,Si
+p57i,2,No
+p57j,1,Si
+p57j,2,No
+p57k,1,Si
+p57k,2,No
+p57l,1,Si
+p58a,1,Si
+p58a,2,No
+p58b,1,Si
+p58b,2,No
+p58c,1,Si
+p58c,2,No
+p59a,1,De acuerdo
+p59a,2,Indiferente
+p59a,3,En desacuerdo
+p59a,8888,No sabe
+p59b,1,De acuerdo
+p59b,2,Indiferente
+p59b,3,En desacuerdo
+p59b,8888,No sabe
+p59c,1,De acuerdo
+p59c,2,Indiferente
+p59c,3,En desacuerdo
+p59c,8888,No sabe
+p6,1,5-10 min
+p6,2,11-15 min
+p6,3,16-20 min
+p6,4,21-30 min
+p6,5,31-45min
+p6,6,46 min a 1hr
+p6,7,1:01 a 1:30 hrs
+p6,8,1:30 a 2 hrs
+p6,9,2:01 a 2:30 hrs
+p6,10,2:30 a 3 hrs
+p6,11,3:01 a 3:30 hrs
+p6,12,Más de 3:30 hrs
+p60,1,Iniciativa ciudadana
+p60,2,Iniciativa privada
+p60,3,Mismo gobierno
+p60,4,Otro
+p60,8888,No sabe
+p62,1,Sin ingreso
+p62,2,"Menos de 1 SM (1 peso a 2,264.24)"
+p62,3,"1-2 SM (2,264.24 - 4,528.4)"
+p62,4,"2-3 SM (4,528.4 - 6,792.7)"
+p62,5,"3-4 SM (6,792.7 - 9,057)"
+p62,6,"4-5 SM (9,057 - 11,321.2)"
+p62,7,"5-6 SM (11,321.2 - 13,585.4)"
+p62,8,"6-7 SM (13,585.4 - 15,849.7)"
+p62,9,"Más de 7 SM ( Más de 15,849.7)"
+p62,8888,No sabe
+p6a,1,5-10 min
+p6a,2,11-15 min
+p6a,3,16-20 min
+p6a,4,21-30 min
+p6a,5,31-45min
+p6a,6,46 min a 1hr
+p6a,7,1:01 a 1:30 hrs
+p6a,8,1:30 a 2 hrs
+p6a,9,2:01 a 2:30 hrs
+p6a,10,2:30 a 3 hrs
+p6a,11,3:01 a 3:30 hrs
+p6a,12,Más de 3:30 hrs
+p7,1,De 0 a 10 min
+p7,2,De 10 a 20 min
+p7,3,De 20 a 30 min
+p7,4,De 30 a 40 min
+p7,5,Más de 40 min
+p7a,1,Si
+p7a,2,No
+p8,1,Si
+p8,2,No
+p8,3,Varía algunas veces
+p8a,1,Menos de $5 pesos
+p8a,2,Entre $5 y $10 pesos
+p8a,3,Entre $10 y $15 pesos
+p8a,4,Entre $15 y $20 pesos
+p8a,5,Más de $20 pesos
+p8b,1,Menos de $5 pesos
+p8b,3,Entre $10 y $15 pesos
+p8b,4,Entre $15 y $20 pesos
+p8b,5,Más de $20 pesos

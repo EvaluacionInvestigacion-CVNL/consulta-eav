@@ -1,0 +1,278 @@
+q_id,q_text,q_section,q_type,q_notes
+edad,¿Cuántos años cumplidos tiene?,general,numerica,No está en la hoja de carga: es una columna del EAV. Va de 16 a 86 años; una sola celda trae 'NC'.
+genero,Sexo,general,categorica,No está en la hoja de carga: es una columna del EAV. Que 1 sea Hombre y 2 Mujer lo confirman los datos —el 96% de quien contestó 'Ama de casa' en P1 y el 96% de quien dice 'ESPOSA' en parentesco son 2—.
+p1,"P1. Durante la semana pasada, cuál fue su principal actividad laboral",general,categorica,
+p10,P10. La vivienda ocupada por este hogar es,movilidad,categorica,
+p11_aa,P11_a. Las unidades del transporte público presenta las siguientes fallas: Asientos Dañados,movilidad,categorica,
+p11_ab,P11_a. Las unidades del transporte público presenta las siguientes fallas: Vidrios Rotos,movilidad,categorica,
+p11_ac,P11_a. Las unidades del transporte público presenta las siguientes fallas: Grafitti y Rayones,movilidad,categorica,
+p11_ad,"P11_a. Las unidades del transporte público presenta las siguientes fallas: Ruidoso, Escandaloso",movilidad,categorica,
+p11_ae,P11_a. Las unidades del transporte público presenta las siguientes fallas: Hecha humo contaminante,movilidad,categorica,
+p11_af,P11_a. Las unidades del transporte público presenta las siguientes fallas: Puertas no cierran adecuadamente,movilidad,categorica,
+p11_ag,P11_a. Las unidades del transporte público presenta las siguientes fallas: Timbre no funciona,movilidad,categorica,
+p11_ah,P11_a. Las unidades del transporte público presenta las siguientes fallas: Goteras en época de lluvia,movilidad,categorica,
+p11a,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: ¿El tiempo de espera por unidades es siempre el mismo?,movilidad,categorica,
+p11b,"P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: Si necesita viajar a zonas que normalmente no visita, ¿Sabe qué ruta lo lleva, por dónde pasa, y dónde está la parada?",movilidad,categorica,
+p11c,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: ¿Se siente seguro viajando en el transporte público?,movilidad,categorica,
+p11d,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: cuenta con suficiente espacio para viajar sentado,movilidad,categorica,
+p11e,"P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: ¿Las unidades que normalmente utiliza, presentan fallas físicas o mecánicas?",movilidad,categorica,
+p11f,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: ¿Cuándo ha tenido algún incidente o sufrido algun problema se ha quejado?,movilidad,categorica,
+p11g,"P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: En caso de queja, ¿Obtuvo una respuesta satisfactoria?",movilidad,categorica,
+p11h,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: El comportamiento de los choferes es respestuoso,movilidad,categorica,
+p11i,P11. Vamos a evaluar la calidad del servicio de transporte público. Conteste a las siguientes preguntas según su experiencia durante el 2016: La forma de conducir de los choferes es apegada a las normas de tránsito,movilidad,categorica,
+p12,"P12. Tomando en cuenta las características de la pregunta anterior, ¿qué tan satisfecho está con el transporte público? 1- 10",movilidad,numerica,
+p13,P13. ¿Por qué razón vive usted en esta casa?,desarrollo_urbano,categorica,
+p14,"P14. De acuerdo con su percepción, ¿cuál es el principal problema de desarrollo urbano que se vive en su municipio?",desarrollo_urbano,categorica,
+p15_1,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: alumbrado público",desarrollo_urbano,numerica,
+p15_2,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: condición de las calles y avenidas",desarrollo_urbano,numerica,
+p15_3,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: mantenimiento y reparación de bacheo de calles y avenidas",desarrollo_urbano,numerica,
+p15_4,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: señalización y semáforos",desarrollo_urbano,numerica,
+p15_5,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: suficiencia de parques y áreas verdes",desarrollo_urbano,numerica,
+p15_6,"P15. De acuerdo con su experiencia en su municipio, qué tan satisfecho está con los siguientes servicios públicos. También, en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: mantenimiento de parques y áreas verdes",desarrollo_urbano,numerica,
+p16a,P16. El alumbrado público de esta ciudad…: Ilumina adecuadamente las calles y áreas públicas,desarrollo_urbano,categorica,
+p16b,P16. El alumbrado público de esta ciudad…: Cuenta con mantenimiento regular,desarrollo_urbano,categorica,
+p16c,P16. El alumbrado público de esta ciudad…: Cuenta con atención inmediata para conservar su buen estado,desarrollo_urbano,categorica,
+p17a,P17. Los parques y jardines de su municipio: Son de acceso libre al público,desarrollo_urbano,categorica,
+p17b,P17. Los parques y jardines de su municipio: Te pide algún requisito para entrar,desarrollo_urbano,categorica,
+p17c,P17. Los parques y jardines de su municipio: Se encuentran cerca (menos de 15 min. Caminando),desarrollo_urbano,categorica,
+p17d,P17. Los parques y jardines de su municipio: Están limpios y tienen buena imagen,desarrollo_urbano,categorica,
+p17e,P17. Los parques y jardines de su municipio: Son seguros para usted y su familia,desarrollo_urbano,categorica,
+p17f,P17. Los parques y jardines de su municipio: Tienen mantenimiento regular,desarrollo_urbano,categorica,
+p17g,P17. Los parques y jardines de su municipio: Son suficientes,desarrollo_urbano,categorica,
+p17h,P17. Los parques y jardines de su municipio: Cuentan con espacios para hacer ejercicio,desarrollo_urbano,categorica,
+p18a,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: contaminación del aire,desarrollo_urbano,numerica,
+p18b,"P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: contaminación del agua (ríos, humedales, quebradas, etc)",desarrollo_urbano,numerica,
+p18c,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: nivel de ruido,desarrollo_urbano,numerica,
+p18d,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: cantidad de árboles,desarrollo_urbano,numerica,
+p18e,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: basura en las calles,desarrollo_urbano,numerica,
+p18f,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: escombros en las calles,desarrollo_urbano,numerica,
+p18g,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: Basureros clandestinos y terrenos baldíos,desarrollo_urbano,numerica,
+p18h,P18. ¿Qué tan satisfecho está respecto a la gestión ambiental en los siguientes temas?: Contaminación visual y panorámicos,desarrollo_urbano,numerica,
+p19_1,P19. ¿Cuáles son los tres temas ambientales a los que más atención le debería prestar el gobierno? (ordénelos del 1 al 3) (mención 1),desarrollo_urbano,categorica,
+p19_2,P19. ¿Cuáles son los tres temas ambientales a los que más atención le debería prestar el gobierno? (ordénelos del 1 al 3) (mención 2),desarrollo_urbano,categorica,
+p19_3,P19. ¿Cuáles son los tres temas ambientales a los que más atención le debería prestar el gobierno? (ordénelos del 1 al 3) (mención 3),desarrollo_urbano,categorica,
+p2,P2. Señale el máximo nivel de estudios completos que tiene alcanzado,general,categorica,
+p20a,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: Tiene acceso a agua entubada",desarrollo_urbano,categorica,
+p20b,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: ¿Ha tenido fugas?",desarrollo_urbano,categorica,
+p20ba,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: ¿Las ha reportado?",desarrollo_urbano,categorica,
+p20bc,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: Fue atendida",desarrollo_urbano,categorica,
+p20c,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: ¿Usted bebe agua directa de la llave?",desarrollo_urbano,categorica,
+p20d,"P20. Con respecto al servicio de agua y drenaje, en los últimos tres meses: ¿Ha sido interrumpido el servicio de agua de su colonia?",desarrollo_urbano,categorica,
+p21,P21. ¿Cómo describiría usted SU SITUACIÓN económica personal comparada con la de HACE 12 MESES?,percepcion_expectativas,categorica,
+p22,P22. ¿Y cómo cree usted que será SU SITUACIÓN económica DENTRO DE 12 MESES respecto de la actual?,percepcion_expectativas,categorica,
+p23,"P23. Con el total de ingreso familiar, diría usted que…",percepcion_expectativas,categorica,
+p24,P24. Alguna vez le han negado un trabajo,pobreza_desigualdad,categorica,
+p24a,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por ser mujer / hombre,pobreza_desigualdad,categorica,
+p24b,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su embarazo,pobreza_desigualdad,categorica,
+p24c,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su edad,pobreza_desigualdad,categorica,
+p24d,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su educación,pobreza_desigualdad,categorica,
+p24f,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su apariencia Especificar,pobreza_desigualdad,categorica,
+p24g,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por ser pobre,pobreza_desigualdad,categorica,
+p24h,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por ser indígena,pobreza_desigualdad,categorica,
+p24i,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por ser persona con discapacidad,pobreza_desigualdad,categorica,
+p24j,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?,pobreza_desigualdad,categorica,el cuestionario no imprime un ítem J de P24a; los datos sí traen la columna
+p24k,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por mi orientación sexual,pobreza_desigualdad,categorica,
+p24l,P24a. ¿Cuál fue la razón y con qué frecuencia sucedió?: OTRO,pobreza_desigualdad,categorica,
+p25,P25. Alguna vez le han negado el acceso a la escuela?,pobreza_desigualdad,categorica,
+p25aa,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por no contar con la vestimenta adecuada,pobreza_desigualdad,categorica,
+p25ab,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su apariencia física,pobreza_desigualdad,categorica,
+p25ac,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su orientación sexual,pobreza_desigualdad,categorica,
+p25ad,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por ser indígena,pobreza_desigualdad,categorica,
+p25ae,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por su origen/procedencia,pobreza_desigualdad,categorica,
+p25af,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por motivos económicos,pobreza_desigualdad,categorica,
+p25ag,P25a. ¿Cuál fue la razón y con qué frecuencia sucedió?: Por alguna incapacidad física,pobreza_desigualdad,categorica,
+p26,P26. ¿Está afiliado a,pobreza_desigualdad,categorica,
+p27,P27. Cuando tiene problemas de salud en ¿dónde se atiende?,pobreza_desigualdad,categorica,
+p28_1,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Calidad de todo el servicio",pobreza_desigualdad,numerica,
+p28_2,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Instalaciones",pobreza_desigualdad,numerica,
+p28_3,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Médicos",pobreza_desigualdad,numerica,
+p28_4,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Tiempo en que tarda en ser atendido",pobreza_desigualdad,numerica,
+p28_5,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Disponibilidad de medicinas",pobreza_desigualdad,numerica,
+p28_6,"P28. ¿Cómo califica los siguientes aspectos del servicio médico que recibe cuando tienen que acudir (a alguna de las instancias anteriores)? También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Buena atención y servicio (por parte de administrativos, secretarias y enfermeras)",pobreza_desigualdad,numerica,
+p29,P29. ¿Ha sido diagnosticado con diabetes?,pobreza_desigualdad,categorica,
+p29a,P29a. ¿Qué tipo?,pobreza_desigualdad,numerica,"'¿Qué tipo?' de diabetes. La celda de opciones está vacía y el cuestionario no imprime catálogo; los datos traen 1, 2 y 3. Se registra el número tal cual: el 1 y el 2 son los tipos de diabetes, el 3 no está documentado."
+p30,P30. ¿Ha sido diagnosticado con obesidad por su médico?,pobreza_desigualdad,categorica,
+p30a,P30a. PERCEPCIÓN ENCUESTADOR: (no preguntar al encuestado) ¿Es obesidad evidente? (De acuerdo al dibujo),pobreza_desigualdad,categorica,
+p30a_b,P30a. PERCEPCIÓN ENCUESTADOR: (no preguntar al encuestado) ¿Es obesidad evidente? (De acuerdo al dibujo) (número de dibujo),pobreza_desigualdad,numerica,El número de silueta del dibujo con que P30a le pide al encuestador estimar la obesidad. Va de 1 a 6 y el cuestionario no lo documenta.
+p31,P31. ¿Ha sido diagnosticado con alguna enfermedad crónica por su médico?,pobreza_desigualdad,categorica,
+p31_1,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Dolores de cabeza,pobreza_desigualdad,categorica,
+p31_2,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Irritación en los ojos,pobreza_desigualdad,categorica,
+p31_3,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Irritación en la garganta,pobreza_desigualdad,categorica,
+p31_4,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Fatiga inusual,pobreza_desigualdad,categorica,
+p31_5,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Alergias,pobreza_desigualdad,categorica,
+p31_6,"P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Infecciones gastrointestinales como vómito, diarrea, etc",pobreza_desigualdad,categorica,
+p31_7,P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Enfermedades respiratorias recurrentes (asma),pobreza_desigualdad,categorica,
+p31_8,"P31a. Durante los últimos 3 meses usted o alguien de su hogar ha tenido: Dengue, zika, chikungunya",pobreza_desigualdad,categorica,
+p32,P32. ¿Algún miembro de su hogar ha tenido un bebé en los últimos 12 meses?,pobreza_desigualdad,categorica,
+p32a,P32a. Edad que tenía la madre al nacer el bebé,pobreza_desigualdad,categorica,
+p33,"P33. En los últimos 12 meses ha sido o es beneficiario de programas sociales como PROSPERA, estancias infantiles, etc",pobreza_desigualdad,categorica,
+p33a_1,P33.a Nombre del programa (mención 1),pobreza_desigualdad,categorica,
+p33a_2,P33.a Nombre del programa (mención 2),pobreza_desigualdad,categorica,
+p34_men,P34. ¿Cuántas personas conforman su hogar? (menores de 15 años),educacion,numerica,
+p34tot,P34. ¿Cuántas personas conforman su hogar? (total),educacion,numerica,
+p35_1_1,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Primaria (pública),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_1_2,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Primaria (privada),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_2_1,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Secundaria (pública),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_2_2,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Secundaria (privada),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_3_1,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Preparatoria (pública),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_3_2,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Preparatoria (privada),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_4_1,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Técnica (pública),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_4_2,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Técnica (privada),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_5_1,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Universidad (pública),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p35_5_2,P35. ¿Cuántos miembros de su familia en este hogar actualmente estudian en alguno de los siguientes niveles educativos?: Universidad (privada),educacion,numerica,"El valor es cuántas personas, no un código: la celda de opciones lista los cinco niveles y las dos columnas de cada uno son el sostenimiento público/privado."
+p36_1,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Instalaciones",educacion,numerica,
+p36_10,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Calidad de la educación recibida",educacion,numerica,
+p36_2,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Profesores",educacion,numerica,
+p36_3,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Mobiliario",educacion,numerica,
+p36_4,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Disponibilidad de Materiales",educacion,numerica,
+p36_5,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Contenido de Programa",educacion,numerica,
+p36_6,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Ambiente escolar",educacion,numerica,
+p36_7,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: No hay Acoso escolar (No hay Bulling)",educacion,numerica,
+p36_8,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Cercanía a casa",educacion,numerica,
+p36_9,"P36. ¿Califica los siguientes aspectos de los servicios educativos públicos que recibe También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Cercanía al trabajo",educacion,numerica,
+p37_1,P37_1. Marque 1 si quien responde es quien fue víctima,seguridad_justicia,categorica,
+p37_10a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Violencia Intrafamiliar (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_10b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Violencia Intrafamiliar (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_11a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Otro (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_11b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Otro (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_1a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en su domicilio (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_1b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en su domicilio (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_2a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en la calle (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_2b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en la calle (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_3a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en transporte público (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_3b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo en transporte público (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_4a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo de auto/vehículo (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_4b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Robo de auto/vehículo (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_5a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Homicidios o asesinatos (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_5b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Homicidios o asesinatos (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_6a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Secuestros o desapariciones (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_6b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Secuestros o desapariciones (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_7a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Extorsión o chantaje (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_7b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Extorsión o chantaje (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_8a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Abuso de autoridad o violación de sus derechos (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_8b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Abuso de autoridad o violación de sus derechos (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_9a,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Lesiones (¿fue víctima?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37_9b,P37. En el último año usted o algún miembro del hogar ¿ha sido víctima de alguno de los siguientes hechos?: Lesiones (¿denunció el delito?),seguridad_justicia,categorica,"El enunciado arrastra las dos escalas de la tabla impresa ('1, Si 2. No / ¿Denunció tal delito? 1, Si 2. No'); las columnas ya las separan con su sufijo."
+p37a,"P37a. ¿Usted o la persona que fue víctima, denunció el delito ante la Policía Municipal, Fuerza Civil o el Ministerio Público? (se puede denunciar ante uno sólo, dos o tres de ellos) (¿denunció?)",seguridad_justicia,categorica,"El enunciado arrastra la escala y dos instrucciones de salto (->PASE A P38), que se comen el resto del renglón y dejan el texto crudo. Las dos columnas que salen de él ya se distinguen con su sufijo."
+p37aa,"P37a. ¿Usted o la persona que fue víctima, denunció el delito ante la Policía Municipal, Fuerza Civil o el Ministerio Público? (se puede denunciar ante uno sólo, dos o tres de ellos) (¿ante quién?)",seguridad_justicia,categorica,el catálogo de la celda son las tres corporaciones; el sí/no está en el enunciado y se declara en opciones_extra
+p37b,P37b. ¿Qué tan probable considera que el delito sea castigado?,seguridad_justicia,categorica,
+p37c,"P37c. ¿Cómo califica la experiencia de su denuncia, del 1 al 10, en donde 1 es ""muy mala"" y 10 ""muy buena""?",seguridad_justicia,numerica,
+p38_1,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Policía de su Municipio y Barrio",seguridad_justicia,numerica,
+p38_2,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Fuerza Civil",seguridad_justicia,numerica,
+p38_3,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Policía Federal",seguridad_justicia,numerica,
+p38_4,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Ejército y Marina",seguridad_justicia,numerica,
+p38_5,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Policía Ministerial",seguridad_justicia,numerica,
+p38_6,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Fuerza Rural",seguridad_justicia,numerica,
+p38_7,"P38. ¿Qué tanta confianza tiene de los siguientes servicios de seguridad También en una escala del 1 al 10, en donde 1 es ""muy malo"" y 10 ""muy bueno"", califique: Tránsito",seguridad_justicia,numerica,
+p39_1_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Uso de fuerza excesiva (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_1_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Uso de fuerza excesiva (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_2_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Sobornos (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_2_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Sobornos (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_3_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Confesión forzada (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_3_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Confesión forzada (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_4_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Arresto injustificado (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_4_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Arresto injustificado (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_5_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Extorsión (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_5_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Extorsión (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_6_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Acoso sexual (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_6_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Acoso sexual (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p39_7_1,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Otro (¿le ha ocurrido?)",seguridad_justicia,categorica,El enunciado arrastra la escala y la instrucción 'De quien (use opciones P38)'; las columnas ya las separan con su sufijo.
+p39_7_2,"P39. ¿Ha sido objeto de las siguientes acciones por parte de algún miembro de las fuerzas de seguridad? (Policía municipal, Fuerza Civil, Ministeriales, Policía Federal, Militares): Otro (¿qué corporación?)",seguridad_justicia,categorica,el enunciado dice 'De quien (use opciones P38)'
+p3a,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Trabajo",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3b,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Escuela",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3c,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Compras",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3d,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Médico, hospital",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3e,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Diversión",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3f,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Llevar a alguien",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3g,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Banco, Pago servicios",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p3h,"P3. Durante el día de ayer: ¿Cuáles de los siguientes fueron los motivos de viaje fuera de su casa? Ordene 1 al 6, siendo 1 el más importante. En caso de otro, especifique: Otro (especifique)",movilidad,numerica,"El valor es el orden que la persona le dio al motivo de viaje (1 = el más importante), no un código de opción."
+p4,"P4. Para su viaje más importante de ayer, numerado como ""1"" ¿Cuál es el municipio y colonia de su destino?",movilidad,categorica,
+p40,P40. ¿Estás enterado de las acciones que realiza el alcalde en tu municipio?,gobierno,categorica,
+p40a,P40a. ¿Cómo te enteras?,gobierno,categorica,
+p40b,P40b. ¿Por qué?,gobierno,categorica,
+p41,P41. ¿Considera que el gobierno MUNICIPAL hace un buen uso de los recursos públicos?,gobierno,categorica,
+p42,P42. ¿Estás enterado de las acciones que realiza el Gobernador en el estado?,gobierno,categorica,
+p42a,P42a. ¿Cómo te enteras?,gobierno,categorica,
+p42b,P42b. ¿Por qué?,gobierno,categorica,
+p43,P43. ¿Considera que el gobierno ESTATAL hace un buen uso de los recursos públicos?,gobierno,categorica,
+p44,P44. ¿Tiene acceso a internet?,gobierno,categorica,
+p45_1,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Licencia de manejo",gobierno,categorica,
+p45_2,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Multas de tránsito",gobierno,categorica,
+p45_3,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Tenencia/ Replaqueo",gobierno,categorica,
+p45_4,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Predial",gobierno,categorica,
+p45_5,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Registro civil",gobierno,categorica,
+p45_6,"P45. En el último mes, ¿ha realizado algún trámite o buscado alguna información de gobierno en internet?: Otro",gobierno,categorica,
+p46,"P46. En su perspectiva, en el estado de Nuevo León la corrupción es una práctica",gobierno,categorica,
+p47,"P47. En su perspectiva, en su municipio la corrupción es una práctica",gobierno,categorica,
+p48,"P48. En los últimos 12 meses usted ¿se ha enfrentado a una situación en la que algún servidor público le solicita directamente un soborno o ""mordida""?",gobierno,categorica,
+p48a,P48a. ¿Ante qué autoridad?,gobierno,categorica,
+p48b,P48b. ¿Usted aceptó pagar el moche?,gobierno,categorica,
+p49,"P49. De acuerdo con su percepción, ¿quién es más corrupto?",gobierno,categorica,
+p50_1,"P50 ¿Cuáles son los 3 principales problemas que enfrenta el ESTADO, dónde 1 es el más importante de todos? (mención 1)",gobierno,categorica,
+p50_2,"P50 ¿Cuáles son los 3 principales problemas que enfrenta el ESTADO, dónde 1 es el más importante de todos? (mención 2)",gobierno,categorica,
+p50_3,"P50 ¿Cuáles son los 3 principales problemas que enfrenta el ESTADO, dónde 1 es el más importante de todos? (mención 3)",gobierno,categorica,
+p51a,P51. Seleccione los artículos que tiene en su vivienda: radio,hogar,categorica,
+p51b,P51. Seleccione los artículos que tiene en su vivienda: televisor,hogar,categorica,
+p51c,P51. Seleccione los artículos que tiene en su vivienda: refrigerador,hogar,categorica,
+p51d,P51. Seleccione los artículos que tiene en su vivienda: lavadora,hogar,categorica,
+p51e,P51. Seleccione los artículos que tiene en su vivienda: computadora,hogar,categorica,
+p51f,P51. Seleccione los artículos que tiene en su vivienda: línea telefónica fija,hogar,categorica,
+p51g,P51. Seleccione los artículos que tiene en su vivienda: celular,hogar,categorica,
+p51h,P51. Seleccione los artículos que tiene en su vivienda: internet,hogar,categorica,
+p51i,P51. Seleccione los artículos que tiene en su vivienda: camioneta,hogar,categorica,
+p51j,P51. Seleccione los artículos que tiene en su vivienda: automóvil,hogar,categorica,
+p51k,P51. Seleccione los artículos que tiene en su vivienda: bicicleta,hogar,categorica,
+p52_1,P52. Seleccione los medios de comunicación que más utiliza: radio,hogar,categorica,
+p52_2,P52. Seleccione los medios de comunicación que más utiliza: televisor,hogar,categorica,
+p52_3,P52. Seleccione los medios de comunicación que más utiliza: Redes sociales,hogar,categorica,
+p52_4,P52. Seleccione los medios de comunicación que más utiliza: periódico,hogar,categorica,
+p52_5,P52. Seleccione los medios de comunicación que más utiliza: revistas,hogar,categorica,
+p53a,P53a. ¿Cómo se llama su alcalde? Marque el cuadro de acuerdo a la respuesta,participacion_ciudadana,categorica,
+p53b,P53b. ¿Cómo se llama el gobernador?,participacion_ciudadana,categorica,
+p54a,"P54. Hasta el momento, ¿qué calificación del 1 al 10 le daría al gobierno: de Jaime Rodríguez (Bronco)",participacion_ciudadana,numerica,
+p54b,"P54. Hasta el momento, ¿qué calificación del 1 al 10 le daría al gobierno: de su alcalde",participacion_ciudadana,numerica,
+p55,"P55. Si pudiera vivir en otro lugar, ¿lo haría?",participacion_ciudadana,categorica,
+p56,P56. ¿Qué tanto cree usted que los ciudadanos pueden influir en las decisiones del gobierno?,participacion_ciudadana,categorica,
+p57a,"P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Asistir a marchas, caminatas o manifestaciones",participacion_ciudadana,categorica,
+p57b,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en Consejos Ciudadanos,participacion_ciudadana,categorica,
+p57c,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Hacer voluntariado en una asociación civil o colectiva,participacion_ciudadana,categorica,
+p57d,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en una junta de vecinos,participacion_ciudadana,categorica,
+p57e,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Participar en una asociación de padres de familia,participacion_ciudadana,categorica,
+p57f,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Contactarse con los medios de comunicación,participacion_ciudadana,categorica,
+p57g,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Solicitar apoyo de personas consideradas influyentes o importantes,participacion_ciudadana,categorica,
+p57h,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Firmar peticiones en línea,participacion_ciudadana,categorica,
+p57i,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Contactar a los funcionarios vía redes sociales o correo electrónico,participacion_ciudadana,categorica,
+p57j,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Presentar quejas ante autoridades o funcionarios,participacion_ciudadana,categorica,
+p57k,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Solicitar apoyo de autoridades o funcionarios,participacion_ciudadana,categorica,
+p57l,P57. ¿Ha realizado alguna(s) de siguientes acciones en los últimos 12 meses para mejorar las condiciones de su estado?: Otra (especificar),participacion_ciudadana,categorica,
+p58a,"P58. Ha escuchado hablar de la iniciativa ciudadana: Cómo Vamos, Nuevo",participacion_ciudadana,categorica,
+p58b,"P58. Ha escuchado hablar de la iniciativa ciudadana: Alcalde, Cómo Vamos",participacion_ciudadana,categorica,
+p58c,"P58. Ha escuchado hablar de la iniciativa ciudadana: Gober, Cómo Vamos",participacion_ciudadana,categorica,
+p59a,"P59. Si respondió que sí en la anterior, ¿qué opina de las siguientes frases: Cómo vamos es una iniciativa que contribuye a contar con mejores gobiernos",participacion_ciudadana,categorica,
+p59b,"P59. Si respondió que sí en la anterior, ¿qué opina de las siguientes frases: Cómo vamos me da información útil para evaluar el desempeño del alcalde de mi municipio",participacion_ciudadana,categorica,
+p59c,"P59. Si respondió que sí en la anterior, ¿qué opina de las siguientes frases: Cómo vamos me da información útil para evaluar el desempeño del gobernador del estado",participacion_ciudadana,categorica,
+p5a,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Pie/ camina",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5b,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Camión, microbús",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5c,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Taxi",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5d,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Uber u otra aplicación móvil similar",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5e,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Motocicleta",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5f,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Bicicleta",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5g,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Metro",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5h,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Automóvil",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5i,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Transmetro",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5j,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Ecovía",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p5k,"P5. Durante el día de ayer: ¿Cuáles de los siguientes medios de transporte usted utilizó para su viaje más importante? Ordene 1 al 8, siendo 1 el más importante. En caso de otro, especifique: Otro",movilidad,numerica,"El valor es el orden que la persona le dio al medio de transporte (1 = el más importante), no un código de opción."
+p6,P6. ¿Cuánto tiempo tardó en el medio que lo transportó a su destino principal (P3)? Incluya tiempo de transbordo y caminata,movilidad,categorica,
+p60,"P60. ¿Sabe quién está detrás de la plataforma ""Cómo vamos?",participacion_ciudadana,categorica,
+p61,"P61. ¿Qué tanto interés tienes en conocer el trabajo de ""Cómo vamos""? En escala del 1 al 10, donde 1 es nada, y 10 es muy interesado, califique",participacion_ciudadana,numerica,
+p62,P62. ¿Cuál es su ingreso familiar mensual?,hogar,categorica,
+p6a,P6a. ¿Cuánto tiempo tardó de vuelta en el medio que lo transportó a su destino principal (P3)? Incluya tiempo de transbordo y caminata,movilidad,categorica,
+p7,P7. ¿Cuánto tiempo esperó para tomar su medio de transporte?,movilidad,categorica,
+p7_1,P7. ¿Cuánto tiempo esperó para tomar su medio de transporte? (minutos aproximados),movilidad,numerica,"La celda de opciones de P7 termina en 'Aproximadamente: ____ Minutos': ésta es esa columna, y guarda los minutos, no el rango."
+p7a,P7a ¿Realizó algún trasbordo?,movilidad,categorica,
+p7a_1,¿Cuántos transbordos?,movilidad,numerica,"La hoja de carga la imprime como 1..4 con el 4 en 'Mas de tres', pero los datos van de 1 a 3 —el 4 nunca se usó— así que el código es el número de transbordos y se registra como tal, sin perder nada."
+p7b,P7b. ¿Cuánto dinero gastó en gasolina durante la semana pasada? (Automóvil/motocicleta),movilidad,numerica,
+p8,"P8. Es su viaje de regreso, el mismo que el de ida?",movilidad,categorica,
+p8a,P8a. ¿Cuál fue el costo total de su viaje principal de ida a su destino?,movilidad,categorica,
+p8b,P8b. ¿Cuál fue el costo total de su viaje principal de regreso a su destino? (en caso de contestar NO en P8),movilidad,categorica,
+p9,P9. ¿Cuál es la frecuencia del destino principal por semana?,movilidad,numerica,
