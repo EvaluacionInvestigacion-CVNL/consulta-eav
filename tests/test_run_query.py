@@ -430,16 +430,15 @@ def test_year_option_map_exposes_raw_per_year():
     assert len(raw_ids) > 1  # el código crudo NO es estable entre años
 
 
-def test_year_sql_lists_one_query_per_wave():
-    """La vista Año no es un solo statement: expone el SQL de cada ola con un
-    encabezado que lo aclara, en vez de dejar el visor sin SQL. Debe incluir un
-    bloque por año miembro del concepto."""
+def test_year_sql_is_one_query_with_a_block_per_wave():
+    """La vista Año es un solo statement (UNION ALL) y el visor lo muestra con
+    un encabezado que lo aclara. Debe incluir un bloque por año miembro."""
     r = run_query(QueryRequest(question_id="cp2", group_by="year"))
     sql = r.get("sql")
-    assert sql and "NO es una sola consulta" in sql
+    assert sql and "es UNA consulta" in sql
     years = r["counts"]["columns"][1:]
     for w in years:
-        assert f"══ {w} ·" in sql  # un bloque rotulado por ola
+        assert f"'{w}' AS ola" in sql  # el bloque de distribución de cada ola
 
 
 def test_year_numeric_empty_base_does_not_crash():

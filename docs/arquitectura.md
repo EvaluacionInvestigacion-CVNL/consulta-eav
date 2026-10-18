@@ -139,9 +139,12 @@ Dos decisiones que conviene conocer antes de tocarlo:
 - `runner` arma un `QueryContext` una sola vez (ola, pregunta, ponderación, SQL
   de filtros, exclusión de centinelas) y cada forma de salida lee de ahí. Por eso
   los armadores reciben un contexto y no diez parámetros sueltos.
-- `year_comparison` recibe `run_query` **como parámetro** en vez de importarlo:
-  el motor llama a la vista Año y la vista Año vuelve a llamar al motor, así que
-  inyectarlo deja la dependencia en un solo sentido y a la vista.
+- `year_comparison` recibe `_build_context` **como parámetro** en vez de
+  importarlo: el motor llama a la vista Año y la vista Año reutiliza el motor, así
+  que inyectarlo deja la dependencia en un solo sentido y a la vista. El SQL de la
+  base y de la distribución vive en `QueryContext.base_sql()` y
+  `QueryContext.distribution_sql()`: una sola definición para la forma plana y la
+  vista Año.
 
 Las dependencias van en **un solo sentido** —`routers`/`chat` → `services`
 (incluido `services/query`) → `repositories` → `db_runtime`— así que no hay imports diferidos ni
@@ -174,9 +177,14 @@ Helpers compartidos que arman el SQL y las tablas:
 - **`_pivot_count_pct_rows(...)`** — ensambla filas de conteos y porcentajes +
   fila Total (idéntico para numérica y categórica).
 
-`_year_comparison()` maneja `group_by="year"`: resuelve el concepto de la
-pregunta y reutiliza el camino plano en cada ola, alineando opciones por
-`concept_option_id` (ver [conceptos.md](conceptos.md)).
+`compare_across_waves()` maneja `group_by="year"` en **una sola consulta**:
+arma un `QueryContext` por ola (las mismas validaciones y el mismo SQL de la forma
+plana, sin consultar la base) y junta la distribución y la base de todas las olas
+con `UNION ALL`. Después alinea las opciones por `concept_option_id` en Python
+(ver [conceptos.md](conceptos.md)). Los metadatos del concepto y el catálogo de
+preguntas se leen una vez por proceso: la base no muta en runtime. Antes eran ~3
+consultas por ola más 5 de metadatos, y cada viaje a DuckDB cuesta mucho con la
+CPU de Render.
 
 ### Filtros entre olas (`services/dimension_service.py`)
 

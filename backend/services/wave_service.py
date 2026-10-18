@@ -32,6 +32,21 @@ def categorical_question_ids(wave: str) -> frozenset[str]:
         return frozenset(survey_repository.fetch_categorical_question_ids(conn, wave))
 
 
+@lru_cache(maxsize=1)
+def question_catalog() -> dict[tuple[str, str], tuple]:
+    """(ola, q_id) → (q_type, concept_id, q_text) de TODAS las olas.
+
+    La base no muta en runtime, así que se lee una vez por proceso en vez de
+    consultar el tipo de la pregunta en cada petición.
+    """
+    with get_conn() as conn:
+        rows = survey_repository.fetch_all_questions_with_concept(conn)
+    return {
+        (wave, q_id): (q_type, concept_id, q_text)
+        for wave, q_id, q_type, concept_id, q_text in rows
+    }
+
+
 def resolve_wave(wave: str | None) -> str:
     """Validate an incoming wave_id or fall back to the most recent wave."""
     resolved = wave or default_wave()

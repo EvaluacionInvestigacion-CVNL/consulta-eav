@@ -1,10 +1,14 @@
 """La vista Año: compara una pregunta a través de las olas donde existe.
 
-No es una sola consulta. Se corre la forma plana una vez por ola.
-Sólo funciona para preguntas con `concept_id` poblado.
+Una sola consulta: el SQL de cada ola es el mismo de la forma plana, 
+y las olas se juntan con UNION ALL para pagar un solo viaje a DuckDB. 
 """
 
+import logging
 from dataclasses import dataclass
+from functools import lru_cache
+from types import MappingProxyType
+
 from fastapi import HTTPException
 
 from db_runtime import get_conn
@@ -13,7 +17,9 @@ from services.dimension_service import translate_filters_across_waves
 from services.query.models import QueryRequest
 from services.query.pivot import format_numeric_label
 from services.query.sentinels import YEAR_VIEW_SENTINEL_CODES, is_sentinel_label
-from services.wave_service import default_wave, wave_ids
+from services.wave_service import default_wave, question_catalog, wave_ids
+
+log = logging.getLogger("encuesta")
 
 
 @dataclass
@@ -27,33 +33,36 @@ class ConceptComparison:
     member_waves: list[str]
     question_id_by_wave: dict[str, str]
     wording_by_wave: list[dict]
-    canonical_options: list[tuple]
-    canonical_option_by_wave_option: dict[tuple[str, object], str]
+    canonical_options: tuple
+    canonical_option_by_wave_option: MappingProxyType
     filters_by_wave: dict[str, list[dict]]
 
 
-def compare_across_waves(request: QueryRequest, run_flat_query) -> dict:
-    """Arma la tabla de comparación entre años.
+def compare_across_waves(request: QueryRequest, build_context) -> dict:
+    comparison = _load_comparison(request)
 
-    `run_flat_query` se recibe como parámetro (y no se importa) porque el motor
-    llama a esta vista y esta vista vuelve a llamar al motor: inyectarlo deja la
-    dependencia en un solo sentido y explícita.
-    """
     with get_conn() as conn:
-        comparison = _load_comparison(conn, request)
-
-    result_by_wave = {
-        wave: run_flat_query(
-            QueryRequest(
-                question_id=comparison.question_id_by_wave[wave],
-                filters=comparison.filters_by_wave[wave],
-                group_by="answer",
-                initial_only=request.initial_only,
-                wave_id=wave,
+        contexts = [
+            build_context(
+                conn,
+                QueryRequest(
+                    question_id=comparison.question_id_by_wave[wave],
+                    filters=comparison.filters_by_wave[wave],
+                    group_by="answer",
+                    initial_only=request.initial_only,
+                    wave_id=wave,
+                ),
             )
-        )
-        for wave in comparison.member_waves
-    }
+            for wave in comparison.member_waves
+        ]
+        sql = _union_sql(contexts)
+        try:
+            rows = conn.execute(sql).fetchall()
+        except Exception:
+            log.exception("vista Año falló: q=%s", request.question_id)
+            raise HTTPException(status_code=500, detail="Error interno.")
+
+    result_by_wave = _results_by_wave(contexts, rows)
 
     response = {
         "format": "pivot",
@@ -69,7 +78,7 @@ def compare_across_waves(request: QueryRequest, run_flat_query) -> dict:
             "label": comparison.concept_label,
         },
         "year_texts": comparison.wording_by_wave,
-        "sql": _sql_listing(comparison, result_by_wave),
+        "sql": _sql_listing(sql),
         "year_bases": [
             {"year": wave, "base": result_by_wave[wave]["total_respondents"] or 0}
             for wave in comparison.member_waves
@@ -89,79 +98,139 @@ def compare_across_waves(request: QueryRequest, run_flat_query) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def _load_comparison(conn, request: QueryRequest) -> ConceptComparison:
+@lru_cache(maxsize=None)
+def _concept_metadata(concept_id: str):
+    with get_conn() as conn:
+        concept = concepts_repository.fetch_concept(conn, concept_id)
+        if not concept:
+            return None
+        members = tuple(concepts_repository.fetch_concept_members(conn, concept_id))
+        option_map = MappingProxyType(
+            {
+                (wave, option_id): concept_option_id
+                for wave, option_id, concept_option_id in (
+                    survey_repository.fetch_concept_option_map(conn, concept_id)
+                )
+            }
+        )
+        canonical_options = tuple(
+            concepts_repository.fetch_concept_options(conn, concept_id)
+        )
+    return concept, members, option_map, canonical_options
+
+
+def _load_comparison(request: QueryRequest) -> ConceptComparison:
     base_wave = request.wave_id or default_wave()
     if base_wave not in wave_ids():
         raise HTTPException(status_code=400, detail=f"Unknown wave_id: {base_wave}")
 
-    question = survey_repository.fetch_question_concept_and_text(
-        conn, base_wave, request.question_id
-    )
+    question = question_catalog().get((base_wave, request.question_id))
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
-    concept_id, question_text = question
+    _, concept_id, question_text = question
     if not concept_id:
         raise HTTPException(
             status_code=400,
             detail="Esta pregunta no tiene equivalencia entre años.",
         )
 
-    concept = concepts_repository.fetch_concept(conn, concept_id)
-    if not concept:
+    metadata = _concept_metadata(concept_id)
+    if not metadata:
         raise HTTPException(
             status_code=400, detail="Concepto no encontrado para esta pregunta."
         )
-    concept_label, concept_type = concept
+    (concept_label, concept_type), members, option_map, canonical_options = metadata
 
-    members = concepts_repository.fetch_concept_members(conn, concept_id)
     member_waves = [wave for wave, _, _ in members]
-    question_id_by_wave = {wave: question_id for wave, question_id, _ in members}
-
-    wording_by_wave = [
-        {"year": wave, "q_id": question_id, "q_text": q_text or ""}
-        for wave, question_id, q_text in members
-    ]
-
-    canonical_option_by_wave_option = {
-        (wave, option_id): concept_option_id
-        for wave, option_id, concept_option_id in (
-            survey_repository.fetch_concept_option_map(conn, concept_id)
-        )
-    }
-
     return ConceptComparison(
         concept_id=concept_id,
         concept_label=concept_label,
         concept_type=concept_type,
         question_text=question_text,
         member_waves=member_waves,
-        question_id_by_wave=question_id_by_wave,
-        wording_by_wave=wording_by_wave,
-        canonical_options=concepts_repository.fetch_concept_options(conn, concept_id),
-        canonical_option_by_wave_option=canonical_option_by_wave_option,
+        question_id_by_wave={wave: question_id for wave, question_id, _ in members},
+        wording_by_wave=[
+            {"year": wave, "q_id": question_id, "q_text": q_text or ""}
+            for wave, question_id, q_text in members
+        ],
+        canonical_options=canonical_options,
+        canonical_option_by_wave_option=option_map,
         filters_by_wave=translate_filters_across_waves(
             request.filters, base_wave, member_waves, concept_id
         ),
     )
 
 
-def _sql_listing(comparison: ConceptComparison, result_by_wave: dict) -> str:
-    """El SQL que se le muestra al usuario: una consulta por ola, rotulada.
+# ---------------------------------------------------------------------------
+# Ejecución: todas las olas en un statement
+# ---------------------------------------------------------------------------
 
-    En vez de dejar el visor vacío porque no hay un solo statement, se listan
-    las N consultas reales con un encabezado que aclara que la alineación final
-    ocurre en la app, no en el SQL. Los separadores son comentarios y no líneas
-    en blanco porque el visor del front colapsa las vacías.
+
+def _union_sql(contexts: list) -> str:
+    """Distribución y base de cada ola, con el mismo SQL de la forma plana.
+
+    Columnas: parte ('dist' | 'base'), ola, option_id, valor, etiqueta, cnt,
+    pct. Cada ola usa su propio `q_type`: un concepto numérico puede tener una
+    ola que guardó la escala como categórica. El % se calcula dentro de cada
+    bloque (la ventana no cruza el UNION), igual que en la forma plana.
     """
-    blocks = "\n--\n".join(
-        f"-- ══ {wave} · pregunta {comparison.question_id_by_wave[wave]} ══\n"
-        + (result_by_wave[wave].get("sql") or "-- (sin datos en esta ola)")
-        for wave in comparison.member_waves
-    )
+    parts = []
+    for context in contexts:
+        wave = context.wave
+        # `clave` es option_id (BIGINT) o valor (DOUBLE): van en columnas
+        # separadas para que el UNION no convierta los códigos en flotantes.
+        keys = (
+            "NULL::BIGINT AS option_id, clave AS valor"
+            if context.question_type == "numerica"
+            else "clave AS option_id, NULL::DOUBLE AS valor"
+        )
+        parts.append(f"""
+                SELECT 'dist' AS parte, '{wave}' AS ola, {keys}, etiqueta,
+                       ROUND(cnt)::BIGINT AS cnt,
+                       ROUND(cnt * 100.0 / SUM(cnt) OVER (), 1) AS pct
+                FROM ({context.distribution_sql()}
+                )""")
+        parts.append(f"""
+                SELECT 'base', '{wave}', NULL::BIGINT, NULL::DOUBLE, NULL::VARCHAR,
+                       ({context.base_sql().strip()}), NULL""")
+    return "\nUNION ALL".join(parts)
+
+
+def _results_by_wave(contexts: list, rows: list) -> dict:
+    """Las filas del statement, por ola, en la misma forma que la consulta
+    plana: [código, etiqueta, total, %] o [valor, total, %].
+
+    Mismo orden que la forma plana (por código o valor, NULL al final): las
+    tablas de abajo usan `setdefault` y dependen del primero que ven.
+    """
+    result_by_wave = {
+        context.wave: {
+            "question": {"q_type": context.question_type},
+            "rows": [],
+            "total_respondents": None,
+        }
+        for context in contexts
+    }
+    numeric = {c.wave for c in contexts if c.question_type == "numerica"}
+    for parte, wave, option_id, value, label, cnt, pct in rows:
+        if parte == "base":
+            result_by_wave[wave]["total_respondents"] = cnt
+        elif wave in numeric:
+            result_by_wave[wave]["rows"].append([value, cnt, pct])
+        else:
+            result_by_wave[wave]["rows"].append([option_id, label, cnt, pct])
+    for result in result_by_wave.values():
+        result["rows"].sort(key=lambda row: (row[0] is None, row[0]))
+    return result_by_wave
+
+
+def _sql_listing(sql: str) -> str:
+    """El SQL que se le muestra al usuario. Los separadores son comentarios y no
+    líneas en blanco porque el visor del front colapsa las vacías."""
     return (
-        "-- La comparación por año NO es una sola consulta: se ejecuta una\n"
-        "-- consulta por ola y los resultados se alinean por concepto en la app.\n"
-        "-- A continuación, el SQL de cada año:\n--\n" + blocks
+        "-- La comparación por año es UNA consulta: cada ola es un bloque del\n"
+        "-- UNION ALL, y los resultados se alinean por concepto en la app.\n--\n"
+        + "\n".join(line for line in sql.strip().splitlines() if line.strip())
     )
 
 

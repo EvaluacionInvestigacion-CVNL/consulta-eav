@@ -111,10 +111,11 @@ que nadie carga hasta revisarlo. Cada renglón trae `sim` para priorizar.
 
 ## Cómo lo consume el motor
 
-`_year_comparison()` en `backend/query_engine.py`:
+`compare_across_waves()` en `backend/services/query/year_comparison.py`:
 1. Resuelve el `concept_id` de la pregunta seleccionada.
-2. Para cada ola miembro, corre el camino plano (ponderado por el `factor_cvnl`
-   de esa ola).
+2. Para cada ola miembro arma el SQL del camino plano (ponderado por el
+   `factor_cvnl` de esa ola) y corre todas las olas en una sola consulta
+   (`UNION ALL`).
 3. Alinea las opciones por `concept_option_id` (no por código crudo), de modo que
    opciones recodificadas se comparen como la misma.
 4. Traduce los filtros entre olas vía la opción canónica (un filtro de "mujeres"

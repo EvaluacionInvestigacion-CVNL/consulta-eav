@@ -41,7 +41,12 @@ from services.query.sql_builder import (
     question_filter_join_sql,
     value_match_clause,
 )
-from services.wave_service import categorical_question_ids, default_wave, wave_ids
+from services.wave_service import (
+    categorical_question_ids,
+    default_wave,
+    question_catalog,
+    wave_ids,
+)
 
 log = logging.getLogger("encuesta")
 
@@ -114,6 +119,43 @@ class QueryContext:
             include_option_labels=include_option_labels,
         )
 
+    def base_sql(self) -> str:
+        """La base: respondientes únicos, ponderados si aplica.
+
+        Única definición: la usan la forma plana y la vista Año.
+        """
+        scope = self.scope(extra_where=self.sentinel_exclusion_sql)
+        if self.weighted:
+            # Suma factor_cvnl sobre (respondiente, factor) distintos.
+            return f"""
+                SELECT ROUND(SUM(factor_cvnl))::BIGINT FROM (
+                    SELECT DISTINCT a.respondent_id, r.factor_cvnl
+                    {scope}
+                )
+            """
+        return f"SELECT COUNT(DISTINCT a.respondent_id) {scope}"
+
+    def distribution_sql(self) -> str:
+        """Un renglón por opción (categórica) o por valor (numérica).
+
+        Columnas: `clave` (option_id o valor), `etiqueta` (NULL en numéricas) y
+        `cnt` sin redondear. Única definición: la usan la forma plana y la
+        vista Año. Los códigos sin catálogo afloran como "Código N" y en las
+        numéricas los centinelas quedan fuera.
+        """
+        if self.question_type == "numerica":
+            return f"""
+                SELECT a.value AS clave, NULL::VARCHAR AS etiqueta,
+                       {self.count_sql} AS cnt
+                {self.scope(extra_where=self.sentinel_exclusion_sql)}
+                GROUP BY a.value"""
+        return f"""
+                SELECT a.option_id AS clave,
+                       COALESCE(o.option_label, 'Código ' || a.option_id::TEXT) AS etiqueta,
+                       {self.count_sql} AS cnt
+                {self.scope(include_option_labels=True)}
+                GROUP BY clave, etiqueta"""
+
     def response_header(self, total_respondents) -> dict:
         """Los campos que toda respuesta lleva, sea plana o pivote."""
         return {
@@ -142,12 +184,13 @@ def _resolve_wave(request: QueryRequest) -> str:
     return wave
 
 
-def _require_question(conn, wave: str, question_id: str) -> tuple[str, str]:
+def _require_question(wave: str, question_id: str) -> tuple[str, str]:
     """(q_type, q_text) de la pregunta pedida, o 404."""
-    question = survey_repository.fetch_question_type_and_text(conn, wave, question_id)
+    question = question_catalog().get((wave, question_id))
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
-    return question
+    q_type, _, q_text = question
+    return q_type, q_text
 
 
 def _validate_filters(
@@ -220,7 +263,7 @@ def _validate_group_by(
 def _build_context(conn, request: QueryRequest) -> QueryContext:
     """Valida la petición completa y devuelve el contexto listo para ejecutar."""
     wave = _resolve_wave(request)
-    question_type, question_text = _require_question(conn, wave, request.question_id)
+    question_type, question_text = _require_question(wave, request.question_id)
 
     # La allowlist es la de ESTA ola: un atributo que no existe en ella (p. ej.
     # `modo_transporte` en 2016) daría cero filas en vez de un error.
@@ -281,73 +324,29 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
 
 def _count_base_respondents(conn, context: QueryContext) -> int:
     """La base de la consulta: respondientes únicos, ponderados si aplica."""
-    scope = context.scope(extra_where=context.sentinel_exclusion_sql)
-    if context.weighted:
-        # Suma factor_cvnl sobre (respondiente, factor) distintos.
-        sql = f"""
-                SELECT ROUND(SUM(factor_cvnl))::BIGINT FROM (
-                    SELECT DISTINCT a.respondent_id, r.factor_cvnl
-                    {scope}
-                )
-            """
-    else:
-        sql = f"SELECT COUNT(DISTINCT a.respondent_id) {scope}"
-    return (conn.execute(sql).fetchone() or (0,))[0]
-
-
-def _flat_numeric(conn, context: QueryContext) -> tuple[list, list, str]:
-    """Distribución de frecuencias: un renglón por valor numérico distinto.
-
-    El valor ES la respuesta (no hay id/etiqueta aparte) y los centinelas ya
-    quedaron fuera del scope.
-    """
-    sql = f"""
-                    WITH base AS (
-                        SELECT a.value AS valor, {context.count_sql} AS cnt
-                        {context.scope(extra_where=context.sentinel_exclusion_sql)}
-                        GROUP BY a.value
-                    ),
-                    totals AS (SELECT SUM(cnt) AS total FROM base)
-                    SELECT b.valor,
-                           ROUND(b.cnt)::BIGINT              AS total,
-                           ROUND(b.cnt * 100.0 / t.total, 1) AS pct
-                    FROM base b CROSS JOIN totals t
-                    ORDER BY b.valor ASC
-                """
-    rows = conn.execute(sql).fetchall()
-    return rows, ["Respuesta", "Respuestas", "%"], sql
-
-
-def _flat_categorical(conn, context: QueryContext) -> tuple[list, list, str]:
-    """Un renglón por opción, con conteo y porcentaje.
-
-    Los códigos sin catálogo afloran como "Código N" en vez de desaparecer.
-    """
-    sql = f"""
-                    WITH base AS (
-                        SELECT a.option_id AS id_respuesta,
-                               COALESCE(o.option_label, 'Código ' || a.option_id::TEXT) AS respuesta,
-                               {context.count_sql} AS cnt
-                        {context.scope(include_option_labels=True)}
-                        GROUP BY id_respuesta, respuesta
-                    ),
-                    totals AS (SELECT SUM(cnt) AS total FROM base)
-                    SELECT b.id_respuesta,
-                           b.respuesta,
-                           ROUND(b.cnt)::BIGINT              AS total,
-                           ROUND(b.cnt * 100.0 / t.total, 1) AS pct
-                    FROM base b CROSS JOIN totals t
-                    ORDER BY b.id_respuesta ASC
-                """
-    rows = conn.execute(sql).fetchall()
-    return rows, ["id_respuesta", "Respuesta", "Total", "%"], sql
+    return (conn.execute(context.base_sql()).fetchone() or (0,))[0]
 
 
 def _flat_result(conn, context: QueryContext, total_respondents) -> dict:
+    """Un renglón por opción (categórica) o por valor (numérica), con conteo y
+    porcentaje. En las numéricas el valor ES la respuesta: no hay etiqueta."""
     if context.question_type == "numerica":
-        rows, column_labels, sql = _flat_numeric(conn, context)
+        columns = "b.clave AS valor"
+        column_labels = ["Respuesta", "Respuestas", "%"]
     else:
-        rows, column_labels, sql = _flat_categorical(conn, context)
+        columns = "b.clave AS id_respuesta, b.etiqueta AS respuesta"
+        column_labels = ["id_respuesta", "Respuesta", "Total", "%"]
+    sql = f"""
+                    WITH base AS ({context.distribution_sql()}
+                    ),
+                    totals AS (SELECT SUM(cnt) AS total FROM base)
+                    SELECT {columns},
+                           ROUND(b.cnt)::BIGINT              AS total,
+                           ROUND(b.cnt * 100.0 / t.total, 1) AS pct
+                    FROM base b CROSS JOIN totals t
+                    ORDER BY b.clave ASC
+                """
+    rows = conn.execute(sql).fetchall()
     return {
         "format": "flat",
         **context.response_header(total_respondents),
@@ -648,7 +647,7 @@ def _pivot_result(conn, context: QueryContext, total_respondents) -> dict:
 def run_query(request: QueryRequest) -> dict:
     """Ejecuta una consulta y devuelve la tabla lista para la UI o el CSV."""
     if request.group_by in YEAR_GROUP_BY_ALIASES:
-        return year_comparison.compare_across_waves(request, run_query)
+        return year_comparison.compare_across_waves(request, _build_context)
 
     conn = get_conn()
     try:

@@ -180,9 +180,15 @@ pivot.py            counts/percentage table assembly + city bucket collapsing
 `runner` builds a `QueryContext` once (wave, question, weighting, filter SQL,
 sentinel exclusion) and every shape reads from it — that's why the shape
 builders take a context instead of ten positional arguments. `year_comparison`
-receives `run_query` as a **parameter** rather than importing it: the engine
-calls the year view and the year view calls the engine back, and injection
-keeps that dependency one-way and explicit.
+receives `_build_context` as a **parameter** rather than importing it: the
+engine calls the year view and the year view reuses the engine, and injection
+keeps that dependency one-way and explicit. The base and distribution SQL live
+once, in `QueryContext.base_sql()` / `distribution_sql()`, shared by the flat
+shape and the year view. The
+year view is **one SQL statement** — each member wave's flat-shape SQL joined
+with `UNION ALL` — and concept metadata / the question catalog are cached per
+process (the DB never mutates), because on Render each DuckDB round trip is the
+cost, not the scan.
 
 Everything routes through `run_query()`. `group_by` selects one of four output
 shapes (flat / pivot × categorical / numeric) plus a fifth, `group_by="year"`,
