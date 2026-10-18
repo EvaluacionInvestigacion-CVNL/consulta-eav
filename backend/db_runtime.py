@@ -16,11 +16,5 @@ def get_conn():
     if _database is None:
         with _lock:
             if _database is None:
-                # Un hilo por consulta: Render da una fracción de CPU, y los
-                # hilos que DuckDB abre por cada núcleo visible sólo compiten
-                # por esa cuota. El paralelismo viene de atender varias
-                # peticiones a la vez, no de partir cada consulta.
-                _database = duckdb.connect(
-                    DB_PATH, read_only=True, config={"threads": 1}
-                )
+                _database = duckdb.connect(DB_PATH, read_only=True)
     return _database.cursor()
