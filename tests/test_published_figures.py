@@ -36,6 +36,7 @@ import pytest
 from db_runtime import get_conn
 from repositories import survey_repository
 from services.query.models import QueryRequest
+from services.query.pivot import format_numeric_label
 from services.query.runner import run_query
 from services.wave_service import wave_ids
 
@@ -66,6 +67,23 @@ def _id_match(row_id, target):
         return float(a) == float(b)
     except ValueError:
         return False
+
+
+def _option_label(case, target):
+    """Rótulo con que la vista Año de un concepto numérico muestra `target`:
+    la etiqueta de la opción si la ola la guardó como categórica, o el valor
+    formateado si la guardó como numérica."""
+    flat = run_query(
+        QueryRequest(
+            question_id=case["question_id"],
+            wave_id=case["wave_id"],
+            initial_only=_as_bool(case.get("initial_only")),
+        )
+    )
+    row = next((row for row in flat["rows"] if _id_match(row[0], target)), None)
+    if row is not None and flat["question"]["q_type"] != "numerica":
+        return str(row[1])
+    return format_numeric_label(float(target))
 
 
 CASES = _load_cases()
@@ -123,12 +141,16 @@ def test_published_figure(case):
             # La vista Año no expone id_respuesta como columna; el código canónico
             # vive en year_option_map, alineado EN ORDEN con las filas de datos.
             yom = r.get("year_option_map") or []
-            data_rows = [row for row in rows if row[0] != "Total"]
-            idx = next(
-                (i for i, e in enumerate(yom) if _id_match(e["id_respuesta"], target)),
-                None,
-            )
-            row = data_rows[idx] if idx is not None and idx < len(data_rows) else None
+            if yom:
+                data_rows = [row for row in rows if row[0] != "Total"]
+                idx = next(
+                    (i for i, e in enumerate(yom) if _id_match(e["id_respuesta"], target)),
+                    None,
+                )
+                row = data_rows[idx] if idx is not None and idx < len(data_rows) else None
+            else:
+                label = _option_label(case, target)
+                row = next((row for row in rows if str(row[0]) == label), None)
         else:
             row = next((row for row in rows if _id_match(row[0], target)), None)
         got = row[ci] if row else None

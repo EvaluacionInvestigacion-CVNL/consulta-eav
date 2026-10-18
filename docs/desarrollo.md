@@ -52,7 +52,9 @@ Se prenden con `FEATURES=a,b` en `.env` (local) o en el dashboard de Render.
 ## Tests
 
 ```bash
-.venv/bin/pytest          # 138 tests: motor de query + endpoints + chat + ratelimit
+.venv/bin/pytest              # todo menos las cifras publicadas (default, segundos)
+.venv/bin/pytest -m published  # sólo las cifras publicadas (~21k casos, minutos)
+.venv/bin/pytest -m ""         # absolutamente todo
 ```
 
 Suites en `tests/`:

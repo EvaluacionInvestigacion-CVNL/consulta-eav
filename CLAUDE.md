@@ -36,10 +36,11 @@ cd frontend && npm run dev
 export GEMINI_API_KEY=your_key_here
 
 # Tests (repo root; conftest.py adds backend/ to sys.path)
-.venv/bin/pytest                                   # full suite
+.venv/bin/pytest                                   # everything except published figures (default)
 .venv/bin/pytest tests/test_run_query.py::test_pivot_by_attribute   # single test
 .venv/bin/pytest -k sentinel                        # by keyword
-.venv/bin/pytest -m published                       # published-figures acceptance tests only
+.venv/bin/pytest -m published                       # published-figures acceptance tests only (~21k, minutes)
+.venv/bin/pytest -m ""                               # truly everything
 
 # Frontend format (no separate lint script; Prettier is the only formatter)
 cd frontend && npm run format          # write
