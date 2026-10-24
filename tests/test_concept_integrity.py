@@ -326,7 +326,7 @@ def test_recodes_exhaustivos(hechos):
             )
     assert not faltantes, (
         "recode NO exhaustivo: los códigos que faltan caen al fallback "
-        f"'{{concept_id}}:{{código}}' y pueden volver a colisionar.\n"
+        "'{concept_id}:{código}' y pueden volver a colisionar.\n"
         + "\n".join(f"  {cid} ({w}/{q}): {msg}" for cid, w, q, msg in faltantes)
         + "\n  Arreglo: declara TODOS los códigos con casos de esa ola en "
         f"concept_recodes_approved.csv.\n  {REVISAR}"

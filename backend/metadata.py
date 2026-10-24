@@ -52,7 +52,6 @@ ID_TO_CITY_NAME = {
     28: "Higueras",
     29: "Hualahuises",
     30: "Iturbide",
-    31: "Juárez",
     32: "Lampazos de Naranjo",
     33: "Linares",
     3: "Los Aldamas",

@@ -29,7 +29,7 @@ Notas de formato del cuestionario (difiere por año):
   - 2024/2023: q_id en col 2; opciones "N. <texto>" en col 3.
   - 2025: se carga desde la BD de una ola; sin cuestionario -> sólo centinelas.
 """
-import csv, re, os
+import csv, re
 from collections import defaultdict
 from pathlib import Path
 

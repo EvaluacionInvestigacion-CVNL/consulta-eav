@@ -1,0 +1,4 @@
+extend-exclude = ["drafts"]
+
+[lint]
+select = ["F", "E9"]
