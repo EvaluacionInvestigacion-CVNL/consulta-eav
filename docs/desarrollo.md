@@ -10,7 +10,7 @@
 ```bash
 # Backend
 python -m venv .venv
-.venv/bin/pip install -r requirements.txt
+.venv/bin/pip install -r requirements-dev.txt   # requirements.txt + pytest, httpx, ruff
 
 # Frontend
 cd frontend && npm install
@@ -57,6 +57,29 @@ Se prenden con `FEATURES=a,b` en `.env` (local) o en el dashboard de Render.
 .venv/bin/pytest -m ""         # absolutamente todo
 ```
 
+Lint de Python con [ruff](https://docs.astral.sh/ruff/), sólo errores reales
+(imports/variables sin usar, nombres indefinidos, sintaxis — ver `ruff.toml`):
+
+```bash
+.venv/bin/ruff check backend tests db
+```
+
+## CI (GitHub Actions)
+
+`.github/workflows/ci.yml` corre en cada push a `main` y en cada PR, en una
+máquina limpia:
+
+- **frontend** — `npm ci`, `npm run format:check`, `npm run build`.
+- **backend** — dos veces, con `FEATURES` vacío y con `olas_2016_2019`:
+  `ruff check`, `python db/build_db.py` (la BD no se versiona) y `pytest`.
+
+El resultado se ve en la pestaña **Actions** del repo y como ✅/❌ junto a cada
+commit. Para reproducirlo en local basta con los comandos de arriba. Sin
+`GEMINI_API_KEY` el modo IA está apagado, así que CI nunca gasta cuota de Gemini.
+
+Render tiene Auto-Deploy en **"After CI Checks Pass"** (dashboard → Settings):
+un push a `main` con CI en rojo no se despliega.
+
 Suites en `tests/`:
 
 - `test_run_query.py` — las 4 formas del motor + invariantes (base Capa A,
@@ -102,9 +125,9 @@ límites del chat) también viven en el dashboard; `render.yaml` lista los valor
 
 Flujo típico:
 
-1. Hacer cambios, reconstruir la BD y correr tests localmente.
+1. Hacer cambios, reconstruir la BD y correr tests y `ruff` localmente.
 2. Commitear los insumos que cambiaron (CSVs de olas, overlays, conceptos) — nunca el `.duckdb`.
-3. `git push` a `main`; si Render no arranca el deploy solo, **Manual Deploy → Deploy latest commit**.
+3. `git push` a `main`; Render despliega cuando CI pasa. Si no arranca solo, **Manual Deploy → Deploy latest commit**.
 4. Si cambia el build, el arranque o una variable, actualizar el dashboard **y** `render.yaml`.
 
 ## Estructura del repo

@@ -23,7 +23,7 @@ area:**
 
 ```bash
 # Setup (first time)
-python -m venv .venv && .venv/bin/pip install -r requirements.txt
+python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 cd frontend && npm install
 
 # Run backend — API on :8000, docs at /docs
@@ -41,6 +41,9 @@ export GEMINI_API_KEY=your_key_here
 .venv/bin/pytest -k sentinel                        # by keyword
 .venv/bin/pytest -m published                       # published-figures acceptance tests only (~21k, minutes)
 .venv/bin/pytest -m ""                               # truly everything
+
+# Python lint (ruff, errors only — see ruff.toml); CI runs it too (.github/workflows/ci.yml)
+.venv/bin/ruff check backend tests db
 
 # Frontend format (no separate lint script; Prettier is the only formatter)
 cd frontend && npm run format          # write
