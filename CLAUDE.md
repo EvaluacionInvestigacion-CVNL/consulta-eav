@@ -39,7 +39,7 @@ export GEMINI_API_KEY=your_key_here
 .venv/bin/pytest                                   # everything except published figures (default)
 .venv/bin/pytest tests/test_run_query.py::test_pivot_by_attribute   # single test
 .venv/bin/pytest -k sentinel                        # by keyword
-.venv/bin/pytest -m published                       # published-figures acceptance tests only (~21k, minutes)
+.venv/bin/pytest -m published                       # published-figures acceptance tests only (~21k, minutes; own CI job)
 .venv/bin/pytest -m ""                               # truly everything
 
 # Python lint (ruff, errors only — see ruff.toml); CI runs it too (.github/workflows/ci.yml)

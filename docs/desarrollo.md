@@ -72,6 +72,10 @@ máquina limpia:
 - **frontend** — `npm ci`, `npm run format:check`, `npm run build`.
 - **backend** — dos veces, con `FEATURES` vacío y con `olas_2016_2019`:
   `ruff check`, `python db/build_db.py` (la BD no se versiona) y `pytest`.
+- **published** — en paralelo, sólo sin flags (la config de producción):
+  `python db/build_db.py` y `pytest -m published`. Es el que detecta cuando un
+  cambio de datos (olas, overlays, conceptos) mueve una cifra publicada; tarda
+  unos minutos y es el que más retrasa el deploy.
 
 El resultado se ve en la pestaña **Actions** del repo y como ✅/❌ junto a cada
 commit. Para reproducirlo en local basta con los comandos de arriba. Sin
