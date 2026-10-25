@@ -34,6 +34,7 @@ import {
   groupByQuestionMeta,
   clearGroupByQuestion,
   toggleSidebar,
+  hasFeature,
 } from '../store.js'
 import QuestionPicker from './QuestionPicker.vue'
 import InfoTooltip from './InfoTooltip.vue'
@@ -510,7 +511,7 @@ const availablePresets = computed(() =>
           </div>
 
           <!-- SQL Preview Toggle -->
-          <div>
+          <div v-if="hasFeature('mostrar_sql')">
             <button
               @click="showSQL = !showSQL"
               class="w-full flex items-center justify-between p-3 bg-[#f8fafc] hover:bg-[#f1f5f9] rounded-lg transition-colors"

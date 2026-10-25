@@ -10,7 +10,7 @@ DB_PATH = os.getenv("DB_PATH", "../data/encuesta_multianual.duckdb")
 STATIC_DIR = os.getenv("STATIC_DIR", "../frontend/dist")
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
-KNOWN_FEATURES = ["olas_2016_2019"]
+KNOWN_FEATURES = ["olas_2016_2019", "mostrar_sql"]
 
 FEATURES = frozenset(
     f.strip() for f in os.getenv("FEATURES", "").split(",") if f.strip()
