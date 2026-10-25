@@ -26,6 +26,8 @@ services:
         value: "production"
       - key: SENTRY_DSN
         sync: false
+      - key: VITE_SENTRY_DSN
+        sync: false
       - key: FEATURES
         value: ""
       - key: CHAT_RATE_PER_MIN

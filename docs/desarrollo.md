@@ -44,6 +44,7 @@ export GEMINI_API_KEY=key   # sin esto, la app corre en modo manual
 | `FEATURES`       | — (vacío: todo apagado)              | Feature flags prendidos, separados por coma |
 | `ENVIRONMENT`    | `development`                        | `production` en Render: entorno de Sentry y oculta `/api/sentry-debug` |
 | `SENTRY_DSN`     | — (sin default)                      | Habilita el envío de errores y trazas a Sentry |
+| `VITE_SENTRY_DSN` | — (sin default)                     | DSN del proyecto de frontend; se lee en el **build**, cambiarla requiere redeploy |
 
 > `DB_PATH` es relativo a `backend/`.
 
@@ -126,7 +127,7 @@ línea** encadenada con `&&`, así el build se detiene en el primer paso que fal
 Sin eso, un `build_db.py` fallido no tumba el build: el deploy pasa sin BD y la
 app truena al arrancar con `database does not exist`.
 
-Las variables de entorno (`DB_PATH`, `STATIC_DIR`, `GEMINI_API_KEY`, `FEATURES`, `ENVIRONMENT`, `SENTRY_DSN`,
+Las variables de entorno (`DB_PATH`, `STATIC_DIR`, `GEMINI_API_KEY`, `FEATURES`, `ENVIRONMENT`, `SENTRY_DSN`, `VITE_SENTRY_DSN`,
 límites del chat) también viven en el dashboard; `render.yaml` lista los valores de referencia.
 
 Flujo típico:
