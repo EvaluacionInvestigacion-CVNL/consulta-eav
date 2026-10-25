@@ -8,6 +8,7 @@ load_dotenv()
 
 DB_PATH = os.getenv("DB_PATH", "../data/encuesta_multianual.duckdb")
 STATIC_DIR = os.getenv("STATIC_DIR", "../frontend/dist")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 KNOWN_FEATURES = ["olas_2016_2019"]
 

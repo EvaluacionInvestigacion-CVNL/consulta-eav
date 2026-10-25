@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from config import DB_PATH
+from config import DB_PATH, ENVIRONMENT
 
 router = APIRouter(prefix="/api", tags=["diagnóstico"])
 
@@ -12,6 +12,7 @@ def health():
     return {"status": "ok", "db": DB_PATH}
 
 
-@router.get("/sentry-debug")
-def trigger_error():
-    division_by_zero = 1 / 0  # noqa: F841
+if ENVIRONMENT != "production":
+    @router.get("/sentry-debug")
+    def trigger_error():
+        division_by_zero = 1 / 0  # noqa: F841

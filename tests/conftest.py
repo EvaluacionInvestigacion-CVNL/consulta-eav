@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 BACKEND = ROOT / "backend"
 
 os.environ.setdefault("DB_PATH", str(ROOT / "data" / "encuesta_multianual.duckdb"))
+os.environ["SENTRY_DSN"] = ""
 sys.path.insert(0, str(BACKEND))
 
 import pytest  # noqa: E402
