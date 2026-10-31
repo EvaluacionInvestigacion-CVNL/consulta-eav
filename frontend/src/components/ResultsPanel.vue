@@ -5,17 +5,12 @@ import {
   state,
   exportCurrentCSV,
   filterValueLabel,
+  attributeLabel,
   questionPicker,
 } from '../store.js'
 import DataTable from './DataTable.vue'
 import PivotTables from './PivotTables.vue'
 import ChartView from './ChartView.vue'
-
-function attributeLabel(attr) {
-  if (attr === 'city_id') return 'Ciudad'
-  const a = state.attributes.find((x) => x.attribute === attr)
-  return a?.label || attr
-}
 
 const isPivot = computed(() => state.lastResult?.format === 'pivot')
 const exportDisabled = computed(() => !state.lastResult || state.loading)

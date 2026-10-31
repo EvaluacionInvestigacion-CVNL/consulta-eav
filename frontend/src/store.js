@@ -227,6 +227,41 @@ export function filterValueLabel(filter) {
   return inner?.get(v) ?? String(v)
 }
 
+export function attributeLabel(attr) {
+  if (attr === 'city_id') return 'Ciudad'
+  const a = state.attributes.find((x) => x.attribute === attr)
+  return a?.label || attr
+}
+
+// Frase que resume la consulta armada en el sidebar, antes de ejecutarla.
+export const querySummary = computed(() => {
+  if (!state.questionId) return ''
+  const g = state.groupBy
+  let breakdown
+  if (g === 'answer') breakdown = 'distribución de respuestas'
+  else if (g === 'year') breakdown = 'comparada entre años'
+  else if (g === 'city_id') breakdown = 'por municipio'
+  else if (isQuestionGroupBy.value)
+    breakdown =
+      groupByQuestionMeta.value?.qType === 'numerica'
+        ? `por rangos de ${g}`
+        : `cruzada con ${g}`
+  else {
+    const recode = state.recodes.find((r) => r.key === g)
+    breakdown = `por ${(recode?.label || attributeLabel(g)).toLowerCase()}`
+  }
+  const parts = [state.questionId, breakdown]
+  if (state.filters.length) {
+    const filters = state.filters.map(
+      (f) =>
+        `${f.question ?? attributeLabel(f.attribute)}: ${filterValueLabel(f)}`,
+    )
+    parts.push(`sólo ${filters.join('; ')}`)
+  }
+  parts.push(state.initialOnly ? 'población estimada' : 'muestra sin ponderar')
+  return parts.join(' · ')
+})
+
 function cleanSQL(sql) {
   return sql
     .split('\n')

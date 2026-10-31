@@ -23,6 +23,8 @@ import {
   clearPreset,
   removeFilter,
   filterValueLabel,
+  attributeLabel,
+  querySummary,
   questionPicker,
   selectedQuestion,
   setQueryMode,
@@ -51,12 +53,6 @@ const selectedQuestionMeta = computed(
   () => questionPicker.value.byId.get(state.questionId) || null,
 )
 
-function attributeLabel(attr) {
-  if (attr === 'city_id') return 'Ciudad'
-  const a = state.attributes.find((x) => x.attribute === attr)
-  return a?.label || attr
-}
-
 function relativeTime(ts) {
   const diff = Date.now() - ts
   const min = Math.floor(diff / 60000)
@@ -84,8 +80,14 @@ async function copySQL() {
   }
 }
 
-function onPresetChange(e) {
-  applyPreset(e.target.value)
+// Un atajo llena el desglose y los filtros; un segundo clic lo quita.
+function togglePreset(key) {
+  if (state.appliedPreset === key) {
+    clearPreset()
+    state.groupBy = 'answer'
+  } else {
+    applyPreset(key)
+  }
 }
 
 // Sentinel <option> value that opens the question picker instead of being a
@@ -195,11 +197,16 @@ const availablePresets = computed(() =>
         <template v-if="state.queryMode === 'manual'">
           <!-- Pregunta -->
           <div>
-            <label
-              class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
-            >
-              Pregunta
-            </label>
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                >1</span
+              >
+              <span
+                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                >Pregunta</span
+              >
+            </div>
             <button
               @click="openPicker('question')"
               class="w-full text-left bg-[#f1f5f9] border border-gray-300 rounded-2xl px-3 py-2.5 cursor-pointer flex items-center gap-2.5 hover:border-[#0d9488] transition-colors"
@@ -236,68 +243,48 @@ const availablePresets = computed(() =>
             </button>
           </div>
 
-          <!-- Desagregaciones predefinidas -->
+          <!-- Paso 2: desglose. Los atajos llenan este paso y el de filtros. -->
           <div>
-            <label
-              class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
-            >
-              Desagregaciones predefinidas
-            </label>
-            <div class="relative">
-              <select
-                :value="state.appliedPreset"
-                @change="onPresetChange"
-                class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                >2</span
               >
-                <option value="">— Ninguno (configura manualmente) —</option>
-                <option
+              <span
+                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                >Desglosar por
+                <span class="normal-case font-normal text-[#94a3b8]"
+                  >(opcional)</span
+                ></span
+              >
+            </div>
+            <div v-if="availablePresets.length" class="mb-2">
+              <span class="text-[11px] text-[#94a3b8] mr-1">Atajos:</span>
+              <div class="inline-flex flex-wrap gap-1.5 align-middle">
+                <button
                   v-for="p in availablePresets"
                   :key="p.key"
-                  :value="p.key"
+                  @click="togglePreset(p.key)"
+                  :class="[
+                    'text-xs font-medium px-2.5 py-1 rounded-full border transition-colors',
+                    state.appliedPreset === p.key
+                      ? 'bg-[#0d9488] border-[#0d9488] text-white'
+                      : 'bg-white border-gray-300 text-[#334155] hover:border-[#0d9488]',
+                  ]"
                 >
                   {{ p.label }}
-                </option>
-              </select>
-              <svg
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-2 pointer-events-none"
-                fill="none"
-                viewBox="0 0 12 7.4"
-              >
-                <path
-                  d="M1 1L6 6L11 1"
-                  stroke="#94A3B8"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+                </button>
+              </div>
             </div>
-          </div>
-
-          <!-- Manual configuration divider -->
-          <div class="flex items-center gap-2 pt-1">
-            <span
-              class="text-[11px] font-bold text-[#1a1a1b] uppercase tracking-wide whitespace-nowrap"
-            >
-              Configurar manualmente
-            </span>
-            <span class="flex-1 h-px bg-[#e2e8f0]" />
-          </div>
-
-          <!-- Group By -->
-          <div>
-            <label
-              class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
-            >
-              Agrupar resultados por
-            </label>
             <div class="relative">
               <select
                 :value="isQuestionGroupBy ? '__question__' : state.groupBy"
                 @change="onGroupByChange"
                 class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
               >
-                <option value="answer">Respuesta</option>
+                <option value="answer">
+                  Sin desglose
+                </option>
                 <option v-if="canCompareYears" value="year">
                   Año (comparar entre olas)
                 </option>
@@ -361,11 +348,19 @@ const availablePresets = computed(() =>
 
           <!-- Agregar filtro: atributos y preguntas en un solo buscador -->
           <div>
-            <label
-              class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
-            >
-              Agregar filtro
-            </label>
+            <div class="flex items-center gap-2 mb-2">
+              <span
+                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                >3</span
+              >
+              <span
+                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                >Filtrar
+                <span class="normal-case font-normal text-[#94a3b8]"
+                  >(opcional)</span
+                ></span
+              >
+            </div>
             <FilterSearch />
           </div>
 
@@ -537,8 +532,15 @@ const availablePresets = computed(() =>
       <!-- Execute Button (manual mode only) -->
       <div
         v-if="state.queryMode === 'manual'"
-        class="p-4 border-t border-[#e2e8f0]"
+        class="p-4 border-t border-[#e2e8f0] space-y-3"
       >
+        <p
+          v-if="querySummary"
+          class="text-xs text-[#475569] bg-[#f8fafc] border border-[#e2e8f0] rounded-lg px-3 py-2 leading-relaxed"
+        >
+          <span class="font-semibold text-[#334155]">Verás:</span>
+          {{ querySummary }}
+        </p>
         <button
           @click="runCurrentQuery"
           :disabled="!canRun"

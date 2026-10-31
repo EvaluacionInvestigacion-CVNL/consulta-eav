@@ -218,37 +218,37 @@ RECODES: dict = {
 PRESETS: list = [
     {
         "key": "respuesta_por_unidad_geografica",
-        "label": "Respuesta por unidad geográfica",
+        "label": "Municipio",
         "group_by": "city_id",
         "filters": [],
     },
     {
         "key": "respuesta_hombres_por_unidad_geografica",
-        "label": "Respuesta de HOMBRES por unidad geográfica",
+        "label": "Hombres por municipio",
         "group_by": "city_id",
         "filters": [{"attribute": "sexo", "value": 0}],
     },
     {
         "key": "respuesta_mujeres_por_unidad_geografica",
-        "label": "Respuesta de MUJERES por unidad geográfica",
+        "label": "Mujeres por municipio",
         "group_by": "city_id",
         "filters": [{"attribute": "sexo", "value": 1}],
     },
     {
         "key": "respuesta_por_sexo",
-        "label": "Respuesta por sexo",
+        "label": "Sexo",
         "group_by": "sexo",
         "filters": [],
     },
     {
         "key": "respuesta_por_edad",
-        "label": "Respuesta por edad",
+        "label": "Edad",
         "group_by": "edad_anos",
         "filters": [],
     },
     {
         "key": "respuesta_por_ano",
-        "label": "Respuesta por año",
+        "label": "Por año",
         "group_by": "year",
         "filters": [],
         # Sólo aplica a preguntas con `concept_id`; la UI lo oculta cuando la
