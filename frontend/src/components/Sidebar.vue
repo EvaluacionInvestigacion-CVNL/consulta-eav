@@ -22,7 +22,6 @@ import {
   applyPreset,
   clearPreset,
   removeFilter,
-  addFilter,
   filterValueLabel,
   questionPicker,
   selectedQuestion,
@@ -37,6 +36,7 @@ import {
   hasFeature,
 } from '../store.js'
 import QuestionPicker from './QuestionPicker.vue'
+import FilterSearch from './FilterSearch.vue'
 import InfoTooltip from './InfoTooltip.vue'
 
 // Searchable question picker modal. `pickerTarget` decides whether a pick sets
@@ -51,28 +51,10 @@ const selectedQuestionMeta = computed(
   () => questionPicker.value.byId.get(state.questionId) || null,
 )
 
-// Manual "add filter" controls.
-const newFilterAttr = ref('')
-const newFilterValue = ref('')
-const newFilterValues = computed(() => {
-  if (newFilterAttr.value === 'city_id') {
-    return state.cities.map((c) => ({ value: c.city_id, label: c.name }))
-  }
-  const attr = state.attributes.find((x) => x.attribute === newFilterAttr.value)
-  return attr ? attr.values : []
-})
 function attributeLabel(attr) {
   if (attr === 'city_id') return 'Ciudad'
   const a = state.attributes.find((x) => x.attribute === attr)
   return a?.label || attr
-}
-function onFilterAttrChange() {
-  newFilterValue.value = ''
-}
-function addCurrentFilter() {
-  if (!newFilterAttr.value || newFilterValue.value === '') return
-  addFilter(newFilterAttr.value, newFilterValue.value)
-  newFilterValue.value = ''
 }
 
 function relativeTime(ts) {
@@ -377,84 +359,14 @@ const availablePresets = computed(() =>
             </button>
           </div>
 
-          <!-- Agregar filtro -->
+          <!-- Agregar filtro: atributos y preguntas en un solo buscador -->
           <div>
             <label
               class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
             >
               Agregar filtro
             </label>
-            <div class="space-y-2">
-              <div class="relative">
-                <select
-                  v-model="newFilterAttr"
-                  @change="onFilterAttrChange"
-                  class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
-                >
-                  <option value="">— Atributo —</option>
-                  <option value="city_id">Ciudad</option>
-                  <option
-                    v-for="a in state.attributes"
-                    :key="a.attribute"
-                    :value="a.attribute"
-                  >
-                    {{ a.label || a.attribute }}
-                  </option>
-                </select>
-                <svg
-                  class="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-2 pointer-events-none"
-                  fill="none"
-                  viewBox="0 0 12 7.4"
-                >
-                  <path
-                    d="M1 1L6 6L11 1"
-                    stroke="#94A3B8"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div class="flex gap-2">
-                <div class="relative flex-1">
-                  <select
-                    v-model="newFilterValue"
-                    :disabled="!newFilterAttr"
-                    class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <option value="">— Valor —</option>
-                    <option
-                      v-for="v in newFilterValues"
-                      :key="v.value"
-                      :value="v.value"
-                    >
-                      {{ v.label }}
-                    </option>
-                  </select>
-                  <svg
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-2 pointer-events-none"
-                    fill="none"
-                    viewBox="0 0 12 7.4"
-                  >
-                    <path
-                      d="M1 1L6 6L11 1"
-                      stroke="#94A3B8"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </div>
-                <button
-                  @click="addCurrentFilter"
-                  :disabled="!newFilterAttr || newFilterValue === ''"
-                  class="shrink-0 bg-[#0d9488] hover:bg-[#00685f] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-4xl px-3 flex items-center justify-center transition-colors"
-                  aria-label="Agregar filtro"
-                >
-                  <Plus class="size-4" />
-                </button>
-              </div>
-            </div>
+            <FilterSearch />
           </div>
 
           <!-- Filtros aplicados -->
@@ -479,7 +391,7 @@ const availablePresets = computed(() =>
                 class="inline-flex items-center gap-1 bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-1 rounded"
               >
                 <span
-                  >{{ attributeLabel(f.attribute) }}:
+                  >{{ f.question ?? attributeLabel(f.attribute) }}:
                   {{ filterValueLabel(f) }}</span
                 >
                 <button

@@ -201,12 +201,26 @@ const cityNameMap = computed(() => {
   return out
 })
 
+// Un rango {min, max} de un filtro por pregunta numérica, para mostrarlo.
+function rangeLabel({ min, max }) {
+  if (min != null && max != null) return `${min}-${max}`
+  return min != null ? `${min} o más` : `hasta ${max}`
+}
+
 export function filterValueLabel(filter) {
+  const v = filter.value
+  if (v && typeof v === 'object' && !Array.isArray(v)) return rangeLabel(v)
+  if (filter.question) {
+    const q = state.questions.find((x) => x.q_id === filter.question)
+    const labels = new Map(
+      (q?.options || []).map((o) => [o.option_id, o.label]),
+    )
+    return v.map((x) => labels.get(x) ?? String(x)).join(', ')
+  }
   const inner =
     filter.attribute === 'city_id'
       ? cityNameMap.value
       : attributeValueMap.value.get(filter.attribute)
-  const v = filter.value
   if (Array.isArray(v)) {
     return v.map((x) => inner?.get(x) ?? String(x)).join(', ')
   }
@@ -326,18 +340,20 @@ export function removeFilter(idx) {
   state.appliedPreset = ''
 }
 
-// Add a value to a manual filter
-export function addFilter(attribute, value) {
-  if (!attribute || value === '' || value == null) return
-  const v = Number(value)
-  const existing = state.filters.find((f) => f.attribute === attribute)
-  if (existing) {
-    const arr = Array.isArray(existing.value)
-      ? existing.value
-      : [existing.value]
-    if (!arr.includes(v)) existing.value = [...arr, v]
+// Agrega un filtro por atributo o por pregunta (`kind` = 'attribute' |
+// 'question'). Una lista de valores se junta con la del filtro existente; un
+// rango {min, max} reemplaza al anterior.
+export function addFilter(kind, key, value) {
+  const existing = state.filters.find((f) => f[kind] === key)
+  if (!existing) {
+    state.filters.push({ [kind]: key, value })
+  } else if (Array.isArray(value) && typeof existing.value !== 'object') {
+    // Los presets pueden traer un valor suelto en vez de una lista.
+    existing.value = [...new Set([existing.value, ...value])]
+  } else if (Array.isArray(value) && Array.isArray(existing.value)) {
+    existing.value = [...new Set([...existing.value, ...value])]
   } else {
-    state.filters.push({ attribute, value: [v] })
+    existing.value = value
   }
   state.appliedPreset = ''
 }

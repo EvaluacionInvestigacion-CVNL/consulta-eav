@@ -31,14 +31,12 @@ const chips = computed(() => {
   )
 })
 
-// In 'groupBy' mode only categorical questions are eligible, and the main
-// question can't cross with itself.
-const isGroupBy = computed(() => props.target === 'groupBy')
+// In 'groupBy' mode the main question can't cross with itself. Any other
+// question is eligible: numeric ones cross by ranges.
+const isRestricted = computed(() => props.target === 'groupBy')
 function eligible(meta) {
-  if (!isGroupBy.value) return true
-  if (meta.qType === 'numerica') return false
-  if (meta.id === state.questionId) return false
-  return true
+  if (!isRestricted.value) return true
+  return meta.id !== state.questionId
 }
 function leafCount(sec) {
   let n = 0
@@ -103,8 +101,8 @@ const built = computed(() => {
     }
   } else {
     for (const sec of secs) {
-      const lc = isGroupBy.value ? leafCount(sec) : sec.count
-      if (isGroupBy.value && lc === 0) continue // no eligible questions here
+      const lc = isRestricted.value ? leafCount(sec) : sec.count
+      if (isRestricted.value && lc === 0) continue // no eligible questions here
       items.push({ kind: 'section', label: sec.label, count: lc })
       for (const e of sec.entries) {
         if (e.type === 'q') {
@@ -187,8 +185,8 @@ watch(
             v-if="target === 'groupBy'"
             class="text-[12px] font-semibold text-[#5e2494] mb-2.5"
           >
-            Cruzar por otra pregunta — elige la variable de desglose (solo
-            preguntas categóricas).
+            Cruzar por otra pregunta — elige la variable de desglose (las
+            numéricas se agrupan por rangos).
           </p>
           <div
             class="flex items-center gap-2.5 bg-[#f1f5f9] rounded-xl px-3.5 py-2.5"

@@ -343,7 +343,8 @@ function setTab(t) {
                 :key="i"
                 class="bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-0.5 rounded"
               >
-                {{ attributeLabel(f.attribute) }}: {{ filterValueLabel(f) }}
+                {{ f.question ?? attributeLabel(f.attribute) }}:
+                {{ filterValueLabel(f) }}
               </span>
             </span>
           </template>
