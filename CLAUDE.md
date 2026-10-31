@@ -176,6 +176,7 @@ models.py           QueryRequest — the input contract
 runner.py           run_query: validation + the four output shapes
 year_comparison.py  the fifth shape, group_by="year"
 sql_builder.py      composed SQL fragments (scope, group expression, filters)
+numeric_bins.py     ranges for crossing by a numeric question (auto or numeric_group_bins)
 sentinels.py        which codes mean "No sabe/No contesta" instead of data
 pivot.py            counts/percentage table assembly + city bucket collapsing
 ```
@@ -212,10 +213,16 @@ compiled by `_recode_case_sql`), and `PRESETS` (canned breakdowns the sidebar
 offers). New buckets/orderings belong here, not in query code.
 
 Filters are `{"attribute": …}` (a friendly attribute or `city_id`) or
-`{"question": <any categorical q_id>}` (an extra JOIN on `answers`). In the year
+`{"question": <any q_id>}` (an extra JOIN on `answers`): a categorical takes a
+list of option codes, a numeric takes a range `{"min", "max"}` (inclusive,
+sentinels always excluded). Any question can also be the `group_by`; a numeric
+one is cut into ranges by `numeric_bins.py` — automatic (each value if ≤11
+distinct, else rounded quintiles) or the request's `numeric_group_bins` edges — with
+sentinels as their own columns. In the year
 view `services/dimension_service.py` translates them per wave through
 `concept_option_id` and is **strict**: a value with no equivalent in some wave
 is a 400 naming the missing waves, never a silent fallback to the raw code.
+A numeric range travels unchanged (like age).
 `GET /api/dimensions?question_id=…&mode=year` tells the UI which attributes and
 questions cover every wave of the selected question.
 

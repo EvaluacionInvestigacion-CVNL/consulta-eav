@@ -58,8 +58,11 @@ amigable (`sexo`) keyeado a un `question_id` de la encuesta, y `value` es el
 `option_id` cuya etiqueta está en `options`.
 
 Un filtro puede ser un atributo (`{"attribute": "sexo", "value": 1}`, o
-`city_id`) o **cualquier pregunta categórica** (`{"question": "p52", "value":
-[1, 2]}`), que se resuelve con un JOIN sobre `answers`. Los atributos son, en el
+`city_id`) o **cualquier pregunta**, que se resuelve con un JOIN sobre `answers`:
+una categórica con sus códigos (`{"question": "p52", "value": [1, 2]}`) y una
+numérica con un rango inclusivo (`{"question": "p26", "value": {"min": 100}}`).
+El rango siempre excluye los centinelas de esa pregunta: con sólo `min`, un 9999
+("No contesta") pasaría como el valor más alto. Los atributos son, en el
 fondo, preguntas con nombre amigable, así que entre olas las dos formas se
 traducen igual (ver *Filtros entre olas* abajo).
 
@@ -170,7 +173,26 @@ Helpers compartidos que arman el SQL y las tablas:
   Slots: `extra_where` (centinelas / no-nulos) y `with_options` (LEFT JOIN al
   catálogo de opciones).
 - **`_group_expr_sql(group_by, wave)`** — expresión SQL de la etiqueta de columna
-  del pivote (city_id / rangos de edad / recode / atributo).
+  del pivote (city_id / rangos de edad / recode / pregunta numérica por rangos /
+  pregunta categórica / atributo).
+
+### Cruzar por una pregunta numérica (`services/query/numeric_bins.py`)
+
+Cualquier pregunta puede ser el `group_by`. Una numérica no puede ser columna tal
+cual (una edad daría ~100 columnas), así que se parte en rangos semiabiertos
+`[a, b)`:
+
+- **Automáticos** (default): si la pregunta tiene ≤ 11 valores distintos en la ola (escalas 0–10),
+  cada valor es su columna; si no, los quintiles redondeados a números legibles
+  (37.4 → 35, 1952 → 2000). Se calculan una vez por pregunta, sin ponderar y sin
+  centinelas.
+- **De la petición**: `numeric_group_bins: [0, 30, 60]` da `Menos de 0 | 0-29 | 30-59 |
+  60 o más`. Así la UI puede ofrecer cortes con sentido ("más de una hora").
+
+Los centinelas nunca caen en un rango: son columnas propias ("No aplica", "No
+sabe", "No contesta"), como en los rangos de edad. La respuesta trae los cortes
+usados en `numeric_group_bins`, y la base de la tabla es quien respondió ambas preguntas,
+igual que en el cruce entre categóricas.
 - **`_city_buckets(city_filter)`** — buckets de columna al agrupar por ciudad.
 - **`_collapse_city_cells(...)`** — colapsa city_ids crudos en los buckets de
   metadata (11 municipios AMM + 4 agregados).
