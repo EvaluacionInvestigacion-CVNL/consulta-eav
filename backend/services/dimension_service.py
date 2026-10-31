@@ -85,6 +85,17 @@ def attribute_question(wave: str, attribute: str) -> str | None:
     return _catalog().attribute_question.get((wave, attribute))
 
 
+def concept_versions(concept_id: str) -> list[dict]:
+    """Cómo se preguntó un concepto en cada ola: `{year, q_id, q_text}` por ola,
+    de la más antigua a la más reciente. Sale del catálogo en caché."""
+    catalog = _catalog()
+    members = catalog.members_by_concept.get(concept_id, {})
+    return [
+        {"year": wave, "q_id": q_id, "q_text": catalog.question[(wave, q_id)][2] or ""}
+        for wave, q_id in sorted(members.items())
+    ]
+
+
 # ---------------------------------------------------------------------------
 # Forma del filtro
 # ---------------------------------------------------------------------------

@@ -27,6 +27,7 @@ from services.catalog_service import get_attributes
 from services.dimension_service import (
     CITY_ATTRIBUTE,
     attribute_question,
+    concept_versions,
     filter_dimension,
 )
 from services.ordering import order_by_desired
@@ -170,6 +171,7 @@ class QueryContext:
 
     def response_header(self, total_respondents) -> dict:
         """Los campos que toda respuesta lleva, sea plana o pivote."""
+        concept_id = question_catalog()[(self.wave, self.question_id)][1]
         return {
             "question": {
                 "q_id": self.question_id,
@@ -184,6 +186,7 @@ class QueryContext:
                 if self.numeric_bins
                 else {}
             ),
+            **({"year_texts": concept_versions(concept_id)} if concept_id else {}),
             "total_respondents": total_respondents,
         }
 

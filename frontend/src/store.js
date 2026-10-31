@@ -17,6 +17,7 @@ export const state = reactive({
   initialOnly: true,
   appliedPreset: '',
   lastResult: null,
+  resultVersion: 0, // Cambia con cada resultado nuevo, para animar su entrada.
   activeTab: 'chart',
   loading: false,
   error: null,
@@ -317,6 +318,8 @@ export async function init() {
     state.recodes = recodes
     applyCatalog(catalog)
     loadConversations()
+    window.addEventListener('popstate', onPopState)
+    if (await applyUrl(location.search)) await runCurrentQuery()
   } catch (e) {
     state.error = 'Error conectando al servidor'
     console.error(e)
@@ -324,24 +327,28 @@ export async function init() {
 }
 
 // Switch the active survey wave: reload catalogs and reset the query, since the
-// question set, options and filter values differ between waves.
-export async function setWave(waveId) {
+// question set, options and filter values differ between waves. Al seguir un
+// link (`keepResult`) el resultado anterior se queda en pantalla, atenuado, y
+// quien navega maneja `loading`: la consulta nueva viene enseguida.
+export async function setWave(waveId, { keepResult = false } = {}) {
   if (!waveId || waveId === state.waveId) return
   state.waveId = waveId
   state.questionId = ''
   state.filters = []
   state.groupBy = 'answer'
   state.appliedPreset = ''
-  state.lastResult = null
   state.error = null
-  state.loading = true
+  if (!keepResult) {
+    state.lastResult = null
+    state.loading = true
+  }
   try {
     await loadCatalog()
   } catch (e) {
     state.error = 'Error al cambiar de ola'
     console.error(e)
   } finally {
-    state.loading = false
+    if (!keepResult) state.loading = false
   }
 }
 
@@ -409,12 +416,117 @@ export async function runCurrentQuery() {
   state.error = null
   try {
     state.lastResult = await api.runQuery(buildBody())
+    state.resultVersion++
+    const url = queryToUrl()
+    if (url !== location.search) history.pushState(null, '', url)
   } catch (e) {
     state.lastResult = null
     state.error = e.message
   } finally {
     state.loading = false
   }
+}
+
+// ── Consulta en la URL ──────────────────────────────────────────────────────
+// La consulta manual vive en el query string (?w=…&q=…&g=…&f=…&io=0): un
+// resultado se comparte con un link y el botón Atrás regresa a la anterior.
+
+function queryParams({ w, q, g, f, io }) {
+  const p = new URLSearchParams()
+  if (w) p.set('w', w)
+  if (q) p.set('q', q)
+  if (g && g !== 'answer') p.set('g', g)
+  if (f?.length) p.set('f', JSON.stringify(f))
+  if (io === false) p.set('io', '0')
+  return `?${p}`
+}
+
+function queryToUrl() {
+  return queryParams({
+    w: state.waveId,
+    q: state.questionId,
+    g: state.groupBy,
+    f: state.filters,
+    io: state.initialOnly,
+  })
+}
+
+// Link a otra pregunta. `keepCut` conserva el desglose, los filtros y la
+// ponderación (p. ej. recorrer las preguntas de un bloque con el mismo corte),
+// quitando lo que no aplicaría a la pregunta destino. Sin `keepCut` la pregunta
+// se abre sola: en otra ola los códigos de los filtros no son los mismos.
+export function questionLink(q, { w = state.waveId, keepCut = true } = {}) {
+  if (!keepCut) return queryParams({ w, q })
+  const target = state.questions.find((x) => x.q_id === q)
+  let g = state.groupBy
+  if (g === q || (g === 'year' && !target?.concept_id)) g = 'answer'
+  return queryParams({
+    w,
+    q,
+    g,
+    f: state.filters.filter((f) => f.question !== q),
+    io: state.initialOnly,
+  })
+}
+
+// Aplica la consulta de la URL. Devuelve false si no hay una consulta válida.
+async function applyUrl(search) {
+  const p = new URLSearchParams(search)
+  const q = p.get('q')
+  if (!q) return false
+  const w = p.get('w')
+  if (w && w !== state.waveId) {
+    if (!state.waves.some((x) => x.wave_id === w)) {
+      state.error = `La ola ${w} no existe.`
+      return false
+    }
+    await setWave(w, { keepResult: true })
+  }
+  if (!state.questions.some((x) => x.q_id === q)) {
+    state.questionId = ''
+    state.error = `La pregunta ${q} no existe en ${state.waveId}.`
+    return false
+  }
+  let filters = []
+  try {
+    filters = JSON.parse(p.get('f') || '[]')
+  } catch {
+    filters = []
+  }
+  state.queryMode = 'manual'
+  state.questionId = q
+  state.groupBy = p.get('g') || 'answer'
+  state.filters = Array.isArray(filters) ? filters : []
+  state.initialOnly = p.get('io') !== '0'
+  state.appliedPreset = ''
+  return true
+}
+
+// Navega a la consulta de la URL actual. El resultado anterior se queda
+// atenuado (`loading`) hasta que llega el nuevo.
+async function navigateToUrl(search) {
+  state.loading = true
+  if (await applyUrl(search)) return runCurrentQuery()
+  state.loading = false
+  if (!new URLSearchParams(search).get('q')) {
+    state.questionId = ''
+    state.lastResult = null
+  }
+}
+
+function onPopState() {
+  return navigateToUrl(location.search)
+}
+
+// Clic en un link interno: navega sin recargar la página (en Render recargar
+// cuesta varios segundos de catálogo). Ctrl/Cmd/Shift-clic sigue abriendo una
+// pestaña nueva, porque el link es un `<a href>` real.
+export async function followQueryLink(event, href) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
+    return
+  event.preventDefault()
+  history.pushState(null, '', href)
+  await navigateToUrl(href)
 }
 
 export function setQueryMode(mode) {

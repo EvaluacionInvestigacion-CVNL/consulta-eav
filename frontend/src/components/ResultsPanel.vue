@@ -1,12 +1,20 @@
 <script setup>
-import { computed } from 'vue'
-import { Table2, BarChart3, Download } from 'lucide-vue-next'
+import { ref, computed } from 'vue'
+import {
+  Table2,
+  BarChart3,
+  Download,
+  Link as LinkIcon,
+  Check,
+} from 'lucide-vue-next'
 import {
   state,
   exportCurrentCSV,
   filterValueLabel,
   attributeLabel,
   questionPicker,
+  questionLink,
+  followQueryLink,
 } from '../store.js'
 import DataTable from './DataTable.vue'
 import PivotTables from './PivotTables.vue'
@@ -20,6 +28,36 @@ const totalRespondents = computed(
 const isYear = computed(() => state.lastResult?.group_by === 'year')
 const yearBases = computed(() => state.lastResult?.year_bases ?? [])
 const yearTexts = computed(() => state.lastResult?.year_texts ?? [])
+
+// Las otras preguntas del mismo bloque (p. ej. los incisos de una batería).
+const blockSiblings = computed(() => {
+  const qid = state.lastResult?.question?.q_id
+  const groupId = qid && questionPicker.value.groupOf.get(qid)
+  if (!groupId) return []
+  return [...questionPicker.value.byId.values()].filter(
+    (m) => m.groupId === groupId && m.id !== qid,
+  )
+})
+
+// Al seguir un link (están al fondo) se sube al inicio del resultado. Un clic
+// con Ctrl/Cmd/Shift abre otra pestaña: ahí no se mueve nada.
+const scroller = ref(null)
+function openLink(event, href) {
+  if (
+    !(event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
+  ) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    scroller.value?.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  }
+  followQueryLink(event, href)
+}
+
+const linkCopied = ref(false)
+async function copyLink() {
+  await navigator.clipboard.writeText(location.href)
+  linkCopied.value = true
+  setTimeout(() => (linkCopied.value = false), 1500)
+}
 const appliedFilters = computed(() => state.lastResult?.filters_applied ?? [])
 const fmtNum = (n) => (n == null ? '—' : Number(n).toLocaleString('es-MX'))
 const groupByLabel = computed(() => {
@@ -43,10 +81,20 @@ function setTab(t) {
 </script>
 
 <template>
-  <div class="flex-1 overflow-auto p-8 bg-[#fcf0e4]">
-    <!-- Loading -->
+  <div ref="scroller" class="flex-1 overflow-auto p-8 bg-[#fcf0e4]">
+    <!-- Cargando con un resultado en pantalla: barra delgada arriba, sin
+         sustituir el resultado (que se atenúa). La altura neta es 0 para que
+         nada salte. -->
     <div
-      v-if="state.loading"
+      v-if="state.loading && state.lastResult"
+      class="sticky top-0 z-10 -mx-8 -mt-8 mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-[#0d9488]/15"
+    >
+      <div class="progress-bar h-full w-1/3 bg-[#0d9488]"></div>
+    </div>
+
+    <!-- Loading (primera consulta: no hay resultado que mostrar) -->
+    <div
+      v-if="state.loading && !state.lastResult"
       class="flex items-center justify-center h-full gap-2.5 text-[#64748b]"
     >
       <div class="spinner"></div>
@@ -203,177 +251,266 @@ function setTab(t) {
       </div>
     </div>
 
-    <!-- Results -->
-    <div v-else class="max-w-7xl mx-auto space-y-8">
-      <!-- Data Visualization Card -->
+    <!-- Results: el anterior se atenúa mientras carga y el nuevo entra con
+         un fundido corto (sólo entrada, para no tener dos a la vez). -->
+    <Transition
+      v-else
+      enter-active-class="motion-safe:transition-opacity motion-safe:duration-200"
+      enter-from-class="opacity-0"
+    >
       <div
-        class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
+        :key="state.resultVersion"
+        class="max-w-7xl mx-auto space-y-8 motion-safe:transition-opacity motion-safe:duration-150"
+        :class="state.loading ? 'opacity-50 pointer-events-none' : ''"
       >
+        <!-- Data Visualization Card -->
         <div
-          class="border-b border-[#f1f5f9] px-6 py-3 flex items-center justify-between"
+          class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
         >
-          <div class="flex gap-8">
-            <button
-              @click="setTab('table')"
-              class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
-              :class="
-                state.activeTab === 'table'
-                  ? 'border-[#0d9488] text-[#0d9488]'
-                  : 'border-transparent text-[#94a3b8]'
-              "
-            >
-              <Table2 class="size-3.5" />
-              <span class="font-bold text-sm">Tabla</span>
-            </button>
-            <button
-              @click="setTab('chart')"
-              class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
-              :class="
-                state.activeTab === 'chart'
-                  ? 'border-[#0d9488] text-[#0d9488]'
-                  : 'border-transparent text-[#94a3b8]'
-              "
-            >
-              <BarChart3 class="size-3.5" />
-              <span class="font-bold text-sm">Gráfica</span>
-            </button>
-          </div>
-          <button
-            @click="exportCurrentCSV"
-            :disabled="exportDisabled"
-            class="flex items-center gap-2 py-1.5 px-2 border border-[#e2e8f0] rounded hover:bg-[#f8fafc] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          <div
+            class="border-b border-[#f1f5f9] px-6 py-3 flex items-center justify-between"
           >
-            <Download class="size-3.5 text-[#475569]" />
-            <span class="font-semibold text-sm text-[#475569]"
-              >Descargar CSV</span
-            >
-          </button>
+            <div class="flex gap-8">
+              <button
+                @click="setTab('table')"
+                class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
+                :class="
+                  state.activeTab === 'table'
+                    ? 'border-[#0d9488] text-[#0d9488]'
+                    : 'border-transparent text-[#94a3b8]'
+                "
+              >
+                <Table2 class="size-3.5" />
+                <span class="font-bold text-sm">Tabla</span>
+              </button>
+              <button
+                @click="setTab('chart')"
+                class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
+                :class="
+                  state.activeTab === 'chart'
+                    ? 'border-[#0d9488] text-[#0d9488]'
+                    : 'border-transparent text-[#94a3b8]'
+                "
+              >
+                <BarChart3 class="size-3.5" />
+                <span class="font-bold text-sm">Gráfica</span>
+              </button>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button
+                @click="copyLink"
+                class="flex items-center gap-2 py-1.5 px-2 border border-[#e2e8f0] rounded hover:bg-[#f8fafc] transition-colors"
+              >
+                <Check v-if="linkCopied" class="size-3.5 text-[#0d9488]" />
+                <LinkIcon v-else class="size-3.5 text-[#475569]" />
+                <span class="font-semibold text-sm text-[#475569]">{{
+                  linkCopied ? 'Copiado' : 'Copiar link'
+                }}</span>
+              </button>
+              <button
+                @click="exportCurrentCSV"
+                :disabled="exportDisabled"
+                class="flex items-center gap-2 py-1.5 px-2 border border-[#e2e8f0] rounded hover:bg-[#f8fafc] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+              >
+                <Download class="size-3.5 text-[#475569]" />
+                <span class="font-semibold text-sm text-[#475569]"
+                  >Descargar CSV</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <div v-show="state.activeTab === 'table'" class="p-6 space-y-8">
+            <PivotTables v-if="isPivot" :data="state.lastResult" />
+            <DataTable v-else :data="state.lastResult" />
+          </div>
+          <div v-show="state.activeTab === 'chart'" class="p-8">
+            <ChartView
+              :data="state.lastResult"
+              :active="state.activeTab === 'chart'"
+            />
+          </div>
         </div>
 
-        <div v-show="state.activeTab === 'table'" class="p-6 space-y-8">
-          <PivotTables v-if="isPivot" :data="state.lastResult" />
-          <DataTable v-else :data="state.lastResult" />
-        </div>
-        <div v-show="state.activeTab === 'chart'" class="p-8">
-          <ChartView
-            :data="state.lastResult"
-            :active="state.activeTab === 'chart'"
-          />
-        </div>
-      </div>
-
-      <!-- Metadata de la consulta. Una sola tarjeta: la franja compacta y el
+        <!-- Metadata de la consulta. Una sola tarjeta: la franja compacta y el
            redactado por año son lo mismo (contexto del resultado), así que van
            juntos y separados sólo por una divisoria interna. Vive aquí y no en
            PivotTables para que también se vea en la pestaña Gráfica. -->
-      <div
-        class="bg-white border border-[#e2e8f0] rounded-lg text-sm overflow-hidden"
-      >
-        <div class="px-5 py-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <!-- Pregunta -->
-          <span class="inline-flex items-center gap-2">
-            <span
-              class="font-mono text-xs bg-[#f0fdfa] text-[#0d9488] px-2 py-0.5 rounded font-bold"
-              >{{ state.lastResult.question.q_id }}</span
-            >
-            <span class="text-[#64748b]">{{
-              state.lastResult.question.q_type
-            }}</span>
-          </span>
-
-          <span class="w-px h-4 bg-[#e2e8f0]"></span>
-
-          <!-- Año / comparación -->
-          <span v-if="!isYear">
-            <span class="text-[#94a3b8]">Año</span>
-            <span class="font-semibold text-[#334155] ml-1">{{
-              state.lastResult.wave_id ?? '—'
-            }}</span>
-          </span>
-          <span v-else class="font-semibold text-[#334155]"
-            >Comparación por año</span
-          >
-
-          <span class="w-px h-4 bg-[#e2e8f0]"></span>
-
-          <!-- Agrupación -->
-          <span>
-            <span class="text-[#94a3b8]">Agrupado por</span>
-            <span class="font-semibold text-[#334155] ml-1">{{
-              groupByLabel
-            }}</span>
-          </span>
-
-          <span class="w-px h-4 bg-[#e2e8f0]"></span>
-
-          <!-- Universo -->
-          <span v-if="!isYear">
-            <span class="text-[#94a3b8]">Universo</span>
-            <span class="font-semibold text-[#334155] ml-1"
-              >{{ totalRespondents }} personas</span
-            >
-          </span>
-          <span
-            v-else
-            class="inline-flex flex-wrap items-center gap-x-2 gap-y-1"
-          >
-            <span class="text-[#94a3b8]">Universo por año</span>
-            <span
-              v-for="yb in yearBases"
-              :key="yb.year"
-              class="font-semibold text-[#334155]"
-            >
-              <span class="text-[#64748b] font-normal">{{ yb.year }}:</span>
-              {{ fmtNum(yb.base) }}
-            </span>
-          </span>
-
-          <!-- Filtros -->
-          <template v-if="appliedFilters.length">
-            <span class="w-px h-4 bg-[#e2e8f0]"></span>
-            <span class="inline-flex flex-wrap items-center gap-1.5">
-              <span class="text-[#94a3b8]">Filtros</span>
+        <div
+          class="bg-white border border-[#e2e8f0] rounded-lg text-sm overflow-hidden"
+        >
+          <div class="px-5 py-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <!-- Pregunta -->
+            <span class="inline-flex items-center gap-2">
               <span
-                v-for="(f, i) in appliedFilters"
-                :key="i"
-                class="bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-0.5 rounded"
+                class="font-mono text-xs bg-[#f0fdfa] text-[#0d9488] px-2 py-0.5 rounded font-bold"
+                >{{ state.lastResult.question.q_id }}</span
               >
-                {{ f.question ?? attributeLabel(f.attribute) }}:
-                {{ filterValueLabel(f) }}
+              <span class="text-[#64748b]">{{
+                state.lastResult.question.q_type
+              }}</span>
+            </span>
+
+            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+
+            <!-- Año / comparación -->
+            <span v-if="!isYear">
+              <span class="text-[#94a3b8]">Año</span>
+              <span class="font-semibold text-[#334155] ml-1">{{
+                state.lastResult.wave_id ?? '—'
+              }}</span>
+            </span>
+            <span v-else class="font-semibold text-[#334155]"
+              >Comparación por año</span
+            >
+
+            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+
+            <!-- Agrupación -->
+            <span>
+              <span class="text-[#94a3b8]">Agrupado por</span>
+              <span class="font-semibold text-[#334155] ml-1">{{
+                groupByLabel
+              }}</span>
+            </span>
+
+            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+
+            <!-- Universo -->
+            <span v-if="!isYear">
+              <span class="text-[#94a3b8]">Universo</span>
+              <span class="font-semibold text-[#334155] ml-1"
+                >{{ totalRespondents }} personas</span
+              >
+            </span>
+            <span
+              v-else
+              class="inline-flex flex-wrap items-center gap-x-2 gap-y-1"
+            >
+              <span class="text-[#94a3b8]">Universo por año</span>
+              <span
+                v-for="yb in yearBases"
+                :key="yb.year"
+                class="font-semibold text-[#334155]"
+              >
+                <span class="text-[#64748b] font-normal">{{ yb.year }}:</span>
+                {{ fmtNum(yb.base) }}
               </span>
             </span>
-          </template>
-        </div>
 
-        <!-- Cómo se preguntó cada año (sólo en la comparación por año) -->
-        <div
-          v-if="isYear && yearTexts.length"
-          class="border-t border-[#f1f5f9] px-5 py-3"
-        >
-          <h4
-            class="text-xs font-bold text-[#64748b] uppercase tracking-wide mb-2"
+            <!-- Filtros -->
+            <template v-if="appliedFilters.length">
+              <span class="w-px h-4 bg-[#e2e8f0]"></span>
+              <span class="inline-flex flex-wrap items-center gap-1.5">
+                <span class="text-[#94a3b8]">Filtros</span>
+                <span
+                  v-for="(f, i) in appliedFilters"
+                  :key="i"
+                  class="bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-0.5 rounded"
+                >
+                  {{ f.question ?? attributeLabel(f.attribute) }}:
+                  {{ filterValueLabel(f) }}
+                </span>
+              </span>
+            </template>
+          </div>
+
+          <!-- Cómo se preguntó cada año. Fuera de la vista Año son links a las
+               otras versiones de la pregunta. -->
+          <div
+            v-if="yearTexts.length > 1"
+            class="border-t border-[#f1f5f9] px-5 py-3"
           >
-            Cómo se preguntó cada año
-          </h4>
-          <ul class="space-y-1">
-            <li
-              v-for="t in yearTexts"
-              :key="t.year"
-              class="text-[#475569] flex gap-2"
+            <h4
+              class="text-xs font-bold text-[#64748b] uppercase tracking-wide mb-2"
             >
-              <span class="font-semibold text-[#1e293b] shrink-0">{{
-                t.year
-              }}</span>
-              <span
-                v-if="t.q_id"
-                class="shrink-0 font-mono text-xs text-[#0d9488] bg-[#f0fdfa] rounded px-1.5 py-0.5 self-start"
-                >{{ t.q_id }}</span
+              {{
+                isYear
+                  ? 'Cómo se preguntó cada año'
+                  : 'Esta pregunta en otros años'
+              }}
+            </h4>
+            <ul class="space-y-1">
+              <li
+                v-for="t in yearTexts"
+                :key="t.year"
+                class="text-[#475569] flex gap-2"
               >
-              <span>{{ t.q_text }}</span>
-            </li>
-          </ul>
+                <span class="font-semibold text-[#1e293b] shrink-0">{{
+                  t.year
+                }}</span>
+                <span
+                  v-if="!isYear && t.year === state.lastResult.wave_id"
+                  class="shrink-0 font-mono text-xs text-[#64748b] bg-[#f1f5f9] rounded px-1.5 py-0.5 self-start"
+                  :title="'La que estás viendo'"
+                  >{{ t.q_id }}</span
+                >
+                <a
+                  v-else-if="t.q_id"
+                  :href="questionLink(t.q_id, { w: t.year, keepCut: false })"
+                  @click="
+                    openLink(
+                      $event,
+                      questionLink(t.q_id, { w: t.year, keepCut: false }),
+                    )
+                  "
+                  :title="`Abrir ${t.q_id} en ${t.year}`"
+                  class="shrink-0 font-mono text-xs text-[#0d9488] bg-[#f0fdfa] rounded px-1.5 py-0.5 self-start hover:underline"
+                  >{{ t.q_id }}</a
+                >
+                <span>{{ t.q_text }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Preguntas del mismo bloque: links que conservan el corte actual -->
+          <div
+            v-if="blockSiblings.length"
+            class="border-t border-[#f1f5f9] px-5 py-3"
+          >
+            <h4
+              class="text-xs font-bold text-[#64748b] uppercase tracking-wide mb-2"
+            >
+              Del mismo bloque
+              <span class="normal-case font-normal text-[#94a3b8]"
+                >· {{ blockSiblings[0].block }}</span
+              >
+            </h4>
+            <div class="flex flex-wrap gap-1.5">
+              <a
+                v-for="m in blockSiblings"
+                :key="m.id"
+                :href="questionLink(m.id)"
+                @click="openLink($event, questionLink(m.id))"
+                class="inline-flex items-center gap-1.5 max-w-full border border-[#e2e8f0] rounded-full px-2.5 py-1 text-xs text-[#334155] hover:border-[#0d9488] transition-colors"
+              >
+                <span class="font-mono text-[#0d9488]">{{ m.id }}</span>
+                <span class="truncate">{{ m.main }}</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
+
+<style scoped>
+.progress-bar {
+  animation: progress 1.1s ease-in-out infinite;
+}
+@keyframes progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar {
+    animation: none;
+    width: 100%;
+  }
+}
+</style>

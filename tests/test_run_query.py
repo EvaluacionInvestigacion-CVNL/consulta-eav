@@ -545,6 +545,15 @@ def test_year_question_filter_uses_each_waves_question_id():
     assert all(base > 0 for _, base in _bases(result))
 
 
+def test_single_wave_result_lists_other_years_versions():
+    """Sin agrupar por año, el resultado igual trae cómo se preguntó en cada ola,
+    para que la UI enlace las otras versiones."""
+    result = run_query(QueryRequest(question_id=YEAR_QID))
+    versions = {(t["year"], t["q_id"]) for t in result["year_texts"]}
+    assert ("2025", YEAR_QID) in versions
+    assert len(versions) >= 5
+
+
 def test_year_question_filter_without_concept_raises_400():
     with get_conn() as conn:
         orphan = conn.execute(
