@@ -6,7 +6,7 @@ from db_runtime import get_conn
 from metadata import ATTRIBUTE_LABELS, ID_TO_CITY_NAME, PRESETS, RECODES
 from repositories import responses_repository, survey_repository
 from services.ordering import ordered_question_ids
-from services.wave_service import default_wave, resolve_wave
+from services.wave_service import default_wave, numeric_question_ids, resolve_wave
 
 
 @lru_cache(maxsize=16)
@@ -54,11 +54,24 @@ def get_attributes(wave: str | None = None) -> list[dict]:
     wave = resolve_wave(wave)
     with get_conn() as conn:
         rows = responses_repository.fetch_attribute_values(conn, wave)
+        backing = {
+            attribute: q_id
+            for w, attribute, q_id in responses_repository.fetch_attribute_questions(
+                conn
+            )
+            if w == wave
+        }
+    numeric_qids = numeric_question_ids(wave)
     attrs: dict = {}
     for attr, val, label in rows:
         attrs.setdefault(attr, []).append({"value": val, "label": label or str(val)})
     return [
-        {"attribute": k, "label": ATTRIBUTE_LABELS.get(k, k), "values": v}
+        {
+            "attribute": k,
+            "label": ATTRIBUTE_LABELS.get(k, k),
+            "numeric": backing.get(k) in numeric_qids,
+            "values": v,
+        }
         for k, v in attrs.items()
     ]
 

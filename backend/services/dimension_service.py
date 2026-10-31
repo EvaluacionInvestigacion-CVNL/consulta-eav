@@ -2,8 +2,9 @@
 
 Un filtro llega en una de dos formas:
 
-    {"attribute": "sexo", "value": 1}      atributo amigable (o "city_id")
-    {"question": "p52", "value": [1, 2]}   cualquier pregunta categórica
+    {"attribute": "sexo", "value": 1}             atributo amigable (o "city_id")
+    {"question": "p52", "value": [1, 2]}          cualquier pregunta categórica
+    {"question": "p26", "value": {"min": 100}}    rango sobre una numérica
 
 Los atributos son preguntas con nombre amigable (`sexo` es `cp2` en 2025 y
 `genero` en 2016), así que entre olas las dos formas se traducen igual: se baja
@@ -79,6 +80,11 @@ def _catalog() -> _Catalog:
     )
 
 
+def attribute_question(wave: str, attribute: str) -> str | None:
+    """La pregunta que respalda un atributo en una ola (`sexo` → `cp2` en 2025)."""
+    return _catalog().attribute_question.get((wave, attribute))
+
+
 # ---------------------------------------------------------------------------
 # Forma del filtro
 # ---------------------------------------------------------------------------
@@ -148,7 +154,10 @@ def translate_filters_across_waves(
 
     for filter_spec in filters:
         kind, name = filter_dimension(filter_spec)
-        codes = _as_codes(filter_spec["value"])
+        value = filter_spec["value"]
+        # Un rango {min, max} no son códigos: viaja tal cual (lo valida
+        # `run_query` de cada ola).
+        codes = None if isinstance(value, dict) else _as_codes(value)
 
         if kind == "attribute" and name == CITY_ATTRIBUTE:
             # Los municipios no cambian de código entre olas.
@@ -170,7 +179,7 @@ def translate_filters_across_waves(
             label = name
         else:
             base_question = catalog.question.get((base_wave, name))
-            if base_question is None or base_question[0] == "numerica":
+            if base_question is None:
                 raise HTTPException(
                     status_code=400, detail=f"Unknown filter question: {name}"
                 )
@@ -196,6 +205,11 @@ def translate_filters_across_waves(
             label = f"pregunta {name}"
 
         base_is_numeric = catalog.question[(base_wave, base_q)][0] == "numerica"
+        if codes is None and not base_is_numeric:
+            raise HTTPException(
+                status_code=400,
+                detail="Un rango {min, max} sólo aplica a preguntas numéricas.",
+            )
         missing_waves = []
         for wave in member_waves:
             target_q = target_q_by_wave[wave]
@@ -204,7 +218,12 @@ def translate_filters_across_waves(
                 continue
             if base_is_numeric:
                 # Una edad es una edad en cualquier ola: el valor viaja tal cual.
-                translated = codes
+                # Pero una ola que guardó la pregunta como categórica no admite
+                # el rango.
+                if catalog.question[(wave, target_q)][0] != "numerica":
+                    missing_waves.append(wave)
+                    continue
+                translated = value if codes is None else codes
             else:
                 translated = _translate_codes(
                     catalog, codes, base_wave, base_q, wave, target_q
@@ -266,7 +285,8 @@ def get_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"
     """Por qué se puede filtrar una pregunta, en una ola o comparando años.
 
     `mode="wave"`: todos los atributos de la ola y todas sus preguntas
-    categóricas (menos la consultada).
+    (menos la consultada). `q_type` le dice a la UI si filtrar por opciones o
+    por un rango {min, max}.
 
     `mode="year"`: sólo lo que existe en TODAS las olas de la pregunta
     consultada. Los atributos se devuelven todos, con `available` y
@@ -287,9 +307,9 @@ def get_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"
         {"attribute": a["attribute"], "label": a["label"]} for a in get_attributes(wave)
     ]
     candidate_questions = [
-        (q_id, concept_id, q_text)
+        (q_id, q_type, concept_id, q_text)
         for (q_wave, q_id), (q_type, concept_id, q_text) in catalog.question.items()
-        if q_wave == wave and q_type != "numerica" and q_id != question_id
+        if q_wave == wave and q_id != question_id
     ]
     candidate_questions.sort(key=lambda question: question_sort_key(question[0]))
 
@@ -303,8 +323,13 @@ def get_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"
                 for attribute in attributes
             ],
             "questions": [
-                {"q_id": q_id, "q_text": q_text, "concept_id": concept_id}
-                for q_id, concept_id, q_text in candidate_questions
+                {
+                    "q_id": q_id,
+                    "q_text": q_text,
+                    "q_type": q_type,
+                    "concept_id": concept_id,
+                }
+                for q_id, q_type, concept_id, q_text in candidate_questions
             ],
         }
 
@@ -322,16 +347,31 @@ def get_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"
         attribute["missing_waves"] = missing
 
     covered = set(member_waves)
+
+    def covers_every_wave(q_type, concept_id):
+        if not concept_id or concept_id == target_concept:
+            return False
+        members = catalog.members_by_concept[concept_id]
+        if not covered <= members.keys():
+            return False
+        # Un rango sólo se aplica donde la pregunta también es numérica.
+        return q_type != "numerica" or all(
+            catalog.question[(w, members[w])][0] == "numerica" for w in covered
+        )
+
     return {
         "mode": mode,
         "wave_id": wave,
         "member_waves": member_waves,
         "attributes": attributes,
         "questions": [
-            {"q_id": q_id, "q_text": q_text, "concept_id": concept_id}
-            for q_id, concept_id, q_text in candidate_questions
-            if concept_id
-            and concept_id != target_concept
-            and covered <= catalog.members_by_concept[concept_id].keys()
+            {
+                "q_id": q_id,
+                "q_text": q_text,
+                "q_type": q_type,
+                "concept_id": concept_id,
+            }
+            for q_id, q_type, concept_id, q_text in candidate_questions
+            if covers_every_wave(q_type, concept_id)
         ],
     }

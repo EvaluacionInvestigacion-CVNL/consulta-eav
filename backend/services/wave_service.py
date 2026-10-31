@@ -47,6 +47,16 @@ def question_catalog() -> dict[tuple[str, str], tuple]:
     }
 
 
+@lru_cache(maxsize=16)
+def numeric_question_ids(wave: str) -> frozenset[str]:
+    """q_ids de las preguntas numéricas de una ola."""
+    return frozenset(
+        q_id
+        for (q_wave, q_id), (q_type, _, _) in question_catalog().items()
+        if q_wave == wave and q_type == "numerica"
+    )
+
+
 def resolve_wave(wave: str | None) -> str:
     """Validate an incoming wave_id or fall back to the most recent wave."""
     resolved = wave or default_wave()

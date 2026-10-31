@@ -239,16 +239,57 @@ def test_cross_tab_self_raises_400():
     assert exc.value.status_code == 400
 
 
-def test_cross_tab_numeric_breakdown_raises_400():
-    """Numeric questions are not allowed as the breakdown variable (v1): they'd
-    explode into dozens of columns. Rejected with a clear message, not 'Unknown'."""
-    numeric = next(
-        q["q_id"] for q in get_questions() if q["q_type"] == "numerica")
+# ── cruce por una pregunta numérica (rangos) ───────────────────────────────
+# `cp4_1` es la edad en 2025: tiene 9999 ("No contesta") además de valores reales.
+NUMERIC_QID = "cp4_1"
+
+
+def _group_columns(result):
+    return result["counts"]["columns"][2:-1]
+
+
+def _total_row(result):
+    return next(row for row in result["counts"]["rows"] if row[0] == "Total")
+
+
+def test_cross_tab_numeric_auto_bins_partition_the_base():
+    """Los rangos automáticos parten la base: la suma de las columnas es el
+    Total, y los centinelas quedan en su propia columna, no en un rango."""
     a, _ = _cross_qids()
+    result = run_query(QueryRequest(question_id=a, group_by=NUMERIC_QID))
+    columns = _group_columns(result)
+    total_row = _total_row(result)
+    assert result["numeric_group_bins"] == sorted(result["numeric_group_bins"])
+    assert "No contesta" in columns
+    assert not any("9999" in column for column in columns)
+    assert sum(total_row[2:-1]) == pytest.approx(total_row[-1], abs=len(columns))
+
+
+def test_cross_tab_numeric_custom_bins():
+    a, _ = _cross_qids()
+    result = run_query(
+        QueryRequest(question_id=a, group_by=NUMERIC_QID, numeric_group_bins=[30, 45, 60])
+    )
+    assert result["numeric_group_bins"] == [30, 45, 60]
+    ranges = [c for c in _group_columns(result) if not c.startswith("No ")]
+    assert ranges == ["Menos de 30", "30-44", "45-59", "60 o más"]
+
+
+@pytest.mark.parametrize(
+    "group_by, numeric_group_bins",
+    [
+        (NUMERIC_QID, [30, 18]),  # desordenados
+        (NUMERIC_QID, []),  # vacíos
+        ("sexo", [1, 2]),  # cortes sobre algo que no es numérico
+        ("year", [1, 2]),  # la vista Año no tiene rangos
+    ],
+)
+def test_invalid_numeric_group_bins_raise_400(group_by, numeric_group_bins):
     with pytest.raises(HTTPException) as exc:
-        run_query(QueryRequest(question_id=a, group_by=numeric))
+        run_query(
+            QueryRequest(question_id="p114", group_by=group_by, numeric_group_bins=numeric_group_bins)
+        )
     assert exc.value.status_code == 400
-    assert "numérica" in exc.value.detail
 
 
 # ── weighting & filters ─────────────────────────────────────────────────────
@@ -316,12 +357,129 @@ def test_question_filter_matches_crosstab_column():
         {"attribute": "sexo", "question": "cp2", "value": 1},  # ambas llaves
         {"value": 1},  # ninguna
         {"question": "cp2"},  # sin valor
+        {"question": "cp4_1", "value": {"min": 30, "max": 18}},  # rango invertido
+        {"question": "cp4_1", "value": {}},  # rango sin extremos
+        {"question": "cp2", "value": {"min": 1}},  # rango sobre categórica
     ],
 )
 def test_invalid_question_filter_raises_400(filter_spec):
     with pytest.raises(HTTPException) as exc:
         run_query(QueryRequest(question_id=YEAR_QID, filters=[filter_spec]))
     assert exc.value.status_code == 400
+
+
+def test_numeric_question_filter_matches_direct_count():
+    """El rango es inclusivo y se aplica sobre `answers.value`."""
+    result = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            initial_only=False,
+            filters=[{"question": "cp4_1", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    with get_conn() as conn:
+        row = conn.execute(
+            """SELECT COUNT(DISTINCT a.respondent_id)
+               FROM answers a
+               JOIN answers f ON f.respondent_id = a.respondent_id
+                AND f.wave_id = '2025' AND f.question_id = 'cp4_1'
+                AND f.value BETWEEN 18 AND 29
+               WHERE a.wave_id = '2025' AND a.question_id = ?""",
+            [YEAR_QID],
+        ).fetchone()
+        assert row is not None
+        expected = row[0]
+    assert result["total_respondents"] == expected > 0
+
+
+def test_numeric_question_filter_with_only_min_excludes_sentinels():
+    """Con sólo `min`, un 9999 no puede pasar como "el valor más alto"."""
+    only_min = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            filters=[{"question": "cp4_1", "value": {"min": 60}}],
+        )
+    )
+    bounded = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            filters=[{"question": "cp4_1", "value": {"min": 60, "max": 130}}],
+        )
+    )
+    assert only_min["total_respondents"] == bounded["total_respondents"] > 0
+
+
+def test_numeric_question_filter_matches_crosstab_column():
+    """Filtrar por un rango da la misma base que esa columna del cruce."""
+    crosstab = run_query(
+        QueryRequest(question_id=YEAR_QID, group_by="cp4_1", numeric_group_bins=[18, 30])
+    )
+    filtered = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            filters=[{"question": "cp4_1", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    column = crosstab["counts"]["columns"].index("18-29")
+    assert sum(row[2] for row in filtered["rows"]) == pytest.approx(
+        _total_row(crosstab)[column], abs=5
+    )
+
+
+def test_year_numeric_question_filter_applies_in_every_wave():
+    result = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            group_by="year",
+            filters=[{"question": "cp4_1", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    bases = _bases(result)
+    assert len(bases) >= 5
+    assert all(base > 0 for _, base in bases)
+
+
+def test_numeric_attribute_range_equals_question_range():
+    """La edad como atributo y como pregunta (`cp4_1`) filtran a la misma gente."""
+    by_attribute = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            filters=[{"attribute": "edad_anos", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    by_question = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            filters=[{"question": "cp4_1", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    assert by_attribute["total_respondents"] == by_question["total_respondents"] > 0
+    assert by_attribute["rows"] == by_question["rows"]
+
+
+@pytest.mark.parametrize("attribute", ["sexo", "city_id"])
+def test_range_on_categorical_attribute_raises_400(attribute):
+    with pytest.raises(HTTPException) as exc:
+        run_query(
+            QueryRequest(
+                question_id=YEAR_QID,
+                filters=[{"attribute": attribute, "value": {"min": 1}}],
+            )
+        )
+    assert exc.value.status_code == 400
+
+
+def test_year_numeric_attribute_range_applies_in_every_wave():
+    result = run_query(
+        QueryRequest(
+            question_id=YEAR_QID,
+            group_by="year",
+            filters=[{"attribute": "edad_anos", "value": {"min": 18, "max": 29}}],
+        )
+    )
+    bases = _bases(result)
+    assert len(bases) >= 5
+    assert all(base > 0 for _, base in bases)
 
 
 def test_attribute_missing_in_wave_raises_400():

@@ -9,3 +9,4 @@ class QueryRequest(BaseModel):
     group_by: str = "answer"
     initial_only: bool = True
     wave_id: str | None = None
+    numeric_group_bins: list[float] | None = None

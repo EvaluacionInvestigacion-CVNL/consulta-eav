@@ -24,10 +24,20 @@ from db_runtime import get_conn
 from metadata import ATTRIBUTE_TO_ORDER_KEY, DESIRED_ORDERS, RECODES
 from repositories import survey_repository
 from services.catalog_service import get_attributes
-from services.dimension_service import CITY_ATTRIBUTE, filter_dimension
+from services.dimension_service import (
+    CITY_ATTRIBUTE,
+    attribute_question,
+    filter_dimension,
+)
 from services.ordering import order_by_desired
 from services.query import year_comparison
 from services.query.models import QueryRequest
+from services.query.numeric_bins import (
+    NumericBins,
+    numeric_bins,
+    validate_edges,
+    validate_range,
+)
 from services.query.pivot import (
     build_counts_and_percentage_rows,
     collapse_cities_into_buckets,
@@ -44,6 +54,7 @@ from services.query.sql_builder import (
 from services.wave_service import (
     categorical_question_ids,
     default_wave,
+    numeric_question_ids,
     question_catalog,
     wave_ids,
 )
@@ -66,6 +77,7 @@ class QueryContext:
     city_filter_sql: str
     sentinel_exclusion_sql: str
     categorical_qids: frozenset = field(default_factory=frozenset)
+    numeric_bins: NumericBins | None = None
 
     @property
     def question_id(self) -> str:
@@ -167,6 +179,11 @@ class QueryContext:
             "wave_id": self.wave,
             "filters_applied": self.request.filters,
             "group_by": self.group_by,
+            **(
+                {"numeric_group_bins": list(self.numeric_bins.edges)}
+                if self.numeric_bins
+                else {}
+            ),
             "total_respondents": total_respondents,
         }
 
@@ -194,11 +211,11 @@ def _require_question(wave: str, question_id: str) -> tuple[str, str]:
 
 
 def _validate_filters(
-    conn,
     request: QueryRequest,
     wave: str,
     valid_attributes: set[str],
     categorical_qids: frozenset,
+    numeric_qids: frozenset,
 ) -> None:
     """Rechaza cualquier atributo o pregunta fuera de la allowlist (guard de
     inyección) y los filtros que no tienen sentido en esta ola."""
@@ -209,14 +226,28 @@ def _validate_filters(
                 raise HTTPException(
                     status_code=400, detail=f"Unknown filter attribute: {name}"
                 )
+            if isinstance(filter_spec["value"], dict):
+                # Un rango sólo tiene sentido si el atributo es numérico (edad).
+                if attribute_question(wave, name) not in numeric_qids:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Un rango {min, max} sólo aplica a atributos numéricos.",
+                    )
+                problem = validate_range(filter_spec["value"])
+                if problem:
+                    raise HTTPException(status_code=400, detail=problem)
             continue
-        if name not in categorical_qids:
-            # Igual que en `group_by`: una numérica merece un mensaje claro.
-            if survey_repository.question_is_numeric(conn, wave, name):
+        if name in numeric_qids:
+            problem = validate_range(filter_spec["value"])
+            if problem:
+                raise HTTPException(status_code=400, detail=problem)
+        elif name in categorical_qids:
+            if isinstance(filter_spec["value"], dict):
                 raise HTTPException(
                     status_code=400,
-                    detail="No se puede filtrar por una pregunta numérica.",
+                    detail="Un rango {min, max} sólo aplica a preguntas numéricas.",
                 )
+        else:
             raise HTTPException(
                 status_code=400, detail=f"Unknown filter question: {name}"
             )
@@ -228,36 +259,38 @@ def _validate_filters(
 
 
 def _validate_group_by(
-    conn,
     request: QueryRequest,
-    wave: str,
     valid_attributes: set[str],
     categorical_qids: frozenset,
+    numeric_qids: frozenset,
 ) -> None:
-    """Rechaza un `group_by` desconocido, numérico o degenerado."""
+    """Rechaza un `group_by` desconocido o degenerado, y cortes sin sentido."""
     allowed = (
         {"answer", "city_id", "edad_anos"}
         | set(RECODES)
         | valid_attributes
         | categorical_qids
+        | numeric_qids
     )
     if request.group_by not in allowed:
-        # Distingue una pregunta NUMÉRICA (no soportada como group_by) de una
-        # clave desconocida, para dar un mensaje claro en vez de "Unknown".
-        if survey_repository.question_is_numeric(conn, wave, request.group_by):
-            raise HTTPException(
-                status_code=400,
-                detail="No se puede agrupar por una pregunta numérica.",
-            )
         raise HTTPException(
             status_code=400, detail=f"Unknown group_by: {request.group_by}"
         )
     # Cruzar una pregunta consigo misma es degenerado (daría una diagonal).
-    if request.group_by in categorical_qids and request.group_by == request.question_id:
+    if request.group_by == request.question_id:
         raise HTTPException(
             status_code=400,
             detail="No se puede cruzar una pregunta consigo misma.",
         )
+    if request.numeric_group_bins is not None:
+        if request.group_by not in numeric_qids:
+            raise HTTPException(
+                status_code=400,
+                detail="`numeric_group_bins` sólo aplica al cruzar por una pregunta numérica.",
+            )
+        problem = validate_edges(request.numeric_group_bins)
+        if problem:
+            raise HTTPException(status_code=400, detail=problem)
 
 
 def _build_context(conn, request: QueryRequest) -> QueryContext:
@@ -269,14 +302,25 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
     # `modo_transporte` en 2016) daría cero filas en vez de un error.
     valid_attributes = {attribute["attribute"] for attribute in get_attributes(wave)}
     categorical_qids = categorical_question_ids(wave)
-    _validate_filters(conn, request, wave, valid_attributes, categorical_qids)
-    _validate_group_by(conn, request, wave, valid_attributes, categorical_qids)
+    numeric_qids = numeric_question_ids(wave)
+    _validate_filters(request, wave, valid_attributes, categorical_qids, numeric_qids)
+    _validate_group_by(request, valid_attributes, categorical_qids, numeric_qids)
 
     # Cada filtro de atributo o de pregunta es un JOIN; el de ciudad es un WHERE
     # sobre `responses`, porque `city_id` vive ahí y no en `respondent_attributes`.
     filter_joins = "".join(
         attribute_join_sql(
-            f"ra{index}", wave, filter_spec["attribute"], filter_spec["value"]
+            f"ra{index}",
+            wave,
+            filter_spec["attribute"],
+            filter_spec["value"],
+            excluded_codes=(
+                numeric_sentinel_codes(
+                    wave, attribute_question(wave, filter_spec["attribute"])
+                )
+                if isinstance(filter_spec["value"], dict)
+                else ()
+            ),
         )
         if "attribute" in filter_spec
         else question_filter_join_sql(
@@ -314,6 +358,11 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
         city_filter_sql=city_filter_sql,
         sentinel_exclusion_sql=sentinel_exclusion_sql,
         categorical_qids=categorical_qids,
+        numeric_bins=(
+            numeric_bins(wave, request.group_by, request.numeric_group_bins)
+            if request.group_by in numeric_qids
+            else None
+        ),
     )
 
 
@@ -380,6 +429,8 @@ def _desired_group_order(conn, context: QueryContext) -> list | None:
     """El orden canónico de las columnas, según de qué se esté agrupando."""
     if context.group_by in RECODES:
         return RECODES[context.group_by].get("order")
+    if context.numeric_bins:
+        return context.numeric_bins.labels
     if context.group_by in context.categorical_qids:
         # Cross-tab por pregunta: ordena por option_id de la pregunta-desglose
         # (mismo criterio que la vista plana), no alfabéticamente. Los
@@ -594,13 +645,15 @@ def _categorical_pivot_result(
 
 
 def _pivot_result(conn, context: QueryContext, total_respondents) -> dict:
-    group_expression = group_expression_sql(context.group_by, context.wave)
+    group_expression = group_expression_sql(
+        context.group_by, context.wave, context.numeric_bins
+    )
     totals_by_group = _fetch_group_totals(conn, context, group_expression)
     grand_total = sum(totals_by_group.values())
 
     # En un cruce pregunta×pregunta la base real de la tabla es A∩B (quien
     # respondió AMBAS), no quien respondió A.
-    if context.group_by in context.categorical_qids:
+    if context.group_by in context.categorical_qids or context.numeric_bins:
         total_respondents = grand_total
 
     if context.grouped_by_city:
@@ -647,6 +700,11 @@ def _pivot_result(conn, context: QueryContext, total_respondents) -> dict:
 def run_query(request: QueryRequest) -> dict:
     """Ejecuta una consulta y devuelve la tabla lista para la UI o el CSV."""
     if request.group_by in YEAR_GROUP_BY_ALIASES:
+        if request.numeric_group_bins is not None:
+            raise HTTPException(
+                status_code=400,
+                detail="`numeric_group_bins` sólo aplica al cruzar por una pregunta numérica.",
+            )
         return year_comparison.compare_across_waves(request, _build_context)
 
     conn = get_conn()

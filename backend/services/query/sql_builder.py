@@ -1,6 +1,7 @@
 """Fragmentos de SQL que el motor compone en tiempo de ejecución."""
 
 from metadata import RECODES
+from services.query.sentinels import numeric_sentinel_codes
 from services.wave_service import categorical_question_ids
 
 
@@ -15,6 +16,22 @@ def value_match_clause(column: str, value) -> str:
             return "FALSE"
         return f"{column} IN ({','.join(str(int(item)) for item in value)})"
     return f"{column} = {int(value)}"
+
+
+def numeric_range_clause(column: str, value_range: dict, excluded_codes) -> str:
+    """`col >= a AND col <= b`, sin centinelas.
+
+    Excluirlos no es opcional: con sólo `min` un 9999 ("No contesta") pasaría
+    como si fuera el valor más alto.
+    """
+    parts = []
+    if value_range.get("min") is not None:
+        parts.append(f"{column} >= {float(value_range['min'])}")
+    if value_range.get("max") is not None:
+        parts.append(f"{column} <= {float(value_range['max'])}")
+    codes = ",".join(str(int(code)) for code in excluded_codes)
+    parts.append(f"{column} NOT IN ({codes})")
+    return " AND ".join(parts)
 
 
 def age_bin_case_sql(column: str) -> str:
@@ -93,18 +110,26 @@ def answer_scope_sql(
           {city_filter_sql}"""
 
 
-def attribute_join_sql(alias: str, wave: str, attribute: str, value) -> str:
+def attribute_join_sql(
+    alias: str, wave: str, attribute: str, value, excluded_codes=()
+) -> str:
     """INNER JOIN que restringe a los respondientes con cierto valor de atributo.
 
     Cada filtro demográfico es un JOIN propio, así que varios filtros se
-    intersectan de forma natural.
+    intersectan de forma natural. Un `value` dict es un rango `{min, max}` sobre
+    un atributo numérico (la edad); `excluded_codes` son sus centinelas.
     """
+    match = (
+        numeric_range_clause(f"{alias}.value", value, excluded_codes)
+        if isinstance(value, dict)
+        else value_match_clause(f"{alias}.value", value)
+    )
     return f"""
             INNER JOIN respondent_attributes {alias}
                 ON {alias}.respondent_id = r.respondent_id
                 AND {alias}.wave_id = '{wave}'
                 AND {alias}.attribute = '{attribute}'
-                AND {value_match_clause(f"{alias}.value", value)}"""
+                AND {match}"""
 
 
 def question_filter_join_sql(alias: str, wave: str, question_id: str, value) -> str:
@@ -112,21 +137,29 @@ def question_filter_join_sql(alias: str, wave: str, question_id: str, value) -> 
 
     Mismo patrón que `attribute_join_sql`, pero sobre `answers`. Ninguna pregunta
     guarda más de un renglón por respondiente, así que el JOIN no duplica filas.
+    Un `value` dict es un rango `{min, max}` sobre una numérica.
     """
+    if isinstance(value, dict):
+        match = numeric_range_clause(
+            f"{alias}.value", value, numeric_sentinel_codes(wave, question_id)
+        )
+    else:
+        match = value_match_clause(f"{alias}.option_id", value)
     return f"""
             INNER JOIN answers {alias}
                 ON {alias}.respondent_id = r.respondent_id
                 AND {alias}.wave_id = '{wave}'
                 AND {alias}.question_id = '{question_id}'
-                AND {value_match_clause(f"{alias}.option_id", value)}"""
+                AND {match}"""
 
 
-def group_expression_sql(group_by: str, wave: str) -> str:
+def group_expression_sql(group_by: str, wave: str, numeric_bins=None) -> str:
     """La expresión que produce la ETIQUETA de columna del pivote.
 
-    Cinco casos, en orden de prioridad: ciudad (id crudo, se agrupa después en
-    Python), edad (rangos), recode (cubetas de `metadata`), otra pregunta
-    (cross-tab pregunta×pregunta) y, por defecto, un atributo demográfico.
+    Seis casos, en orden de prioridad: ciudad (id crudo, se agrupa después en
+    Python), edad (rangos), recode (cubetas de `metadata`), pregunta numérica
+    (sus rangos, ver `numeric_bins`), pregunta categórica (cross-tab
+    pregunta x pregunta) y, por defecto, un atributo demográfico.
     """
     if group_by == "city_id":
         return "r.city_id::TEXT"
@@ -147,6 +180,15 @@ def group_expression_sql(group_by: str, wave: str) -> str:
                 WHERE rg.respondent_id = r.respondent_id
                   AND rg.wave_id = '{wave}'
                   AND rg.attribute = '{source_attribute}'
+                LIMIT 1
+            )"""
+    if numeric_bins is not None:
+        return f"""(
+                SELECT {numeric_bins.case_sql('ab.value')}
+                FROM answers ab
+                WHERE ab.wave_id = '{wave}'
+                  AND ab.question_id = '{group_by}'
+                  AND ab.respondent_id = r.respondent_id
                 LIMIT 1
             )"""
     if group_by in categorical_question_ids(wave):

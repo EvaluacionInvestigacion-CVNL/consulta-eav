@@ -55,6 +55,24 @@ def test_dimensions_wave_mode_lists_all_categorical(client):
     assert len(body["questions"]) > len(year_body["questions"])
 
 
+def test_dimensions_include_numeric_questions_with_type(client):
+    """Las numéricas también son filtros (por rango): la UI necesita `q_type`."""
+    for mode in ("wave", "year"):
+        body = client.get(
+            f"/api/dimensions?question_id=p114&wave=2025&mode={mode}"
+        ).json()
+        types = {q["q_id"]: q["q_type"] for q in body["questions"]}
+        assert types.get("cp4_1") == "numerica"
+
+
+def test_attributes_flag_numeric_ones(client):
+    """La UI filtra la edad por rango y el resto por opciones."""
+    body = client.get("/api/attributes?wave=2025").json()
+    numeric = {a["attribute"]: a["numeric"] for a in body}
+    assert numeric["edad_anos"] is True
+    assert numeric["sexo"] is False
+
+
 def test_dimensions_rejects_bad_mode(client):
     r = client.get("/api/dimensions?question_id=p114&mode=x")
     assert r.status_code == 400

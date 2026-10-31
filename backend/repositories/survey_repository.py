@@ -92,16 +92,6 @@ def fetch_question_concept_and_text(conn, wave: str, question_id: str) -> tuple 
     ).fetchone()
 
 
-def question_is_numeric(conn, wave: str, question_id: str) -> bool:
-    """True si la pregunta existe en la ola y es de tipo `numerica`."""
-    row = conn.execute(
-        "SELECT 1 FROM questions "
-        "WHERE wave_id = ? AND q_id = ? AND q_type = 'numerica'",
-        [wave, question_id],
-    ).fetchone()
-    return row is not None
-
-
 def fetch_option_labels_in_code_order(conn, wave: str, question_id: str) -> list[str]:
     """Etiquetas de una pregunta ordenadas por `option_id` (no alfabéticamente)."""
     rows = conn.execute(

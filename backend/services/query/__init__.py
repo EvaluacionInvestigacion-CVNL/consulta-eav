@@ -10,6 +10,7 @@ base ANTES de interpolarse: ése es el patrón de builder SQL seguro.
     runner.py            run_query: validación + las cuatro formas de salida
     year_comparison.py   la quinta forma: group_by="year"
     sql_builder.py       fragmentos de SQL compuestos (scope, group, filtros)
+    numeric_bins.py      rangos para cruzar por una pregunta numérica
     sentinels.py         qué códigos son "No sabe/No contesta" y no datos
     pivot.py             armado de las tablas de conteos y porcentajes
 
