@@ -163,11 +163,8 @@ def test_published_figure(case):
     # Una suma ("1+2") se arma con el % de cada opcion; si falta alguna, falla.
     targets = [t.strip() for t in str(case["option_id"]).split("+")]
     cells = [_percentage(r, case, target) for target in targets]
-    got = (
-        sum(cells)
-        if all(isinstance(cell, (int, float)) for cell in cells)
-        else None
-    )
+    numeric_cells = [cell for cell in cells if isinstance(cell, (int, float))]
+    got = sum(numeric_cells) if len(numeric_cells) == len(cells) else None
     target = case["option_id"]
 
     assert isinstance(got, (int, float)), (

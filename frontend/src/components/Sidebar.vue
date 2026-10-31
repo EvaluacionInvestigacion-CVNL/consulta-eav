@@ -282,9 +282,7 @@ const availablePresets = computed(() =>
                 @change="onGroupByChange"
                 class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
               >
-                <option value="answer">
-                  Sin desglose
-                </option>
+                <option value="answer">Sin desglose</option>
                 <option v-if="canCompareYears" value="year">
                   Año (comparar entre olas)
                 </option>

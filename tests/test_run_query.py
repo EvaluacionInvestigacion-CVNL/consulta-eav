@@ -556,10 +556,12 @@ def test_single_wave_result_lists_other_years_versions():
 
 def test_year_question_filter_without_concept_raises_400():
     with get_conn() as conn:
-        orphan = conn.execute(
+        row = conn.execute(
             "SELECT q_id FROM questions WHERE wave_id = '2025' "
             "AND q_type != 'numerica' AND concept_id IS NULL LIMIT 1"
-        ).fetchone()[0]
+        ).fetchone()
+        assert row is not None
+        orphan = row[0]
     with pytest.raises(HTTPException) as exc:
         run_query(
             QueryRequest(

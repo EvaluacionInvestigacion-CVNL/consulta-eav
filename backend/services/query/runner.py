@@ -319,7 +319,9 @@ def _build_context(conn, request: QueryRequest) -> QueryContext:
             filter_spec["value"],
             excluded_codes=(
                 numeric_sentinel_codes(
-                    wave, attribute_question(wave, filter_spec["attribute"])
+                    wave,
+                    attribute_question(wave, filter_spec["attribute"])
+                    or "",
                 )
                 if isinstance(filter_spec["value"], dict)
                 else ()
