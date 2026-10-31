@@ -29,3 +29,10 @@ def fetch_concept_options(conn, concept_id: str) -> list[tuple]:
         "WHERE concept_id = ? ORDER BY sort_order",
         [concept_id],
     ).fetchall()
+
+
+def fetch_exclusions(conn) -> list[tuple]:
+    """(wave_a, q_a, wave_b, q_b, reason): pares declarados NO comparables."""
+    return conn.execute(
+        "SELECT wave_a, q_a, wave_b, q_b, reason FROM concept_exclusions"
+    ).fetchall()

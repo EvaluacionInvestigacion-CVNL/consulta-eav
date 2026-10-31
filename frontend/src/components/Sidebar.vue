@@ -114,11 +114,15 @@ watch(canCompareYears, (ok) => {
   }
 })
 
-// Los presets marcados `requires_concept` (agrupar por año) sólo se ofrecen si
-// la pregunta tiene equivalencia entre olas; si no, la consulta daría 400.
-const availablePresets = computed(() =>
-  state.presets.filter((p) => !p.requires_concept || canCompareYears.value),
-)
+// Los presets marcados `requires_concept` (agrupar por año) siempre se ven, pero
+// deshabilitados si la pregunta no tiene equivalencia entre olas (la consulta
+// daría 400). El porqué se explica bajo el resultado.
+const availablePresets = computed(() => state.presets)
+function presetDisabled(p) {
+  return p.requires_concept && !canCompareYears.value
+}
+const NO_YEARS_HINT =
+  'Esta pregunta no tiene equivalencia entre años; bajo el resultado verás por qué.'
 </script>
 
 <template>
@@ -265,8 +269,10 @@ const availablePresets = computed(() =>
                   v-for="p in availablePresets"
                   :key="p.key"
                   @click="togglePreset(p.key)"
+                  :disabled="presetDisabled(p)"
+                  :title="presetDisabled(p) ? NO_YEARS_HINT : undefined"
                   :class="[
-                    'text-xs font-medium px-2.5 py-1 rounded-full border transition-colors',
+                    'text-xs font-medium px-2.5 py-1 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-300',
                     state.appliedPreset === p.key
                       ? 'bg-[#0d9488] border-[#0d9488] text-white'
                       : 'bg-white border-gray-300 text-[#334155] hover:border-[#0d9488]',
@@ -283,7 +289,11 @@ const availablePresets = computed(() =>
                 class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
               >
                 <option value="answer">Sin desglose</option>
-                <option v-if="canCompareYears" value="year">
+                <option
+                  value="year"
+                  :disabled="!canCompareYears"
+                  :title="canCompareYears ? undefined : NO_YEARS_HINT"
+                >
                   Año (comparar entre olas)
                 </option>
                 <option value="city_id">Ciudad</option>

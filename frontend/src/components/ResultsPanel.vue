@@ -416,9 +416,9 @@ function setTab(t) {
           </div>
 
           <!-- Cómo se preguntó cada año. Fuera de la vista Año son links a las
-               otras versiones de la pregunta. -->
+               otras versiones; las que no se comparan dicen por qué. -->
           <div
-            v-if="yearTexts.length > 1"
+            v-if="yearTexts.length"
             class="border-t border-[#f1f5f9] px-5 py-3"
           >
             <h4
@@ -430,7 +430,10 @@ function setTab(t) {
                   : 'Esta pregunta en otros años'
               }}
             </h4>
-            <ul class="space-y-1">
+            <p v-if="yearTexts.length === 1" class="text-[#475569]">
+              Sólo se preguntó en {{ yearTexts[0].year }}.
+            </p>
+            <ul v-else class="space-y-1">
               <li
                 v-for="t in yearTexts"
                 :key="t.year"
@@ -455,10 +458,22 @@ function setTab(t) {
                     )
                   "
                   :title="`Abrir ${t.q_id} en ${t.year}`"
-                  class="shrink-0 font-mono text-xs text-[#0d9488] bg-[#f0fdfa] rounded px-1.5 py-0.5 self-start hover:underline"
+                  :class="[
+                    'shrink-0 font-mono text-xs rounded px-1.5 py-0.5 self-start hover:underline',
+                    t.comparable === false
+                      ? 'text-[#64748b] bg-[#f1f5f9]'
+                      : 'text-[#0d9488] bg-[#f0fdfa]',
+                  ]"
                   >{{ t.q_id }}</a
                 >
-                <span>{{ t.q_text }}</span>
+                <span :class="t.comparable === false ? 'text-[#94a3b8]' : ''">
+                  {{ t.q_text }}
+                  <span
+                    v-if="t.comparable === false"
+                    class="ml-1 inline-block text-[11px] font-semibold text-[#b45309] bg-[#fef3c7] rounded px-1.5 py-0.5"
+                    >No comparable: {{ t.reason_label }}</span
+                  >
+                </span>
               </li>
             </ul>
           </div>

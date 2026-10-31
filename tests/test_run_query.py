@@ -554,6 +554,17 @@ def test_single_wave_result_lists_other_years_versions():
     assert len(versions) >= 5
 
 
+def test_year_texts_explain_non_comparable_versions():
+    """Una pregunta sin concepto igual dice cómo se preguntó en otra ola y por qué
+    no se compara: `2025 p52` ↔ `2024 p48` está excluido por cambio de base."""
+    result = run_query(QueryRequest(question_id="p52"))
+    by_year = {t["year"]: t for t in result["year_texts"]}
+    assert by_year["2025"]["comparable"] is True
+    assert by_year["2024"]["comparable"] is False
+    assert by_year["2024"]["reason"] == "base"
+    assert by_year["2024"]["reason_label"]
+
+
 def test_year_question_filter_without_concept_raises_400():
     with get_conn() as conn:
         row = conn.execute(

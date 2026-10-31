@@ -13,7 +13,10 @@ from fastapi import HTTPException
 
 from db_runtime import get_conn
 from repositories import concepts_repository, survey_repository
-from services.dimension_service import translate_filters_across_waves
+from services.dimension_service import (
+    translate_filters_across_waves,
+    year_comparability,
+)
 from services.query.models import QueryRequest
 from services.query.pivot import format_numeric_label
 from services.query.sentinels import YEAR_VIEW_SENTINEL_CODES, is_sentinel_label
@@ -32,7 +35,6 @@ class ConceptComparison:
     question_text: str
     member_waves: list[str]
     question_id_by_wave: dict[str, str]
-    wording_by_wave: list[dict]
     canonical_options: tuple
     canonical_option_by_wave_option: MappingProxyType
     filters_by_wave: dict[str, list[dict]]
@@ -77,7 +79,9 @@ def compare_across_waves(request: QueryRequest, build_context) -> dict:
             "concept_id": comparison.concept_id,
             "label": comparison.concept_label,
         },
-        "year_texts": comparison.wording_by_wave,
+        "year_texts": year_comparability(
+            request.wave_id or default_wave(), request.question_id
+        ),
         "sql": _sql_listing(sql),
         "year_bases": [
             {"year": wave, "base": result_by_wave[wave]["total_respondents"] or 0}
@@ -149,10 +153,6 @@ def _load_comparison(request: QueryRequest) -> ConceptComparison:
         question_text=question_text,
         member_waves=member_waves,
         question_id_by_wave={wave: question_id for wave, question_id, _ in members},
-        wording_by_wave=[
-            {"year": wave, "q_id": question_id, "q_text": q_text or ""}
-            for wave, question_id, q_text in members
-        ],
         canonical_options=canonical_options,
         canonical_option_by_wave_option=option_map,
         filters_by_wave=translate_filters_across_waves(

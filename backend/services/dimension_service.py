@@ -26,7 +26,8 @@ from functools import lru_cache
 from fastapi import HTTPException
 
 from db_runtime import get_conn
-from repositories import responses_repository, survey_repository
+from metadata import EXCLUSION_REASONS
+from repositories import concepts_repository, responses_repository, survey_repository
 from services.catalog_service import get_attributes
 from services.ordering import question_sort_key
 from services.wave_service import resolve_wave
@@ -47,6 +48,9 @@ class _Catalog:
     options_by_canonical: dict
     # (ola, atributo) → q_id
     attribute_question: dict
+    # (ola, q_id) → [((ola, q_id), reason), …]: pares declarados NO comparables,
+    # indexados desde los dos lados.
+    exclusions: dict
 
 
 @lru_cache(maxsize=1)
@@ -55,6 +59,7 @@ def _catalog() -> _Catalog:
         questions = survey_repository.fetch_all_questions_with_concept(conn)
         options = survey_repository.fetch_all_option_concepts(conn)
         attributes = responses_repository.fetch_attribute_questions(conn)
+        exclusion_rows = concepts_repository.fetch_exclusions(conn)
 
     question, members_by_concept = {}, {}
     for wave, q_id, q_type, concept_id, q_text in questions:
@@ -69,6 +74,11 @@ def _catalog() -> _Catalog:
             option_id
         )
 
+    exclusions = {}
+    for wave_a, q_a, wave_b, q_b, reason in exclusion_rows:
+        exclusions.setdefault((wave_a, q_a), []).append(((wave_b, q_b), reason))
+        exclusions.setdefault((wave_b, q_b), []).append(((wave_a, q_a), reason))
+
     return _Catalog(
         question=question,
         members_by_concept=members_by_concept,
@@ -77,6 +87,7 @@ def _catalog() -> _Catalog:
         attribute_question={
             (wave, attribute): q_id for wave, attribute, q_id in attributes
         },
+        exclusions=exclusions,
     )
 
 
@@ -85,15 +96,37 @@ def attribute_question(wave: str, attribute: str) -> str | None:
     return _catalog().attribute_question.get((wave, attribute))
 
 
-def concept_versions(concept_id: str) -> list[dict]:
-    """Cómo se preguntó un concepto en cada ola: `{year, q_id, q_text}` por ola,
-    de la más antigua a la más reciente. Sale del catálogo en caché."""
+def year_comparability(wave: str, q_id: str) -> list[dict]:
+    """La pregunta en cada ola, de la más antigua a la más reciente.
+
+    Las versiones comparables (el concepto, o sólo la propia pregunta si no
+    tiene) llevan `comparable: True`. Las que el equipo revisó y declaró NO
+    comparables llevan `comparable: False` y el motivo, para que la UI explique
+    por qué no se comparan. Una ola ya cubierta por una versión comparable no se
+    repite, y los encabezados de batería sin datos (`sin_datos`) no se listan.
+    """
     catalog = _catalog()
-    members = catalog.members_by_concept.get(concept_id, {})
-    return [
-        {"year": wave, "q_id": q_id, "q_text": catalog.question[(wave, q_id)][2] or ""}
-        for wave, q_id in sorted(members.items())
-    ]
+    _, concept_id, _ = catalog.question[(wave, q_id)]
+    members = (
+        catalog.members_by_concept.get(concept_id, {}) if concept_id else {wave: q_id}
+    )
+
+    def entry(w, q, **extra):
+        return {"year": w, "q_id": q, "q_text": catalog.question[(w, q)][2] or "", **extra}
+
+    versions = {w: entry(w, q, comparable=True) for w, q in members.items()}
+    for member in members.items():
+        for (other_wave, other_q), reason in catalog.exclusions.get(member, []):
+            if other_wave in versions or reason == "sin_datos":
+                continue
+            versions[other_wave] = entry(
+                other_wave,
+                other_q,
+                comparable=False,
+                reason=reason,
+                reason_label=EXCLUSION_REASONS.get(reason, reason),
+            )
+    return [versions[w] for w in sorted(versions)]
 
 
 # ---------------------------------------------------------------------------
