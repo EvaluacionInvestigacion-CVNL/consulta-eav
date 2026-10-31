@@ -17,6 +17,20 @@ const labelCols = computed(() => (isYear.value ? 1 : 2))
 
 const columns = computed(() => props.data.counts.columns)
 
+// El código de la opción (id_respuesta) le sirve al equipo, no al lector: no se
+// pinta. Los renglones "Total" y "Promedio" llevan su etiqueta en esa columna,
+// así que ahí se muestra en la de Respuesta.
+const hiddenCol = computed(() => columns.value.indexOf('id_respuesta'))
+const visibleCols = computed(() =>
+  columns.value.map((_, i) => i).filter((i) => i !== hiddenCol.value),
+)
+function cellAt(cells, ci) {
+  const hidden = hiddenCol.value
+  if (hidden >= 0 && ci === hidden + 1 && (cells[ci] ?? '') === '')
+    return cells[hidden]
+  return cells[ci]
+}
+
 // Obtener las filas de counts cuyos labels no existen en percentages (Promedio, Base ponderada).
 const statRows = computed(() => {
   const percentageLabels = new Set(
@@ -146,11 +160,11 @@ function formatCell(cell, row, ci, stat) {
         <thead>
           <tr class="bg-[rgba(248,250,252,0.5)]">
             <th
-              v-for="c in columns"
-              :key="c"
+              v-for="ci in visibleCols"
+              :key="columns[ci]"
               class="px-6 py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
             >
-              {{ c }}
+              {{ columns[ci] }}
             </th>
           </tr>
         </thead>
@@ -165,19 +179,21 @@ function formatCell(cell, row, ci, stat) {
             "
           >
             <td
-              v-for="(cell, ci) in cells"
+              v-for="ci in visibleCols"
               :key="ci"
               class="px-6 py-4 text-sm whitespace-nowrap"
               :class="
                 isTotalRow(cells)
                   ? 'font-bold text-[#0f172a]'
-                  : isNumeric(cell, ci)
+                  : isNumeric(cellAt(cells, ci), ci)
                     ? 'font-mono text-[#475569]'
                     : 'text-[#1e293b] font-medium'
               "
             >
               <span class="inline-flex items-center gap-1.5">
-                <span>{{ formatCell(cell, cells, ci, stat) }}</span>
+                <span>{{
+                  formatCell(cellAt(cells, ci), cells, ci, stat)
+                }}</span>
                 <InfoTooltip
                   v-if="diffEntry(ri, cells, ci)"
                   :text="rawTooltip(diffEntry(ri, cells, ci))"

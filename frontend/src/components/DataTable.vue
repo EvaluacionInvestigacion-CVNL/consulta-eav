@@ -1,7 +1,16 @@
 <script setup>
+import { computed } from 'vue'
+
 const props = defineProps({
   data: { type: Object, required: true },
 })
+
+// El código de la opción (id_respuesta) le sirve al equipo, no al lector.
+const visibleCols = computed(() =>
+  (props.data?.column_labels ?? [])
+    .map((_, i) => i)
+    .filter((i) => props.data.column_labels[i] !== 'id_respuesta'),
+)
 
 const TOTAL_LABEL_RE = /^(Total|Respuestas|Mínimo|Máximo)$/i
 
@@ -23,11 +32,11 @@ function formatCell(cell, ci) {
         <thead>
           <tr class="bg-[rgba(248,250,252,0.5)]">
             <th
-              v-for="c in data.column_labels"
-              :key="c"
+              v-for="ci in visibleCols"
+              :key="ci"
               class="px-6 py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
             >
-              {{ c }}
+              {{ data.column_labels[ci] }}
             </th>
           </tr>
         </thead>
@@ -38,16 +47,16 @@ function formatCell(cell, ci) {
             class="border-t border-[#f1f5f9] hover:bg-[#f8fafc] transition-colors"
           >
             <td
-              v-for="(cell, ci) in row"
+              v-for="ci in visibleCols"
               :key="ci"
               class="px-6 py-4 text-sm whitespace-nowrap"
               :class="
-                typeof cell === 'number'
+                typeof row[ci] === 'number'
                   ? 'font-mono text-[#475569]'
                   : 'text-[#1e293b] font-medium'
               "
             >
-              {{ formatCell(cell, ci) }}
+              {{ formatCell(row[ci], ci) }}
             </td>
           </tr>
         </tbody>
