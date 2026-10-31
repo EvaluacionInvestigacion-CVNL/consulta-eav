@@ -22,7 +22,9 @@ export const state = reactive({
   loading: false,
   error: null,
   queryMode: 'manual',
-  sidebarOpen: true,
+  // En el teléfono el panel tapa el resultado: arranca cerrado si el link ya trae
+  // una consulta (se ve directo el resultado).
+  sidebarOpen: !isMobile() || !new URLSearchParams(location.search).get('q'),
   chatMessages: [],
   pendingChats: [], // Ids de las conversaciones con una petición activa.
   conversations: [],
@@ -531,6 +533,11 @@ export async function followQueryLink(event, href) {
 
 export function setQueryMode(mode) {
   state.queryMode = mode
+}
+
+// Pantalla angosta (teléfono): el sidebar va encima del resultado.
+export function isMobile() {
+  return !window.matchMedia('(min-width: 768px)').matches
 }
 
 export function toggleSidebar() {

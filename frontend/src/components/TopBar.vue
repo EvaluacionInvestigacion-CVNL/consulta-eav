@@ -17,7 +17,7 @@ function onWaveChange(e) {
 
 <template>
   <header
-    class="bg-white border-b border-[#e2e8f0] px-8 py-4 flex items-center justify-between gap-6"
+    class="bg-white border-b border-[#e2e8f0] px-4 md:px-8 py-3 md:py-4 flex items-center justify-between gap-3 md:gap-6"
   >
     <div class="flex items-center gap-2 min-w-0">
       <button
@@ -29,7 +29,7 @@ function onWaveChange(e) {
         <PanelLeft class="size-5" />
       </button>
       <h2
-        class="font-['Poppins'] text-lg whitespace-nowrap overflow-x-auto min-w-0 uppercase text-[#fb7e50] font-extrabold"
+        class="font-['Poppins'] text-base md:text-lg whitespace-nowrap overflow-x-auto min-w-0 uppercase text-[#fb7e50] font-extrabold"
       >
         {{ questionText }}
       </h2>
@@ -40,8 +40,10 @@ function onWaveChange(e) {
       class="flex items-center gap-2 shrink-0"
       title="Levantamiento de la encuesta"
     >
-      <Calendar class="size-4 text-[#94a3b8]" />
-      <label class="text-xs font-medium text-[#64748b] uppercase tracking-wide">
+      <Calendar class="size-4 text-[#94a3b8] max-md:hidden" />
+      <label
+        class="text-xs font-medium text-[#64748b] uppercase tracking-wide max-md:hidden"
+      >
         Encuesta
       </label>
       <select

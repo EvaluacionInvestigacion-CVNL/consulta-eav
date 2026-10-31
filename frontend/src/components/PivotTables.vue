@@ -162,7 +162,7 @@ function formatCell(cell, row, ci, stat) {
             <th
               v-for="ci in visibleCols"
               :key="columns[ci]"
-              class="px-6 py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
+              class="px-3 py-2 md:px-6 md:py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
             >
               {{ columns[ci] }}
             </th>
@@ -181,7 +181,7 @@ function formatCell(cell, row, ci, stat) {
             <td
               v-for="ci in visibleCols"
               :key="ci"
-              class="px-6 py-4 text-sm whitespace-nowrap"
+              class="px-3 py-2 md:px-6 md:py-4 text-sm whitespace-nowrap"
               :class="
                 isTotalRow(cells)
                   ? 'font-bold text-[#0f172a]'

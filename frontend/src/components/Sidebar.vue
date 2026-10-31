@@ -35,6 +35,7 @@ import {
   groupByQuestionMeta,
   clearGroupByQuestion,
   toggleSidebar,
+  isMobile,
   hasFeature,
 } from '../store.js'
 import QuestionPicker from './QuestionPicker.vue'
@@ -81,6 +82,12 @@ async function copySQL() {
 }
 
 // Un atajo llena el desglose y los filtros; un segundo clic lo quita.
+// En el teléfono el panel tapa el resultado: al ejecutar se cierra solo.
+function runAndClose() {
+  runCurrentQuery()
+  if (isMobile()) state.sidebarOpen = false
+}
+
 function togglePreset(key) {
   if (state.appliedPreset === key) {
     clearPreset()
@@ -134,7 +141,7 @@ const NO_YEARS_HINT =
   >
     <aside
       v-show="state.sidebarOpen"
-      class="w-70 shrink-0 bg-white border-r border-[#e2e8f0] flex flex-col"
+      class="w-70 shrink-0 bg-white border-r border-[#e2e8f0] flex flex-col max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:shadow-2xl"
     >
       <!-- Logo -->
       <div class="py-2 px-4 border-b border-[#e2e8f0]">
@@ -550,7 +557,7 @@ const NO_YEARS_HINT =
           {{ querySummary }}
         </p>
         <button
-          @click="runCurrentQuery"
+          @click="runAndClose"
           :disabled="!canRun"
           class="w-full bg-[#0d9488] hover:bg-[#00685f] disabled:opacity-45 disabled:cursor-not-allowed text-white rounded px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-lg shadow-[#0d9488]/20 transition-colors"
         >

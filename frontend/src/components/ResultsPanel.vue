@@ -81,13 +81,13 @@ function setTab(t) {
 </script>
 
 <template>
-  <div ref="scroller" class="flex-1 overflow-auto p-8 bg-[#fcf0e4]">
+  <div ref="scroller" class="flex-1 overflow-auto p-4 md:p-8 bg-[#fcf0e4]">
     <!-- Cargando con un resultado en pantalla: barra delgada arriba, sin
          sustituir el resultado (que se atenúa). La altura neta es 0 para que
          nada salte. -->
     <div
       v-if="state.loading && state.lastResult"
-      class="sticky top-0 z-10 -mx-8 -mt-8 mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-[#0d9488]/15"
+      class="sticky top-0 z-10 -mx-4 -mt-4 mb-[calc(1rem-2px)] md:-mx-8 md:-mt-8 md:mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-[#0d9488]/15"
     >
       <div class="progress-bar h-full w-1/3 bg-[#0d9488]"></div>
     </div>
@@ -118,9 +118,9 @@ function setTab(t) {
       v-else-if="!state.lastResult"
       class="flex flex-col items-center justify-center h-full text-[#94a3b8] text-center gap-3"
     >
-      <div class="flex-1 overflow-auto p-8">
+      <div class="flex-1 overflow-auto p-4 md:p-8">
         <div class="max-w-225 mx-auto">
-          <div class="grid grid-cols-2 gap-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-white rounded-lg border border-[#e2e8f0] p-6">
               <div class="flex items-start gap-4">
                 <!-- <div class="bg-[#0d9488]/10 rounded-lg p-3 shrink-0">
@@ -185,7 +185,7 @@ function setTab(t) {
             </div>
           </div>
 
-          <div class="bg-[#7e34c3] rounded-lg p-8 text-white">
+          <div class="bg-[#7e34c3] rounded-lg p-5 md:p-8 text-white">
             <div class="flex items-start justify-between">
               <div class="flex-1">
                 <h3 class="font-['Manrope'] font-bold text-xl mb-2">
@@ -268,9 +268,9 @@ function setTab(t) {
           class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
         >
           <div
-            class="border-b border-[#f1f5f9] px-6 py-3 flex items-center justify-between"
+            class="border-b border-[#f1f5f9] px-3 md:px-6 py-3 flex flex-wrap items-center justify-between gap-2"
           >
-            <div class="flex gap-8">
+            <div class="flex gap-4 md:gap-8">
               <button
                 @click="setTab('table')"
                 class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
@@ -320,11 +320,14 @@ function setTab(t) {
             </div>
           </div>
 
-          <div v-show="state.activeTab === 'table'" class="p-6 space-y-8">
+          <div
+            v-show="state.activeTab === 'table'"
+            class="p-3 md:p-6 space-y-8"
+          >
             <PivotTables v-if="isPivot" :data="state.lastResult" />
             <DataTable v-else :data="state.lastResult" />
           </div>
-          <div v-show="state.activeTab === 'chart'" class="p-8">
+          <div v-show="state.activeTab === 'chart'" class="p-3 md:p-8">
             <ChartView
               :data="state.lastResult"
               :active="state.activeTab === 'chart'"

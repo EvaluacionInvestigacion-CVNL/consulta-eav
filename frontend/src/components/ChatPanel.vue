@@ -109,7 +109,7 @@ watch(
 <template>
   <div class="flex-1 flex flex-col overflow-hidden bg-[#fcf0e4]">
     <!-- Messages -->
-    <div ref="scroller" class="flex-1 overflow-auto p-8">
+    <div ref="scroller" class="flex-1 overflow-auto p-4 md:p-8">
       <div class="max-w-4xl mx-auto space-y-6">
         <!-- Empty state -->
         <div

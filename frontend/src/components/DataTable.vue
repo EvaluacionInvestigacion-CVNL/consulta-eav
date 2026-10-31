@@ -34,7 +34,7 @@ function formatCell(cell, ci) {
             <th
               v-for="ci in visibleCols"
               :key="ci"
-              class="px-6 py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
+              class="px-3 py-2 md:px-6 md:py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
             >
               {{ data.column_labels[ci] }}
             </th>
@@ -49,7 +49,7 @@ function formatCell(cell, ci) {
             <td
               v-for="ci in visibleCols"
               :key="ci"
-              class="px-6 py-4 text-sm whitespace-nowrap"
+              class="px-3 py-2 md:px-6 md:py-4 text-sm whitespace-nowrap"
               :class="
                 typeof row[ci] === 'number'
                   ? 'font-mono text-[#475569]'
