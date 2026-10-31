@@ -10,7 +10,11 @@ Columnas del CSV (una fila por celda publicada):
   question_id   id de la pregunta EN ESA ola (numeracion propia de cada anio)
   filters       JSON de filtros, p. ej. [] o [{"attribute":"sexo","value":0}]
   group_by      "answer" (distribucion plana) o un atributo/"year" (pivote)
-  option_id     la opcion cuyo % verificas (el id_respuesta / valor de la fila)
+  option_id     la opcion cuyo % verificas (el id_respuesta / valor de la fila),
+                o varias unidas con "+" (p. ej. "1+2" = seguro + muy seguro):
+                se suman sus %. Cada % viene redondeado a 0.1 y la cifra
+                publicada tambien, asi que una suma de n opciones necesita
+                tol >= 0.05 * (n + 1); p. ej. 0.15 para dos
   group_value   PIVOTE: la columna a leer (p. ej. "Mujer", "2024"). Vacio si plano
   initial_only  TRUE  = ponderado con factor_cvnl, solo respondiente inicial
                 FALSE = conteo crudo de todos los miembros del hogar (las cifras
@@ -86,6 +90,39 @@ def _option_label(case, target):
     return format_numeric_label(float(target))
 
 
+def _percentage(r, case, target):
+    """El % publicado de UNA opcion en el resultado `r`, o None si no esta."""
+    if r["format"] == "flat":
+        return next(
+            (row[-1] for row in r["rows"] if _id_match(row[0], target)), None
+        )
+    # Pivote: localizar la columna por su encabezado (group_value) y la fila
+    # por option_id; leer esa celda de la tabla de porcentajes.
+    gv = str(case.get("group_value") or "").strip()
+    assert gv, f"{case['source']}: group_value es obligatorio en modo pivote"
+    cols = r["percentages"]["columns"]
+    assert gv in cols, f"{case['source']}: columna '{gv}' no existe en {cols}"
+    ci = cols.index(gv)
+    rows = r["percentages"]["rows"]
+    if r.get("group_by") == "year":
+        # La vista Año no expone id_respuesta como columna; el código canónico
+        # vive en year_option_map, alineado EN ORDEN con las filas de datos.
+        yom = r.get("year_option_map") or []
+        if yom:
+            data_rows = [row for row in rows if row[0] != "Total"]
+            idx = next(
+                (i for i, e in enumerate(yom) if _id_match(e["id_respuesta"], target)),
+                None,
+            )
+            row = data_rows[idx] if idx is not None and idx < len(data_rows) else None
+        else:
+            label = _option_label(case, target)
+            row = next((row for row in rows if str(row[0]) == label), None)
+    else:
+        row = next((row for row in rows if _id_match(row[0], target)), None)
+    return row[ci] if row else None
+
+
 CASES = _load_cases()
 CASE_WAVES = {c["wave_id"] for c in CASES}
 
@@ -123,37 +160,15 @@ def test_published_figure(case):
         )
     )
 
-    target = str(case["option_id"]).strip()
-    if r["format"] == "flat":
-        got = next(
-            (row[-1] for row in r["rows"] if _id_match(row[0], target)), None
-        )
-    else:
-        # Pivote: localizar la columna por su encabezado (group_value) y la fila
-        # por option_id; leer esa celda de la tabla de porcentajes.
-        gv = str(case.get("group_value") or "").strip()
-        assert gv, f"{case['source']}: group_value es obligatorio en modo pivote"
-        cols = r["percentages"]["columns"]
-        assert gv in cols, f"{case['source']}: columna '{gv}' no existe en {cols}"
-        ci = cols.index(gv)
-        rows = r["percentages"]["rows"]
-        if r.get("group_by") == "year":
-            # La vista Año no expone id_respuesta como columna; el código canónico
-            # vive en year_option_map, alineado EN ORDEN con las filas de datos.
-            yom = r.get("year_option_map") or []
-            if yom:
-                data_rows = [row for row in rows if row[0] != "Total"]
-                idx = next(
-                    (i for i, e in enumerate(yom) if _id_match(e["id_respuesta"], target)),
-                    None,
-                )
-                row = data_rows[idx] if idx is not None and idx < len(data_rows) else None
-            else:
-                label = _option_label(case, target)
-                row = next((row for row in rows if str(row[0]) == label), None)
-        else:
-            row = next((row for row in rows if _id_match(row[0], target)), None)
-        got = row[ci] if row else None
+    # Una suma ("1+2") se arma con el % de cada opcion; si falta alguna, falla.
+    targets = [t.strip() for t in str(case["option_id"]).split("+")]
+    cells = [_percentage(r, case, target) for target in targets]
+    got = (
+        sum(cells)
+        if all(isinstance(cell, (int, float)) for cell in cells)
+        else None
+    )
+    target = case["option_id"]
 
     assert isinstance(got, (int, float)), (
         f"{case['source']}: opcion {target} no encontrada / sin valor en "
