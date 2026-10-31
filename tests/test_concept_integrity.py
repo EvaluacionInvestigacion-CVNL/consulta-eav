@@ -132,6 +132,23 @@ def hechos(conn):
 # ---------------------------------------------------------------------------
 
 
+def test_toda_exclusion_tiene_motivo_publicable():
+    """Cada par `exclude` lleva un `reason` del vocabulario de
+    `metadata.EXCLUSION_REASONS`: es lo que la UI le explica al usuario cuando
+    una pregunta no se compara entre años. La `note` es técnica y no se publica."""
+    from metadata import EXCLUSION_REASONS
+
+    sin_motivo = [
+        f"{r['wave_a']}/{r['q_a']} <-> {r['wave_b']}/{r['q_b']}: {r.get('reason')!r}"
+        for r in _rows(EQUIV)
+        if r["decision"] == "exclude" and r.get("reason") not in EXCLUSION_REASONS
+    ]
+    assert not sin_motivo, (
+        f"{len(sin_motivo)} exclusiones sin motivo valido "
+        f"(usa uno de {sorted(EXCLUSION_REASONS)}): {sin_motivo[:5]}"
+    )
+
+
 def test_ningun_concepto_categorico_tiene_miembro_numerico(hechos):
     """Si una ola guardó la medida en `answers.value`, el concepto NO puede ser
     `categorica`.

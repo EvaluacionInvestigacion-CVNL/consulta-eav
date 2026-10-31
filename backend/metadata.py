@@ -256,3 +256,19 @@ PRESETS: list = [
         "requires_concept": True,
     },
 ]
+
+
+# Motivos por los que dos preguntas de olas distintas NO se comparan (columna
+# `reason` de las filas `exclude` en concept_equivalences.csv). La UI muestra el
+# texto; la nota técnica del CSV es para el equipo y no se publica.
+EXCLUSION_REASONS: dict = {
+    "base": "cambió a quién se le pregunta",
+    "opciones": "cambiaron las opciones de respuesta",
+    "reactivo": "cambió el contenido de la pregunta",
+    "escala": "cambió la escala de respuesta",
+    "unidades": "se midió en otras unidades",
+    "captura": "cambió la forma de registrar la respuesta",
+    "sin_datos": "no tiene respuestas en una de las olas",
+    "equipo": "decisión metodológica del equipo",
+    "otra": "no son equivalentes",
+}

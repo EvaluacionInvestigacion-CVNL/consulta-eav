@@ -14,6 +14,18 @@ CREATE TABLE concepts (
     PRIMARY KEY (concept_id)
 );
 
+-- Pares de preguntas que el equipo revisó y declaró NO comparables
+-- (`decision=exclude` en concept_equivalences.csv). `reason` es un motivo de un
+-- vocabulario cerrado que la UI traduce a texto; la nota técnica no se carga.
+CREATE TABLE concept_exclusions (
+    wave_a VARCHAR NOT NULL,
+    q_a    VARCHAR NOT NULL,
+    wave_b VARCHAR NOT NULL,
+    q_b    VARCHAR NOT NULL,
+    reason VARCHAR NOT NULL,
+    PRIMARY KEY (wave_a, q_a, wave_b, q_b)
+);
+
 -- Armonización de opciones entre años.
 -- Un `concept_option_id` agrupa opciones equivalentes de distintas olas.
 CREATE TABLE concept_options (

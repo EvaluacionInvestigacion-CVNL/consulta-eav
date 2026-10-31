@@ -21,10 +21,10 @@ insumos versionados.
 ### 1. `db/concepts/concept_equivalences.csv` — qué equivale a qué
 
 ```csv
-wave_a,q_a,wave_b,q_b,ctype,decision,concept_id,source,note
-2024,cp2,2025,cp2,categorica,comparable,attr_sexo,manual,
-2022,p45_5,2023,p46_5,numerica,comparable,,frozen-auto,
-2024,p65,2025,p78,categorica,exclude,,manual,"rediseño: mismos códigos, otro significado"
+wave_a,q_a,wave_b,q_b,ctype,decision,concept_id,source,note,reason
+2024,cp2,2025,cp2,categorica,comparable,attr_sexo,manual,,
+2022,p45_5,2023,p46_5,numerica,comparable,,frozen-auto,,
+2024,p65,2025,p78,categorica,exclude,,manual,"rediseño: mismos códigos, otro significado",reactivo
 ```
 
 Un renglón por **par** de preguntas equivalentes entre dos olas. Los pares se
@@ -38,6 +38,8 @@ código. Un par que referencia una ola aún no cargada se ignora hasta que exist
 | `decision` | `comparable` crea/extiende el concepto; `exclude` documenta un par que **no** debe compararse (rediseños, códigos reasignados). |
 | `concept_id` | Opcional. Fija el id del concepto. Se usa para los `attr_*`, que `concept_recodes_approved.csv` referencia por nombre. Si va vacío, el id se deriva de la ola más reciente del concepto (`c2025_p9_1`) — estable, no se renumera al agregar preguntas. |
 | `source` | `manual` = verificado por el equipo. `frozen-auto` = congelado del viejo emparejador difuso, **no verificado uno por uno**: es el candidato natural a auditar. |
+| `note` | Nota **técnica** para el equipo (por qué se decidió así, con cifras). No se publica. |
+| `reason` | Sólo en `exclude`, y obligatorio: el motivo **para el usuario**, de un vocabulario cerrado (`metadata.EXCLUSION_REASONS`: `base`, `opciones`, `reactivo`, `escala`, `unidades`, `captura`, `sin_datos`, `equipo`, `otra`). El build lo carga en `concept_exclusions` y la UI lo muestra bajo el resultado ("No comparable: cambió la escala de respuesta"). `sin_datos` (encabezados de batería sin respuestas) no se muestra. Un test falla si una exclusión no trae un motivo válido. |
 
 ### 2. `db/concepts/concept_recodes_approved.csv` — opciones recodificadas
 

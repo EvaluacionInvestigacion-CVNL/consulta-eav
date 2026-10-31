@@ -36,7 +36,7 @@ EQUIV = Path(__file__).resolve().parent / "concept_equivalences.csv"
 OUT = Path(__file__).resolve().parent / "concept_equivalences.draft.csv"
 
 TH = 0.62  # umbral de similitud (igual que el emparejador histórico)
-FIELDS = ["wave_a", "q_a", "wave_b", "q_b", "ctype", "decision", "concept_id", "source", "note"]
+FIELDS = ["wave_a", "q_a", "wave_b", "q_b", "ctype", "decision", "concept_id", "source", "note", "reason"]
 
 
 def _norm(t: str) -> str:
@@ -125,6 +125,7 @@ def main() -> None:
             "ctype": B[qb][1] or "categorica", "decision": "comparable",
             "concept_id": "", "source": "draft",
             "note": f"sim={s:.2f} · REVISAR · {_norm(A[qa][0])[:60]}",
+            "reason": "",
         })
 
     rows.sort(key=lambda r: (r["source"], r["note"]))

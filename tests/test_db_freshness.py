@@ -100,6 +100,31 @@ def test_concept_membership_matches_equivalences(conn):
     )
 
 
+def test_concept_exclusions_match_equivalences(conn):
+    """Los pares `exclude` (con su motivo) que la UI explica son los del CSV.
+    Sólo cuentan los pares cuyas dos preguntas están cargadas."""
+    existing = {
+        (w, q) for w, q in conn.execute("SELECT wave_id, q_id FROM questions").fetchall()
+    }
+    expected = {
+        (r["wave_a"], r["q_a"], r["wave_b"], r["q_b"], r["reason"])
+        for r in _rows(EQUIV)
+        if r["decision"] == "exclude"
+        and (r["wave_a"], r["q_a"]) in existing
+        and (r["wave_b"], r["q_b"]) in existing
+    }
+    actual = set(
+        conn.execute(
+            "SELECT wave_a, q_a, wave_b, q_b, reason FROM concept_exclusions"
+        ).fetchall()
+    )
+    assert actual == expected, (
+        f"{REBUILD}\n"
+        f"  en el CSV y no en la BD: {sorted(expected - actual)[:3]}\n"
+        f"  en la BD y no en el CSV: {sorted(actual - expected)[:3]}"
+    )
+
+
 def test_question_type_overlay_applied(conn):
     """Cada renglón de question_type_fixes_approved.csv está reflejado en `questions`."""
     bad = []

@@ -254,10 +254,12 @@ generated intermediate files.** `build_db.py::load_concepts` builds the whole
 layer in memory at build time.
 
 - `concept_equivalences.csv` — one row per **pair** of equivalent questions in two
-  waves (`wave_a,q_a,wave_b,q_b,ctype,decision,concept_id,source,note`). Pairs
+  waves (`wave_a,q_a,wave_b,q_b,ctype,decision,concept_id,source,note,reason`). Pairs
   chain transitively, so a multi-wave concept is built from pairwise rows and
   adding a wave is **adding rows, never touching code**. `decision=exclude`
-  documents pairs that must *not* be compared. `concept_id` optionally pins the
+  documents pairs that must *not* be compared, and needs a user-facing `reason`
+  from `metadata.EXCLUSION_REASONS` (loaded into `concept_exclusions`; the UI
+  shows it under a result — `note` is internal and never published). `concept_id` optionally pins the
   id (used for `attr_*`, which the recodes file references by name); otherwise
   the id derives from the newest member (`c2025_p9_1`) and is stable across
   rebuilds. `source` marks `manual` (team-verified) vs `frozen-auto` (frozen from

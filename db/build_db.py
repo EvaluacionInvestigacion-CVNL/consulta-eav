@@ -436,7 +436,7 @@ def load_concepts(con: duckdb.DuckDBPyConnection) -> None:
             skipped += 1  # ola/pregunta aún no cargada: se ignora
             continue
         if r["decision"] == "exclude":
-            excluded_pairs.append((a, b, r.get("note", "")))
+            excluded_pairs.append((a, b, r.get("note", ""), r.get("reason", "")))
             continue
         # aviso: par declarado comparable cuyas opciones NO alinean por código
         if r["ctype"] == "categorica":
@@ -565,7 +565,7 @@ def load_concepts(con: duckdb.DuckDBPyConnection) -> None:
             opt_map.append((wave, qid, oid, coid))
 
     # --- avisos de integridad -------------------------------------------------
-    for a, b, note in excluded_pairs:
+    for a, b, note, _ in excluded_pairs:
         ca, cb = (
             next((c for c, ms in members.items() if n in ms), None) for n in (a, b)
         )
@@ -584,6 +584,12 @@ def load_concepts(con: duckdb.DuckDBPyConnection) -> None:
         "UPDATE questions SET concept_id = ? WHERE wave_id = ? AND q_id = ?",
         [(cid, w, q) for cid, ns in members.items() for w, q in ns],
     )
+    if excluded_pairs:
+        con.executemany(
+            "INSERT INTO concept_exclusions (wave_a, q_a, wave_b, q_b, reason)"
+            " VALUES (?,?,?,?,?)",
+            [(a[0], a[1], b[0], b[1], reason) for a, b, _, reason in excluded_pairs],
+        )
     if catalog:
         con.executemany(
             "INSERT INTO concept_options (concept_id, concept_option_id, label, sort_order)"
