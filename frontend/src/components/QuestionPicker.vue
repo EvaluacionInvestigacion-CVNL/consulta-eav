@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, watch, nextTick } from 'vue'
 import { Search, X, ChevronRight, Check } from 'lucide-vue-next'
-import { state, questionPicker, clearGroupBy } from '../store.js'
+import { state, questionPicker, clearGroupBy, isMobile } from '../store.js'
 import InfoTooltip from './InfoTooltip.vue'
 
 const props = defineProps({
@@ -134,7 +134,7 @@ watch(
     sectionFilter.value = 'all'
     const g = questionPicker.value.groupOf.get(state.questionId)
     if (g) expandedGroups[g] = true
-    nextTick(() => searchInput.value?.focus())
+    if (!isMobile()) nextTick(() => searchInput.value?.focus())
   },
 )
 </script>
@@ -159,6 +159,12 @@ watch(
             <input
               ref="searchInput"
               v-model="query"
+              type="search"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              enterkeyhint="search"
               @keydown="onKey"
               placeholder="Busca por tema, palabra o código — p. ej. discriminación, mujer, p80"
               class="flex-1 bg-transparent border-none outline-none text-[15px] text-[#1e293b] placeholder:text-[#94a3b8]"

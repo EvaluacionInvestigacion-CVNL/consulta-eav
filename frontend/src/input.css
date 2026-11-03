@@ -47,3 +47,15 @@
     animation: spin 0.7s linear infinite;
   }
 }
+
+@media (max-width: 767px) {
+  input:not([type='checkbox']),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  display: none;
+}

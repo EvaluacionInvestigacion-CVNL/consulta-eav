@@ -11,11 +11,14 @@ import {
   canCompareYears,
   NO_YEARS_HINT,
 } from '../store.js'
+import { useTapToType } from '../tapToType.js'
 
 const MAX_QUESTIONS = 30
 
 const query = ref('')
-const open = ref(false)
+const root = ref(null)
+const { open, typing, onTouchStart, onClick, onFocus, onBlur } =
+  useTapToType(root)
 
 const ql = computed(() => query.value.trim().toLowerCase())
 
@@ -64,15 +67,23 @@ function chooseFirst() {
 
 <template>
   <div class="space-y-2">
-    <div class="relative">
+    <div ref="root" class="relative">
       <div
         class="flex items-center gap-2 bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5"
       >
         <Search class="size-4 text-[#94a3b8] shrink-0" />
         <input
           v-model="query"
-          @focus="open = true"
-          @blur="open = false"
+          type="search"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="search"
+          @touchstart="onTouchStart"
+          @click="onClick"
+          @focus="onFocus"
+          @blur="onBlur"
           @input="open = true"
           @keydown.esc="open = false"
           @keydown.enter.prevent="chooseFirst"
@@ -83,7 +94,7 @@ function chooseFirst() {
 
       <div
         v-if="open"
-        class="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg py-1"
+        class="mt-1 w-full bg-white border border-gray-200 rounded-xl py-1 md:absolute md:z-20 md:max-h-72 md:overflow-y-auto md:shadow-lg"
       >
         <p
           v-if="matchingFrequent.length"
@@ -134,7 +145,11 @@ function chooseFirst() {
           </p>
         </template>
         <p v-else class="px-3 pt-2 pb-1.5 text-xs text-[#94a3b8]">
-          Escribe para cruzar con cualquier pregunta.
+          {{
+            typing()
+              ? 'Escribe para cruzar con cualquier pregunta.'
+              : 'Toca el buscador otra vez para escribir.'
+          }}
         </p>
       </div>
     </div>

@@ -2,11 +2,14 @@
 import { ref, computed, watch } from 'vue'
 import { Search, Plus, X } from 'lucide-vue-next'
 import { state, searchQuestions, addFilter, removeFilter } from '../store.js'
+import { useTapToType } from '../tapToType.js'
 
 const MAX_QUESTIONS = 30
 
 const query = ref('')
-const open = ref(false)
+const root = ref(null)
+const { open, typing, onTouchStart, onClick, onFocus, onBlur } =
+  useTapToType(root)
 const selected = ref(null)
 const checked = ref([])
 const min = ref('')
@@ -113,15 +116,23 @@ watch(
 
 <template>
   <div class="space-y-2">
-    <div class="relative">
+    <div ref="root" class="relative">
       <div
         class="flex items-center gap-2 bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5"
       >
         <Search class="size-4 text-[#94a3b8] shrink-0" />
         <input
           v-model="query"
-          @focus="open = true"
-          @blur="open = false"
+          type="search"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="search"
+          @touchstart="onTouchStart"
+          @click="onClick"
+          @focus="onFocus"
+          @blur="onBlur"
           @input="open = true"
           @keydown.esc="open = false"
           @keydown.enter.prevent="chooseFirst"
@@ -132,7 +143,7 @@ watch(
 
       <div
         v-if="open"
-        class="absolute z-20 mt-1 w-full max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg py-1"
+        class="mt-1 w-full bg-white border border-gray-200 rounded-xl py-1 md:absolute md:z-20 md:max-h-72 md:overflow-y-auto md:shadow-lg"
       >
         <p
           class="px-3 pt-2 pb-1 text-[10px] font-semibold text-[#94a3b8] uppercase tracking-wide"
@@ -182,7 +193,11 @@ watch(
           </p>
         </template>
         <p v-else class="px-3 pt-2 pb-1.5 text-xs text-[#94a3b8]">
-          Escribe para buscar en todas las preguntas.
+          {{
+            typing()
+              ? 'Escribe para buscar en todas las preguntas.'
+              : 'Toca el buscador otra vez para escribir.'
+          }}
         </p>
       </div>
     </div>
