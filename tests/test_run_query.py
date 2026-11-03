@@ -360,6 +360,11 @@ def test_question_filter_matches_crosstab_column():
         {"question": "cp4_1", "value": {"min": 30, "max": 18}},  # rango invertido
         {"question": "cp4_1", "value": {}},  # rango sin extremos
         {"question": "cp2", "value": {"min": 1}},  # rango sobre categórica
+        {"question": "cp2", "value": ["abc"]},  # código no numérico
+        {"question": "cp2", "value": ["1) OR (1=1"]},  # inyección en el valor
+        {"attribute": "sexo", "value": ["abc"]},
+        {"attribute": "sexo", "value": [[1]]},
+        {"attribute": "city_id", "value": "abc"},
     ],
 )
 def test_invalid_question_filter_raises_400(filter_spec):

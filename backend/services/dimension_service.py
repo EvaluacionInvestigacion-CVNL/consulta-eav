@@ -149,7 +149,7 @@ def filter_dimension(filter_spec: dict) -> tuple[str, str]:
     return kind, filter_spec[kind]
 
 
-def _as_codes(value) -> list[int]:
+def as_codes(value) -> list[int]:
     """Los códigos de un filtro como enteros; un valor no numérico es un 400."""
     values = value if isinstance(value, list) else [value]
     try:
@@ -201,7 +201,7 @@ def translate_filters_across_waves(
         value = filter_spec["value"]
         # Un rango {min, max} no son códigos: viaja tal cual (lo valida
         # `run_query` de cada ola).
-        codes = None if isinstance(value, dict) else _as_codes(value)
+        codes = None if isinstance(value, dict) else as_codes(value)
 
         if kind == "attribute" and name == CITY_ATTRIBUTE:
             # Los municipios no cambian de código entre olas.

@@ -26,6 +26,7 @@ from repositories import survey_repository
 from services.catalog_service import get_attributes
 from services.dimension_service import (
     CITY_ATTRIBUTE,
+    as_codes,
     attribute_question,
     filter_dimension,
     year_comparability,
@@ -223,6 +224,10 @@ def _validate_filters(
     inyección) y los filtros que no tienen sentido en esta ola."""
     for filter_spec in request.filters:
         kind, name = filter_dimension(filter_spec)
+        value = filter_spec["value"]
+        if not isinstance(value, dict):
+            codes = as_codes(value)
+            filter_spec["value"] = codes if isinstance(value, list) else codes[0]
         if kind == "attribute":
             if name != CITY_ATTRIBUTE and name not in valid_attributes:
                 raise HTTPException(
