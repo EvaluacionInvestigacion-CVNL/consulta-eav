@@ -175,6 +175,22 @@ def test_ningun_concepto_categorico_tiene_miembro_numerico(hechos):
     )
 
 
+def test_ningun_concepto_numerico_es_todo_categorico(hechos):
+    """Un concepto `numerica` necesita al menos una ola que guarde la medida
+    como número."""
+    malos = sorted(
+        cid
+        for cid, ms in hechos["members"].items()
+        if hechos["concepts"][cid] == "numerica"
+        and all(hechos["qtype"][m] == "categorica" for m in ms)
+    )
+    assert not malos, (
+        f"conceptos 'numerica' sin ninguna ola numérica: {malos}\n"
+        f"  Arreglo: pon ctype=categorica en sus renglones de "
+        f"concept_equivalences.csv.\n  {REVISAR}"
+    )
+
+
 # E6 CERRADO: `2024 p52_5` código 6666 = 'No cuento con el servicio de recolección
 # de residuos en mi hogar.' (n=1, ponderado 667) vivía dentro de la escala 1-10 de
 # `c2025_p62_5` y entraba a la media de la vista Año como si fuera una calificación:
