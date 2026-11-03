@@ -38,6 +38,13 @@ export const selectedQuestion = computed(
   () => state.questions.find((q) => q.q_id === state.questionId) || null,
 )
 
+// "Año" (comparación entre olas) solo aplica a preguntas con concepto equivalente.
+export const canCompareYears = computed(
+  () => !!selectedQuestion.value?.concept_id,
+)
+export const NO_YEARS_HINT =
+  'Esta pregunta no tiene equivalencia entre años; bajo el resultado verás por qué.'
+
 // La conversación en pantalla está esperando respuesta.
 export const chatLoading = computed(() =>
   state.pendingChats.includes(state.currentConversationId),
@@ -177,16 +184,42 @@ export const groupByQuestionMeta = computed(() =>
     : null,
 )
 
-// Set/clear the breakdown question chosen for a cross-tab.
-export function setGroupByQuestion(id) {
-  state.groupBy = id
+// Elegir o quitar el desglose a mano deja de ser un atajo.
+export function setGroupBy(key) {
+  state.groupBy = key
   state.appliedPreset = ''
 }
 
-export function clearGroupByQuestion() {
-  state.groupBy = 'answer'
-  state.appliedPreset = ''
+export function clearGroupBy() {
+  setGroupBy('answer')
 }
+
+// Preguntas cuyo texto contiene `text`, salvo la principal (no se cruza ni se
+// filtra una pregunta consigo misma). Las numéricas van por rango.
+export function searchQuestions(text, max) {
+  const out = []
+  if (!text) return out
+  for (const meta of questionPicker.value.byId.values()) {
+    if (meta.id === state.questionId || !meta.search.includes(text)) continue
+    out.push({
+      kind: 'question',
+      key: meta.id,
+      label: meta.block ? `${meta.block} · ${meta.main}` : meta.main,
+      type: meta.qType === 'numerica' ? 'range' : 'options',
+    })
+    if (out.length === max) break
+  }
+  return out
+}
+
+// Etiqueta del desglose actual, para la tarjeta del sidebar.
+export const groupByLabel = computed(() => {
+  const g = state.groupBy
+  if (g === 'year') return 'Año'
+  if (isQuestionGroupBy.value) return groupByQuestionMeta.value.main
+  const recode = state.recodes.find((r) => r.key === g)
+  return recode?.label || attributeLabel(g)
+})
 
 const attributeValueMap = computed(() => {
   const out = new Map()

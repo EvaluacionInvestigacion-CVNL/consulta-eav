@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { Search, Plus, X } from 'lucide-vue-next'
-import { state, questionPicker, addFilter, removeFilter } from '../store.js'
+import { state, searchQuestions, addFilter, removeFilter } from '../store.js'
 
 const MAX_QUESTIONS = 30
 
@@ -39,22 +39,9 @@ const matchingAttributes = computed(() =>
     : attributeItems.value,
 )
 
-const matchingQuestions = computed(() => {
-  if (!ql.value) return []
-  const out = []
-  for (const meta of questionPicker.value.byId.values()) {
-    if (meta.id === state.questionId || !meta.search.includes(ql.value))
-      continue
-    out.push({
-      kind: 'question',
-      key: meta.id,
-      label: meta.block ? `${meta.block} · ${meta.main}` : meta.main,
-      type: meta.qType === 'numerica' ? 'range' : 'options',
-    })
-    if (out.length === MAX_QUESTIONS) break
-  }
-  return out
-})
+const matchingQuestions = computed(() =>
+  searchQuestions(ql.value, MAX_QUESTIONS),
+)
 
 const selectedOptions = computed(() => {
   const item = selected.value

@@ -1,17 +1,11 @@
 <script setup>
 import { ref, reactive, computed, watch, nextTick } from 'vue'
 import { Search, X, ChevronRight, Check } from 'lucide-vue-next'
-import {
-  state,
-  questionPicker,
-  setGroupByQuestion,
-  clearGroupByQuestion,
-} from '../store.js'
+import { state, questionPicker, clearGroupBy } from '../store.js'
 import InfoTooltip from './InfoTooltip.vue'
 
 const props = defineProps({
   open: { type: Boolean, default: false },
-  target: { type: String, default: 'question' },
 })
 const emit = defineEmits(['close'])
 
@@ -30,22 +24,6 @@ const chips = computed(() => {
     model.sections.map((s) => ({ key: s.key, label: s.label, count: s.count })),
   )
 })
-
-// In 'groupBy' mode the main question can't cross with itself. Any other
-// question is eligible: numeric ones cross by ranges.
-const isRestricted = computed(() => props.target === 'groupBy')
-function eligible(meta) {
-  if (!isRestricted.value) return true
-  return meta.id !== state.questionId
-}
-function leafCount(sec) {
-  let n = 0
-  for (const e of sec.entries) {
-    if (e.type === 'q') n += eligible(e) ? 1 : 0
-    else n += e.facets.filter(eligible).length
-  }
-  return n
-}
 
 // Flatten the section/group/question tree into a single render list, applying
 // the current search and section filter. Mirrors the design's buildPickerItems.
@@ -94,22 +72,19 @@ const built = computed(() => {
         if (e.type === 'q') metas.push(e)
         else for (const f of e.facets) metas.push(f)
       }
-      const matches = metas.filter((m) => m.search.includes(q) && eligible(m))
+      const matches = metas.filter((m) => m.search.includes(q))
       if (!matches.length) continue
       items.push({ kind: 'section', label: sec.label, count: matches.length })
       for (const m of matches) pushQ(m, false)
     }
   } else {
     for (const sec of secs) {
-      const lc = isRestricted.value ? leafCount(sec) : sec.count
-      if (isRestricted.value && lc === 0) continue // no eligible questions here
-      items.push({ kind: 'section', label: sec.label, count: lc })
+      items.push({ kind: 'section', label: sec.label, count: sec.count })
       for (const e of sec.entries) {
         if (e.type === 'q') {
-          if (eligible(e)) pushQ(e, false)
+          pushQ(e, false)
         } else {
-          const facets = e.facets.filter(eligible)
-          if (!facets.length) continue
+          const facets = e.facets
           const expanded = !!expandedGroups[e.groupId]
           items.push({
             kind: 'group',
@@ -132,14 +107,10 @@ function toggleGroup(id) {
 }
 
 function selectQuestion(id) {
-  if (props.target === 'groupBy') {
-    setGroupByQuestion(id)
-  } else {
-    state.questionId = id
-    // Si la pregunta principal pasa a ser la de desglose, deshaz el cruce para
-    // no dejar A == B (el backend lo rechazaría).
-    if (state.groupBy === id) clearGroupByQuestion()
-  }
+  state.questionId = id
+  // Si la pregunta principal pasa a ser la de desglose, deshaz el cruce para
+  // no dejar A == B (el backend lo rechazaría).
+  if (state.groupBy === id) clearGroupBy()
   query.value = ''
   emit('close')
 }
@@ -181,13 +152,6 @@ watch(
       >
         <!-- Search header -->
         <div class="p-4 pb-3 border-b border-[#f1f5f9]">
-          <p
-            v-if="target === 'groupBy'"
-            class="text-[12px] font-semibold text-[#5e2494] mb-2.5"
-          >
-            Cruzar por otra pregunta — elige la variable de desglose (las
-            numéricas se agrupan por rangos).
-          </p>
           <div
             class="flex items-center gap-2.5 bg-[#f1f5f9] rounded-xl px-3.5 py-2.5"
           >

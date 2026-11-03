@@ -26,30 +26,23 @@ import {
   attributeLabel,
   querySummary,
   questionPicker,
-  selectedQuestion,
   setQueryMode,
   newConversation,
   loadConversation,
   deleteConversation,
-  isQuestionGroupBy,
-  groupByQuestionMeta,
-  clearGroupByQuestion,
+  canCompareYears,
+  NO_YEARS_HINT,
   toggleSidebar,
   isMobile,
   hasFeature,
 } from '../store.js'
 import QuestionPicker from './QuestionPicker.vue'
 import FilterSearch from './FilterSearch.vue'
+import GroupBySearch from './GroupBySearch.vue'
 import InfoTooltip from './InfoTooltip.vue'
 
-// Searchable question picker modal. `pickerTarget` decides whether a pick sets
-// the main question or the cross-tab breakdown question.
+// Modal para buscar la pregunta principal.
 const pickerOpen = ref(false)
-const pickerTarget = ref('question')
-function openPicker(target) {
-  pickerTarget.value = target
-  pickerOpen.value = true
-}
 const selectedQuestionMeta = computed(
   () => questionPicker.value.byId.get(state.questionId) || null,
 )
@@ -97,22 +90,6 @@ function togglePreset(key) {
   }
 }
 
-// Sentinel <option> value that opens the question picker instead of being a
-// real group_by value.
-const CROSS_QUESTION = '__question__'
-function onGroupByChange(e) {
-  const v = e.target.value
-  if (v === CROSS_QUESTION) {
-    openPicker('groupBy') // pick B in the modal; state.groupBy set on selection
-    return
-  }
-  state.groupBy = v
-  state.appliedPreset = ''
-}
-
-// "Año" (comparación entre olas) solo aplica a preguntas con concepto equivalente.
-const canCompareYears = computed(() => !!selectedQuestion.value?.concept_id)
-
 // Si cambias a una pregunta sin equivalencia y tenías "Año" seleccionado, resetea.
 watch(canCompareYears, (ok) => {
   if (!ok && state.groupBy === 'year') {
@@ -128,8 +105,6 @@ const availablePresets = computed(() => state.presets)
 function presetDisabled(p) {
   return p.requires_concept && !canCompareYears.value
 }
-const NO_YEARS_HINT =
-  'Esta pregunta no tiene equivalencia entre años; bajo el resultado verás por qué.'
 </script>
 
 <template>
@@ -219,7 +194,7 @@ const NO_YEARS_HINT =
               >
             </div>
             <button
-              @click="openPicker('question')"
+              @click="pickerOpen = true"
               class="w-full text-left bg-[#f1f5f9] border border-gray-300 rounded-2xl px-3 py-2.5 cursor-pointer flex items-center gap-2.5 hover:border-[#0d9488] transition-colors"
             >
               <span
@@ -289,76 +264,7 @@ const NO_YEARS_HINT =
                 </button>
               </div>
             </div>
-            <div class="relative">
-              <select
-                :value="isQuestionGroupBy ? '__question__' : state.groupBy"
-                @change="onGroupByChange"
-                class="w-full bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155] font-medium appearance-none cursor-pointer"
-              >
-                <option value="answer">Sin desglose</option>
-                <option
-                  value="year"
-                  :disabled="!canCompareYears"
-                  :title="canCompareYears ? undefined : NO_YEARS_HINT"
-                >
-                  Año (comparar entre olas)
-                </option>
-                <option value="city_id">Ciudad</option>
-                <option
-                  v-for="a in state.attributes"
-                  :key="a.attribute"
-                  :value="a.attribute"
-                >
-                  {{ a.label || a.attribute }}
-                </option>
-                <option v-for="r in state.recodes" :key="r.key" :value="r.key">
-                  {{ r.label }}
-                </option>
-                <option value="__question__">Cruzar con otra pregunta…</option>
-              </select>
-              <svg
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-2 pointer-events-none"
-                fill="none"
-                viewBox="0 0 12 7.4"
-              >
-                <path
-                  d="M1 1L6 6L11 1"
-                  stroke="#94A3B8"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <!-- Cross-tab: chosen breakdown question -->
-          <div
-            v-if="isQuestionGroupBy && groupByQuestionMeta"
-            class="-mt-3 flex items-center gap-2 bg-[#faf5ff] border border-[#e9d8fb] rounded-2xl px-3 py-2"
-          >
-            <span
-              class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-[#e9d8fb] text-[#7e34c3]"
-              >{{ groupByQuestionMeta.id }}</span
-            >
-            <span
-              class="flex-1 min-w-0 text-[12px] font-semibold text-[#334155] overflow-hidden text-ellipsis whitespace-nowrap"
-              >{{ groupByQuestionMeta.main }}</span
-            >
-            <button
-              @click="openPicker('groupBy')"
-              class="shrink-0 text-[#94a3b8] hover:text-[#7e34c3] transition-colors"
-              aria-label="Cambiar pregunta de desglose"
-            >
-              <Search class="size-3.5" />
-            </button>
-            <button
-              @click="clearGroupByQuestion"
-              class="shrink-0 text-[#94a3b8] hover:text-[#b91c1c] transition-colors"
-              aria-label="Quitar desglose"
-            >
-              <X class="size-3.5" />
-            </button>
+            <GroupBySearch />
           </div>
 
           <!-- Agregar filtro: atributos y preguntas en un solo buscador -->
@@ -566,11 +472,7 @@ const NO_YEARS_HINT =
         </button>
       </div>
 
-      <QuestionPicker
-        :open="pickerOpen"
-        :target="pickerTarget"
-        @close="pickerOpen = false"
-      />
+      <QuestionPicker :open="pickerOpen" @close="pickerOpen = false" />
     </aside>
   </Transition>
 </template>
