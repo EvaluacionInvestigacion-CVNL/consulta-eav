@@ -27,6 +27,8 @@ def test_per_ip_window_blocks_after_limit(monkeypatch):
         ratelimit.check_and_consume("1.1.1.1", now=t)
     assert ei.value.scope == "ip"
     assert ei.value.retry_after and ei.value.retry_after > 0
+    assert "Agotaste tus 3 consultas por minuto" in ei.value.message
+    assert "Espera un minuto" in ei.value.message
 
 
 def test_per_ip_window_slides(monkeypatch):

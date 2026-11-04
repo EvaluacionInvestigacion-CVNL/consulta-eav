@@ -64,7 +64,8 @@ def check_and_consume(ip: str, now: float | None = None) -> None:
             retry = int(_WINDOW_SECONDS - (now - hits[0])) + 1 if hits else int(_WINDOW_SECONDS)
             raise RateLimited(
                 "ip",
-                "Vas muy rápido. Espera un momento antes de enviar otra pregunta.",
+                f"Agotaste tus {CHAT_RATE_PER_MIN} consultas por minuto. "
+                "Espera un minuto y vuelve a intentarlo.",
                 retry,
             )
 
