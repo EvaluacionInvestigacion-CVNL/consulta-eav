@@ -177,11 +177,29 @@ def test_ningun_concepto_categorico_tiene_miembro_numerico(hechos):
 
 def test_ningun_concepto_numerico_es_todo_categorico(hechos):
     """Un concepto `numerica` necesita al menos una ola que guarde la medida
-    como número."""
+    como número.
+
+    Sólo se juzgan los conceptos con todas sus olas declaradas cargadas en la
+    BD. Con `olas_2016_2019` apagado, la escala 1-10 de salud (`c2023_p89`)
+    se queda con 2021-2023, que la guardan como categórica; su ola numérica
+    (2018-2019) existe en la declaración pero no en la BD."""
+    cargadas = {w for w, _ in hechos["qtype"]}
+    incompletos = set()
+    for r in _rows(EQUIV):
+        if r["decision"] != "comparable":
+            continue
+        for (w, q), otra in (
+            ((r["wave_a"], r["q_a"]), r["wave_b"]),
+            ((r["wave_b"], r["q_b"]), r["wave_a"]),
+        ):
+            cid = hechos["qconcept"].get((w, q))
+            if cid and otra not in cargadas:
+                incompletos.add(cid)
     malos = sorted(
         cid
         for cid, ms in hechos["members"].items()
         if hechos["concepts"][cid] == "numerica"
+        and cid not in incompletos
         and all(hechos["qtype"][m] == "categorica" for m in ms)
     )
     assert not malos, (
