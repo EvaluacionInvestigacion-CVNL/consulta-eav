@@ -6,6 +6,7 @@ total y luego el desglose) sin quedarse en un ciclo infinito si nunca concluye.
 """
 
 import logging
+import re
 
 from services.chat import gemini, prompts, query_tool
 
@@ -15,12 +16,35 @@ MAX_TOOL_ROUNDS = 4
 
 NO_ANSWER_REPLY = "No pude completar la consulta. Intenta reformular la pregunta."
 
+MAX_TITLE_CHARS = 60
+
+_TITLE_LINE = re.compile(
+    r"\A\s*(?:#+\s*)?\**\s*t[ií]tulo\s*\**\s*:\s*(?P<title>[^\n]*)\n?",
+    re.IGNORECASE,
+)
+
+
+def split_title(text: str) -> tuple[str | None, str]:
+    match = _TITLE_LINE.match(text or "")
+    if not match:
+        return None, text or ""
+    title = match.group("title").strip().rstrip(".").strip(" *_\"'«»“”").rstrip(".")
+    body = text[match.end():].lstrip("\n")
+    if len(title) > MAX_TITLE_CHARS:
+        title = title[: MAX_TITLE_CHARS - 1].rstrip() + "…"
+    return title or None, body
+
 
 def run_chat(message: str, history: list) -> dict:
-    """Responde un mensaje del chat. Devuelve respuesta, consultas y datos."""
+    """Responde un mensaje del chat. Devuelve respuesta, consultas, datos y,
+    en el primer turno de una conversación, un título para la lista."""
+    new_conversation = not history
+    instruction = prompts.system_instruction()
+    if new_conversation:
+        instruction += prompts.NEW_CONVERSATION_RULE
     client = gemini.get_client()
     config = gemini.build_config(
-        system_instruction=prompts.system_instruction(),
+        system_instruction=instruction,
         tools=[query_tool.query_tool_declaration()],
     )
 
@@ -68,5 +92,15 @@ def run_chat(message: str, history: list) -> dict:
         if not reply_text:
             reply_text = NO_ANSWER_REPLY
 
+    title, reply_text = split_title(reply_text)
+    if not new_conversation:
+        title = None
+    if not reply_text.strip():
+        reply_text = NO_ANSWER_REPLY
     logger.info("chat message=%r tool_calls=%s", message, executed_queries)
-    return {"reply": reply_text, "tool_calls": executed_queries, "data": data_result}
+    return {
+        "reply": reply_text,
+        "title": title,
+        "tool_calls": executed_queries,
+        "data": data_result,
+    }

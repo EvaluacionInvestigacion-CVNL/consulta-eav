@@ -640,7 +640,7 @@ function syncCurrentConversation() {
     state.conversations.unshift(conv)
   }
   conv.messages = JSON.parse(JSON.stringify(state.chatMessages))
-  conv.title = conversationTitle(state.chatMessages)
+  if (!conv.titleFromModel) conv.title = conversationTitle(state.chatMessages)
   conv.updatedAt = now
   persistConversations()
 }
@@ -663,6 +663,15 @@ export function deleteConversation(id) {
   state.conversations.splice(idx, 1)
   if (state.currentConversationId === id) newConversation()
   persistConversations()
+}
+
+// El título que generó el modelo en la primera respuesta reemplaza al
+// provisional una sola vez. Se guarda al agregar la respuesta.
+function applyGeneratedTitle(convId, title) {
+  const conv = state.conversations.find((c) => c.id === convId)
+  if (!conv || conv.titleFromModel || !title) return
+  conv.title = title
+  conv.titleFromModel = true
 }
 
 // Agrega un mensaje al historial de `convId`.
@@ -703,6 +712,7 @@ export async function sendChatMessage(text) {
   state.pendingChats.push(convId)
   try {
     const res = await api.chat({ message: msg, history })
+    applyGeneratedTitle(convId, res.title)
     appendToConversation(convId, {
       id: msgId(),
       role: 'assistant',

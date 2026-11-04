@@ -243,3 +243,15 @@ def system_instruction() -> str:
         + "\n\n=== CATÁLOGO DE DATOS ===\n"
         + survey_catalog()
     )
+
+NEW_CONVERSATION_RULE = (
+    "\n\n=== TÍTULO DE LA CONVERSACIÓN ===\n"
+    "Este es el primer mensaje de una conversación nueva. Empieza tu respuesta "
+    "final (la que redactas después de consultar los datos) con UNA línea "
+    "exactamente así:\n"
+    "Título: <título>\n"
+    "donde <título> resume el tema en 3 a 6 palabras, en español, sin comillas, "
+    "sin cifras, sin negritas y sin punto final (p. ej. 'Título: Percepción de "
+    "seguridad en Monterrey'). Después de esa línea sigue tu respuesta normal. "
+    "La app quita esa línea antes de mostrar la respuesta: no la menciones."
+)

@@ -67,3 +67,54 @@ def test_exec_query_bad_question_returns_error(numeric_qid):
     assert result is None
     assert "error" in summary
     assert effective["question_id"] == "__does_not_exist__"
+
+
+# --- título de la conversación ------------------------------------------------
+
+from types import SimpleNamespace  # noqa: E402
+
+from services.chat import conversation, gemini, prompts  # noqa: E402
+
+
+@pytest.mark.parametrize(
+    "text, title, body",
+    [
+        ("Título: Seguridad en Monterrey\nEn 2025…", "Seguridad en Monterrey", "En 2025…"),
+        ('**Título:** "Calidad del aire".\n\nTexto', "Calidad del aire", "Texto"),
+        ("El título más común es licenciatura.", None, "El título más común es licenciatura."),
+    ],
+)
+def test_split_title(text, title, body):
+    assert conversation.split_title(text) == (title, body)
+
+
+def _fake_gemini(monkeypatch, reply_text):
+    """Sustituye la llamada al modelo: responde `reply_text` sin herramientas y
+    guarda la instrucción de sistema que recibió."""
+    seen = {}
+
+    def generate(client, contents, config):
+        seen["instruction"] = config.system_instruction
+        content = SimpleNamespace(parts=[SimpleNamespace(function_call=None, text=reply_text)])
+        return SimpleNamespace(candidates=[SimpleNamespace(content=content)], text=reply_text)
+
+    monkeypatch.setattr(gemini, "get_client", lambda: object())
+    monkeypatch.setattr(gemini, "generate", generate)
+    return seen
+
+
+def test_first_turn_asks_for_and_returns_a_title(monkeypatch):
+    seen = _fake_gemini(monkeypatch, "Título: Ingreso de los hogares\nEn 2025, **13.5%** ahorra.")
+    out = conversation.run_chat("¿Les alcanza para ahorrar?", [])
+    assert prompts.NEW_CONVERSATION_RULE in seen["instruction"]
+    assert out["title"] == "Ingreso de los hogares"
+    assert out["reply"] == "En 2025, **13.5%** ahorra."
+
+
+def test_later_turns_get_no_title_and_never_show_the_line(monkeypatch):
+    seen = _fake_gemini(monkeypatch, "Título: Otra cosa\nEn 2022, **11.2%**.")
+    history = [{"role": "user", "text": "hola"}, {"role": "assistant", "text": "¡Hola!"}]
+    out = conversation.run_chat("¿y en 2022?", history)
+    assert prompts.NEW_CONVERSATION_RULE not in seen["instruction"]
+    assert out["title"] is None
+    assert out["reply"] == "En 2022, **11.2%**."
