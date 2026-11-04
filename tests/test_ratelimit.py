@@ -125,3 +125,18 @@ def test_endpoint_blocks_when_global_budget_exhausted(client, monkeypatch):
     ratelimit.reset()
     r = client.post("/api/chat", json={"message": "hola"})
     assert r.status_code == 429
+    assert r.json()["detail"] == (
+        "El asistente de IA alcanzó su límite de consultas por hoy. "
+        "Vuelve mañana, o usa el modo manual mientras tanto."
+    )
+    assert r.headers["X-RateLimit-Scope"] == "global"
+    assert "Retry-After" not in r.headers
+
+
+def test_endpoint_per_ip_limit_says_scope_and_when_to_retry(client, monkeypatch):
+    monkeypatch.setattr(ratelimit, "CHAT_RATE_PER_MIN", 0)
+    r = client.post("/api/chat", json={"message": "hola"})
+    assert r.status_code == 429
+    assert "Espera un minuto" in r.json()["detail"]
+    assert r.headers["X-RateLimit-Scope"] == "ip"
+    assert int(r.headers["Retry-After"]) > 0

@@ -164,7 +164,7 @@ watch(
                 {{ toolSummary(m.toolCalls) }}
               </p>
               <button
-                v-if="m.error && !chatLoading"
+                v-if="m.error && !chatLoading && m.rateLimit !== 'global'"
                 @click="retryLastMessage"
                 class="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#b91c1c] hover:text-[#7f1d1d] transition-colors"
               >

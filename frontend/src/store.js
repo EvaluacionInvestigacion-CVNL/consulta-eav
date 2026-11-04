@@ -721,11 +721,15 @@ export async function sendChatMessage(text) {
       toolCalls: res.tool_calls || [],
     })
   } catch (e) {
+    // Un límite (429) trae un mensaje pensado para el usuario: se muestra tal
+    // cual. Cualquier otro error, el genérico.
+    const limited = e.status === 429 && e.message
     appendToConversation(convId, {
       id: msgId(),
       role: 'assistant',
-      text: `Lo siento, ocurrió un error.`,
+      text: limited ? e.message : `Lo siento, ocurrió un error.`,
       error: true,
+      rateLimit: limited ? e.scope || 'ip' : null,
     })
   } finally {
     const i = state.pendingChats.indexOf(convId)

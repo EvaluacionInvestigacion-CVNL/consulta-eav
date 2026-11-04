@@ -60,7 +60,9 @@ async def chat(req: ChatRequest, request: Request):
     try:
         ratelimit.check_and_consume(ratelimit.client_ip(request))
     except ratelimit.RateLimited as error:
-        headers = {"Retry-After": str(error.retry_after)} if error.retry_after else None
+        headers = {"X-RateLimit-Scope": error.scope}
+        if error.retry_after:
+            headers["Retry-After"] = str(error.retry_after)
         raise HTTPException(status_code=429, detail=error.message, headers=headers)
     # El SDK de Gemini es bloqueante: fuera del event loop.
     try:

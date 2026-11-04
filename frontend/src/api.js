@@ -75,7 +75,10 @@ export async function chat(body) {
   })
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
-    throw new Error(err.detail || res.statusText)
+    const error = new Error(err.detail || res.statusText)
+    error.status = res.status
+    error.scope = res.headers.get('X-RateLimit-Scope')
+    throw error
   }
   return res.json()
 }
