@@ -211,6 +211,7 @@ export function searchQuestions(text, max) {
 // Etiqueta del desglose actual, para la tarjeta del sidebar.
 export const groupByLabel = computed(() => {
   const g = state.groupBy
+  if (g === 'answer') return 'Respuesta'
   if (g === 'year') return 'Año'
   if (isQuestionGroupBy.value) return groupByQuestionMeta.value.main
   const recode = state.recodes.find((r) => r.key === g)
