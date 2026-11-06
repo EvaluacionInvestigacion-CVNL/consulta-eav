@@ -35,7 +35,7 @@ def get_client():
         if not GEMINI_API_KEY:
             raise HTTPException(
                 status_code=503,
-                detail="El chat de IA no está disponible.",
+                detail="El modo IA no está disponible.",
             )
         from google import genai
 

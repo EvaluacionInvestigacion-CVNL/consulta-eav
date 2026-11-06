@@ -126,11 +126,11 @@ def _concept_metadata(concept_id: str):
 def _load_comparison(request: QueryRequest) -> ConceptComparison:
     base_wave = request.wave_id or default_wave()
     if base_wave not in wave_ids():
-        raise HTTPException(status_code=400, detail=f"Unknown wave_id: {base_wave}")
+        raise HTTPException(status_code=400, detail=f"La ola {base_wave} no existe.")
 
     question = question_catalog().get((base_wave, request.question_id))
     if not question:
-        raise HTTPException(status_code=404, detail="Question not found")
+        raise HTTPException(status_code=404, detail="La pregunta no existe en esta ola.")
     _, concept_id, question_text = question
     if not concept_id:
         raise HTTPException(

@@ -205,7 +205,7 @@ function setTab(t) {
                     <button
                       class="bg-white text-[#303030] px-4 py-2 rounded-lg font-medium hover:bg-white/90 hover:cursor-pointer transition-colors text-sm"
                     >
-                      Descargar BD
+                      Descargar base de datos
                     </button>
                   </a>
                 </div>
@@ -304,7 +304,7 @@ function setTab(t) {
                 <Check v-if="linkCopied" class="size-3.5 text-[#0d9488]" />
                 <LinkIcon v-else class="size-3.5 text-[#475569]" />
                 <span class="font-semibold text-sm text-[#475569]">{{
-                  linkCopied ? 'Copiado' : 'Copiar link'
+                  linkCopied ? 'Copiado' : 'Copiar enlace'
                 }}</span>
               </button>
               <button

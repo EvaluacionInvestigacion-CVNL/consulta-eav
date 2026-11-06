@@ -310,7 +310,7 @@ watch(canCompareYears, (ok) => {
               <span
                 class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
               >
-                SQL Generado
+                SQL generado
               </span>
               <Eye
                 :class="[

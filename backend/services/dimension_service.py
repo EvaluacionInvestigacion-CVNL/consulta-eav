@@ -225,7 +225,7 @@ def translate_filters_across_waves(
             base_question = catalog.question.get((base_wave, name))
             if base_question is None:
                 raise HTTPException(
-                    status_code=400, detail=f"Unknown filter question: {name}"
+                    status_code=400, detail=f"La pregunta {name} no existe en esta ola; no se puede usar como filtro."
                 )
             concept_id = base_question[1]
             if not concept_id:
@@ -339,12 +339,12 @@ def get_dimensions(question_id: str, wave: str | None = None, mode: str = "wave"
     nadie).
     """
     if mode not in ("wave", "year"):
-        raise HTTPException(status_code=400, detail=f"Unknown mode: {mode}")
+        raise HTTPException(status_code=400, detail=f"Modo desconocido: {mode}.")
     wave = resolve_wave(wave)
     catalog = _catalog()
     target = catalog.question.get((wave, question_id))
     if target is None:
-        raise HTTPException(status_code=404, detail="Question not found")
+        raise HTTPException(status_code=404, detail="La pregunta no existe en esta ola.")
     _, target_concept, _ = target
 
     attributes = [

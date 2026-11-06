@@ -200,7 +200,7 @@ def _resolve_wave(request: QueryRequest) -> str:
     """La ola pedida (o la más reciente), validada contra el catálogo."""
     wave = request.wave_id or default_wave()
     if wave not in wave_ids():
-        raise HTTPException(status_code=400, detail=f"Unknown wave_id: {wave}")
+        raise HTTPException(status_code=400, detail=f"La ola {wave} no existe.")
     return wave
 
 
@@ -208,7 +208,7 @@ def _require_question(wave: str, question_id: str) -> tuple[str, str]:
     """(q_type, q_text) de la pregunta pedida, o 404."""
     question = question_catalog().get((wave, question_id))
     if not question:
-        raise HTTPException(status_code=404, detail="Question not found")
+        raise HTTPException(status_code=404, detail="La pregunta no existe en esta ola.")
     q_type, _, q_text = question
     return q_type, q_text
 
@@ -231,7 +231,7 @@ def _validate_filters(
         if kind == "attribute":
             if name != CITY_ATTRIBUTE and name not in valid_attributes:
                 raise HTTPException(
-                    status_code=400, detail=f"Unknown filter attribute: {name}"
+                    status_code=400, detail=f"No se puede filtrar por «{name}» en esta ola."
                 )
             if isinstance(filter_spec["value"], dict):
                 # Un rango sólo tiene sentido si el atributo es numérico (edad).
@@ -256,7 +256,7 @@ def _validate_filters(
                 )
         else:
             raise HTTPException(
-                status_code=400, detail=f"Unknown filter question: {name}"
+                status_code=400, detail=f"La pregunta {name} no existe en esta ola; no se puede usar como filtro."
             )
         if name == request.question_id:
             raise HTTPException(
@@ -281,7 +281,7 @@ def _validate_group_by(
     )
     if request.group_by not in allowed:
         raise HTTPException(
-            status_code=400, detail=f"Unknown group_by: {request.group_by}"
+            status_code=400, detail=f"No se puede desglosar por «{request.group_by}»."
         )
     # Cruzar una pregunta consigo misma es degenerado (daría una diagonal).
     if request.group_by == request.question_id:
