@@ -149,7 +149,7 @@ eav-queries/
 │   ├── repositories/    # Único lugar con texto SQL fijo
 │   ├── db_runtime.py    # Conexión DuckDB de solo lectura
 │   ├── services/chat/   # Modo IA: prompts, SDK, tool use
-│   ├── metadata.py      # Rollups geográficos, recodes, órdenes
+│   ├── metadata.py      # Rollups geográficos, órdenes
 │   └── ratelimit.py     # Rate limiting del modo IA
 ├── frontend/
 │   ├── src/             # SPA Vue 3 + Vite

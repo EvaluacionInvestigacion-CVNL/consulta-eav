@@ -1,6 +1,5 @@
 """Fragmentos de SQL que el motor compone en tiempo de ejecución."""
 
-from metadata import RECODES
 from services.query.sentinels import numeric_sentinel_codes
 from services.wave_service import categorical_question_ids
 
@@ -51,27 +50,6 @@ def age_bin_case_sql(column: str) -> str:
         WHEN {column} <= 74 THEN '65-74'
         ELSE '75 o más'
     END"""
-
-
-def recode_bucket_case_sql(recode_key: str, value_column: str) -> str:
-    """CASE que colapsa los códigos de un atributo en las cubetas del recode.
-
-    Una cubeta con `values=None` es la cubeta "todo lo demás" y se emite al
-    final como `WHEN <col> IS NOT NULL`.
-    """
-    recode = RECODES[recode_key]
-    cases = []
-    catch_all_label = None
-    for label, values in recode["buckets"]:
-        safe_label = label.replace("'", "''")
-        if values is None:
-            catch_all_label = safe_label
-            continue
-        codes = ",".join(str(int(value)) for value in values)
-        cases.append(f"WHEN {value_column} IN ({codes}) THEN '{safe_label}'")
-    if catch_all_label is not None:
-        cases.append(f"WHEN {value_column} IS NOT NULL THEN '{catch_all_label}'")
-    return "CASE\n        " + "\n        ".join(cases) + "\n    END"
 
 
 def answer_scope_sql(
@@ -156,9 +134,8 @@ def question_filter_join_sql(alias: str, wave: str, question_id: str, value) -> 
 def group_expression_sql(group_by: str, wave: str, numeric_bins=None) -> str:
     """La expresión que produce la ETIQUETA de columna del pivote.
 
-    Seis casos, en orden de prioridad: ciudad (id crudo, se agrupa después en
-    Python), edad (rangos), recode (cubetas de `metadata`), pregunta numérica
-    (sus rangos, ver `numeric_bins`), pregunta categórica (cross-tab
+    Cinco casos, en orden de prioridad: ciudad (id crudo, se agrupa después en
+    Python), edad (rangos), pregunta numérica (sus rangos, ver `numeric_bins`), pregunta categórica (cross-tab
     pregunta x pregunta) y, por defecto, un atributo demográfico.
     """
     if group_by == "city_id":
@@ -170,16 +147,6 @@ def group_expression_sql(group_by: str, wave: str, numeric_bins=None) -> str:
                 WHERE rg.respondent_id = r.respondent_id
                   AND rg.wave_id = '{wave}'
                   AND rg.attribute = 'edad_anos'
-                LIMIT 1
-            )"""
-    if group_by in RECODES:
-        source_attribute = RECODES[group_by]["source_attribute"]
-        return f"""(
-                SELECT {recode_bucket_case_sql(group_by, 'rg.value')}
-                FROM respondent_attributes rg
-                WHERE rg.respondent_id = r.respondent_id
-                  AND rg.wave_id = '{wave}'
-                  AND rg.attribute = '{source_attribute}'
                 LIMIT 1
             )"""
     if numeric_bins is not None:

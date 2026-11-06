@@ -29,12 +29,6 @@ def list_dimensions(question_id: str, wave: str | None = None, mode: str = "wave
     return dimension_service.get_dimensions(question_id, wave, mode)
 
 
-@router.get("/recodes")
-def list_recodes():
-    """Definiciones de recode utilizables como `group_by` en /api/query."""
-    return catalog_service.get_recodes()
-
-
 @router.get("/cities")
 def list_cities(wave: str | None = None):
     """Ciudades (municipios) con respondientes en una ola."""

@@ -37,7 +37,6 @@ const frequentItems = computed(() => [
     label: a.label || a.attribute,
     hint: a.numeric ? 'rangos' : '',
   })),
-  ...state.recodes.map((r) => ({ key: r.key, label: r.label })),
 ])
 
 const matchingFrequent = computed(() =>

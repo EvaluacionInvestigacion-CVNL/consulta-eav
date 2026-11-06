@@ -95,7 +95,6 @@ ATTRIBUTE_TO_ORDER_KEY = {
     "ingreso": "ingreso",
     "edad_anos": "edad",
     "tipo_escuela": "tipo_escuela",
-    "tipo_trabajo": "tipo_trabajo",
     "nivel_max_estudios": "estudios",
     "nivel_actual_estudios": "estudios",
 }
@@ -167,53 +166,7 @@ DESIRED_ORDERS = {
         "Nuevo León",
     ],
     "tipo_escuela": ["Pública", "Privada", "Otro tipo"],
-    "tipo_trabajo": ["Trabajo remunerado", "Trabajo no remunerado", "Otro"],
 }
-
-RECODES: dict = {
-    "tipo_trabajo_remunerado": {
-        "source_attribute": "tipo_trabajo",
-        "label": "Tipo de trabajo (remunerado)",
-        "buckets": [
-            ("Trabajo remunerado", [1, 4, 6]),
-            ("Trabajo no remunerado", [5]),
-            ("Otro", None),
-        ],
-        "order": ["Trabajo remunerado", "Trabajo no remunerado", "Otro"],
-    },
-    "tipo_servicio_salud_publico_privado": {
-        "source_attribute": "servicio_salud_donde_se_atendio",
-        "label": "Tipo de servicio de salud (público/privado)",
-        "buckets": [
-            ("Públicos", [1, 4, 5, 6, 11]),
-            ("Privados", [2, 3, 7, 8, 9, 10, 12, 13]),
-        ],
-        "order": ["Públicos", "Privados"],
-    },
-    "particion_modal_agregada": {
-        "source_attribute": "modo_transporte",
-        "label": "Partición modal agregada",
-        "buckets": [
-            ("Medios motorizados no colectivos", [3, 4, 5, 9]),
-            ("Medios no motorizados", [1, 6, 7]),
-            ("Transporte público colectivo", [2, 8, 10]),
-            ("Transporte privado colectivo", [11, 12, 13]),
-            ("Otros", [14, 15]),
-            ("No sabe", [8888]),
-            ("No contesta", [9999]),
-        ],
-        "order": [
-            "Medios no motorizados",
-            "Transporte público colectivo",
-            "Transporte privado colectivo",
-            "Medios motorizados no colectivos",
-            "Otros",
-            "No sabe",
-            "No contesta",
-        ],
-    },
-}
-
 
 # Motivos por los que dos preguntas de olas distintas NO se comparan (columna
 # `reason` de las filas `exclude` en concept_equivalences.csv). La UI muestra el

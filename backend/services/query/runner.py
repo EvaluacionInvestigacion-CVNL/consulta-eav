@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from fastapi import HTTPException
 
 from db_runtime import get_conn
-from metadata import ATTRIBUTE_TO_ORDER_KEY, DESIRED_ORDERS, RECODES
+from metadata import ATTRIBUTE_TO_ORDER_KEY, DESIRED_ORDERS
 from repositories import survey_repository
 from services.catalog_service import get_attributes
 from services.dimension_service import (
@@ -274,7 +274,6 @@ def _validate_group_by(
     """Rechaza un `group_by` desconocido o degenerado, y cortes sin sentido."""
     allowed = (
         {"answer", "city_id", "edad_anos"}
-        | set(RECODES)
         | valid_attributes
         | categorical_qids
         | numeric_qids
@@ -436,8 +435,6 @@ def _fetch_group_totals(conn, context: QueryContext, group_expression: str) -> d
 
 def _desired_group_order(conn, context: QueryContext) -> list | None:
     """El orden canónico de las columnas, según de qué se esté agrupando."""
-    if context.group_by in RECODES:
-        return RECODES[context.group_by].get("order")
     if context.numeric_bins:
         return context.numeric_bins.labels
     if context.group_by in context.categorical_qids:

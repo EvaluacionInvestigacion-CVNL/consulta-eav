@@ -2,7 +2,7 @@
 
 Covers the four shapes (flat/pivot × numeric/categorical) plus the behaviours
 that previously broke: numeric frequency breakdown, single 'Promedio' stat row,
-city-filter column narrowing, recode grouping, weighting, and sentinel handling.
+city-filter column narrowing, weighting, and sentinel handling.
 """
 
 import pytest
@@ -158,16 +158,6 @@ def test_numeric_pivot_has_only_promedio_stat(numeric_qid):
     labels = {row[0] for row in r["counts"]["rows"]}
     assert "Promedio" in labels
     assert labels.isdisjoint({"Mínimo", "Máximo", "Desv. estándar"})
-
-
-# ── recode grouping ─────────────────────────────────────────────────────────
-def test_recode_group_by(numeric_qid):
-    r = run_query(
-        QueryRequest(question_id=numeric_qid, group_by="tipo_trabajo_remunerado")
-    )
-    assert r["format"] == "pivot"
-    group_cols = r["counts"]["columns"][2:-1]
-    assert "Trabajo remunerado" in group_cols
 
 
 # ── cross-tab: group_by = another survey question ───────────────────────────

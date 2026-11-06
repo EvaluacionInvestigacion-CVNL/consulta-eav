@@ -26,12 +26,6 @@ export async function fetchAttributes(wave) {
   return res.json()
 }
 
-export async function fetchRecodes() {
-  const res = await fetch(`${API}/recodes`)
-  if (!res.ok) throw new Error('Error al cargar recodes')
-  return res.json()
-}
-
 export async function fetchCities(wave) {
   const res = await fetch(`${API}/cities${waveQuery(wave)}`)
   if (!res.ok) throw new Error('Error al cargar ciudades')

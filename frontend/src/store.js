@@ -8,7 +8,6 @@ export const state = reactive({
   waveId: '',
   questions: [],
   attributes: [],
-  recodes: [],
   cities: [],
   questionId: '',
   groupBy: 'answer',
@@ -165,14 +164,13 @@ export const questionPicker = computed(() => {
 })
 
 // group_by can be a question id (cross-tab). Distinguish it from the reserved
-// keys and from attribute/recode names, which are the other legal group_by values.
+// keys and from attribute names, which are the other legal group_by values.
 const RESERVED_GROUP_BY = new Set(['answer', 'year', 'city_id'])
 
 export const isQuestionGroupBy = computed(() => {
   const g = state.groupBy
   if (!g || RESERVED_GROUP_BY.has(g)) return false
   if (state.attributes.some((a) => a.attribute === g)) return false
-  if (state.recodes.some((r) => r.key === g)) return false
   return questionPicker.value.byId.has(g) // a real question id
 })
 
@@ -214,8 +212,7 @@ export const groupByLabel = computed(() => {
   if (g === 'answer') return 'Respuesta'
   if (g === 'year') return 'Año'
   if (isQuestionGroupBy.value) return groupByQuestionMeta.value.main
-  const recode = state.recodes.find((r) => r.key === g)
-  return recode?.label || attributeLabel(g)
+  return attributeLabel(g)
 })
 
 const attributeValueMap = computed(() => {
@@ -280,8 +277,7 @@ export const querySummary = computed(() => {
         ? `por rangos de ${g}`
         : `cruzada con ${g}`
   else {
-    const recode = state.recodes.find((r) => r.key === g)
-    breakdown = `por ${(recode?.label || attributeLabel(g)).toLowerCase()}`
+    breakdown = `por ${attributeLabel(g).toLowerCase()}`
   }
   const parts = [state.questionId, breakdown]
   if (state.filters.length) {
@@ -335,16 +331,14 @@ async function loadCatalog() {
 
 export async function init() {
   try {
-    const [waves, recodes, catalog, features] = await Promise.all([
+    const [waves, catalog, features] = await Promise.all([
       api.fetchWaves(),
-      api.fetchRecodes(),
       fetchCatalog(),
       api.fetchFeatures(),
     ])
     state.features = features
     state.waves = waves
     state.waveId = defaultWaveId()
-    state.recodes = recodes
     applyCatalog(catalog)
     loadConversations()
     window.addEventListener('popstate', onPopState)

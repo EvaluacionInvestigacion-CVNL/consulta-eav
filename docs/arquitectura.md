@@ -97,7 +97,7 @@ routers/      → services/      → repositories/ → db_runtime
 ```
 
 - `routers/` — endpoints delgados, cero lógica: `catalog.py` (preguntas,
-  atributos, ciudades, olas, recodes), `query.py` (`/api/query` y la
+  atributos, ciudades, olas), `query.py` (`/api/query` y la
   descarga CSV) y `health.py` (diagnóstico).
 - `services/` — orquestación, reglas de negocio y **los `lru_cache`**:
   `catalog_service.py` (arma el catálogo),
@@ -173,7 +173,7 @@ Helpers compartidos que arman el SQL y las tablas:
   Slots: `extra_where` (centinelas / no-nulos) y `with_options` (LEFT JOIN al
   catálogo de opciones).
 - **`_group_expr_sql(group_by, wave)`** — expresión SQL de la etiqueta de columna
-  del pivote (city_id / rangos de edad / recode / pregunta numérica por rangos /
+  del pivote (city_id / rangos de edad / pregunta numérica por rangos /
   pregunta categórica / atributo).
 
 ### Cruzar por una pregunta numérica (`services/query/numeric_bins.py`)
@@ -273,7 +273,6 @@ de la pregunta consultada.
 | GET    | `/api/cities`      | Municipios distintos                    |
 | GET    | `/api/waves`       | Olas disponibles (marca la default)     |
 | GET    | `/api/dimensions`  | Por qué se puede filtrar una pregunta (`mode=wave\|year`) |
-| GET    | `/api/recodes`     | Definiciones de recode                  |
 | POST   | `/api/query`       | Corre una consulta → JSON               |
 | POST   | `/api/query/csv`   | Corre una consulta → descarga CSV       |
 | POST   | `/api/chat`        | Consulta en lenguaje natural (modo IA)  |

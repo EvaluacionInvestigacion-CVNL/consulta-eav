@@ -42,7 +42,7 @@ def query_tool_declaration():
                             description=(
                                 "'answer', 'city_id', 'year' (comparación entre "
                                 "años, solo preguntas comparables ⟳), o el nombre "
-                                "de un atributo o recode. Por defecto 'answer'."
+                                "de un atributo. Por defecto 'answer'."
                             ),
                         ),
                         "wave_id": types.Schema(

@@ -1,9 +1,9 @@
-"""Catálogo de la encuesta: preguntas, atributos, ciudades y recodes."""
+"""Catálogo de la encuesta: preguntas, atributos y ciudades."""
 
 from functools import lru_cache
 
 from db_runtime import get_conn
-from metadata import ATTRIBUTE_LABELS, ID_TO_CITY_NAME, RECODES
+from metadata import ATTRIBUTE_LABELS, ID_TO_CITY_NAME
 from repositories import responses_repository, survey_repository
 from services.ordering import ordered_question_ids
 from services.wave_service import numeric_question_ids, resolve_wave
@@ -85,23 +85,4 @@ def get_cities(wave: str | None = None) -> list[dict]:
     return [
         {"city_id": city_id, "name": ID_TO_CITY_NAME.get(city_id, str(city_id))}
         for city_id in city_ids
-    ]
-
-
-def get_recodes() -> list[dict]:
-    """Recodes: formas de colapsar los valores de un atributo en cubetas con
-    nombre (p. ej. tipo_trabajo → Remunerado / No remunerado / Otro). Se pueden
-    usar como `group_by` en /api/query.
-    """
-    return [
-        {
-            "key": k,
-            "label": v["label"],
-            "source_attribute": v["source_attribute"],
-            "buckets": [
-                {"label": label, "values": values} for label, values in v["buckets"]
-            ],
-            "order": v.get("order"),
-        }
-        for k, v in RECODES.items()
     ]

@@ -67,8 +67,6 @@ const groupByLabel = computed(() => {
   if (g === 'city_id') return 'Ciudad'
   const attr = state.attributes.find((a) => a.attribute === g)
   if (attr) return attr.label || attr.attribute
-  const recode = state.recodes.find((r) => r.key === g)
-  if (recode) return recode.label
   // Cross-tab by another question: show its code + text, not the raw q_id.
   const q = questionPicker.value.byId.get(g)
   if (q) return `${q.id} · ${q.main}`

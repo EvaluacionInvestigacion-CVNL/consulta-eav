@@ -3,7 +3,7 @@
 from functools import lru_cache
 
 from db_runtime import get_conn
-from metadata import AMM_ID, ID_TO_CITY_NAME, PERIFERIA_ID, RECODES
+from metadata import AMM_ID, ID_TO_CITY_NAME, PERIFERIA_ID
 from repositories import survey_repository
 from services import wave_service
 from services.catalog_service import get_attributes, get_questions
@@ -43,26 +43,6 @@ def survey_catalog() -> str:
     for a in attributes:
         vals = ", ".join(f"{v['value']}={v['label']}" for v in a["values"])
         lines.append(f"- {a['attribute']}: {vals}")
-
-    if RECODES:
-        lines.append("")
-        lines.append(
-            "RECODES válidos como group_by (agrupan un atributo en categorías): "
-            + ", ".join(RECODES.keys())
-        )
-        lines.append(
-            "Para FILTRAR a una de esas categorías NO uses el nombre del recode: "
-            "filtra su atributo base con los ids de la categoría. Mapeo:"
-        )
-        for key, rc in RECODES.items():
-            src = rc["source_attribute"]
-            cats = [
-                f'{label} → {{"attribute": "{src}", "value": {ids}}}'
-                for label, ids in rc["buckets"]
-                if ids  # 'Otro'/None (resto) no se puede expresar como ids
-            ]
-            if cats:
-                lines.append(f"- {key} (base: {src}): " + "; ".join(cats))
 
     lines.append("")
     lines.append(
@@ -192,7 +172,7 @@ def system_instruction() -> str:
         "- Para cualquier cifra, SIEMPRE llama a `query`. Nunca inventes números.\n"
         "- `question_id` debe ser uno de los q_id listados abajo, exactamente.\n"
         '- `group_by`: "answer" (sin agrupar), "city_id" (por municipio), "year" '
-        "(comparación entre años), o el nombre de un atributo o recode listado abajo.\n"
+        "(comparación entre años), o el nombre de un atributo listado abajo.\n"
         "- EVOLUCIÓN ENTRE AÑOS: si preguntan por la evolución, tendencia, histórico, "
         "cómo ha cambiado algo 'a lo largo de los años', o por comparar/contrastar "
         "varios años, usa group_by='year'. Solo funciona en preguntas COMPARABLES "

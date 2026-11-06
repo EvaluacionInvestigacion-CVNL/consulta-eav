@@ -78,12 +78,6 @@ def test_dimensions_rejects_bad_mode(client):
     assert r.status_code == 400
 
 
-def test_recodes(client):
-    r = client.get("/api/recodes")
-    assert r.status_code == 200
-    assert len(r.json()) == 3
-
-
 def test_query_endpoint(client, categorical_qid):
     r = client.post("/api/query", json={"question_id": categorical_qid})
     assert r.status_code == 200

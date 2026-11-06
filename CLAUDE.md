@@ -207,9 +207,11 @@ percentages + Total, shared by the numeric and categorical paths).
 
 `metadata.py` is the hand-maintained lookup layer those helpers read: city
 rollups (`AMM_ID`, `PERIFERIA_ID`, `ID_TO_CITY_NAME`), age bins, label and
-sort-order overrides (`DESIRED_ORDERS`, `ATTRIBUTE_TO_ORDER_KEY`), `RECODES` (derived group-by attributes
-that bucket an existing attribute's option codes — served by `/api/recodes`,
-compiled by `_recode_case_sql`). New buckets/orderings belong here, not in query code.
+sort-order overrides (`DESIRED_ORDERS`, `ATTRIBUTE_TO_ORDER_KEY`). New
+buckets/orderings belong here, not in query code. There are deliberately **no
+hidden regroupings** of an attribute's options as a breakdown (the old `RECODES`
+were removed): every breakdown is either another question's own options or a
+grouping the user can see (city rollups, age ranges) — see the decision log.
 
 Filters are `{"attribute": …}` (a friendly attribute or `city_id`) or
 `{"question": <any q_id>}` (an extra JOIN on `answers`): a categorical takes a
