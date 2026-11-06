@@ -34,10 +34,21 @@ const frequentItems = computed(() => [
   { key: 'city_id', label: 'Ciudad' },
   ...state.attributes.map((a) => ({
     key: a.attribute,
+    code: a.question_id,
     label: a.label || a.attribute,
     hint: a.numeric ? 'rangos' : '',
   })),
 ])
+
+// Código de pregunta del desglose elegido: el de la pregunta misma, o el de la
+// pregunta de la que sale el atributo.
+const groupByCode = computed(() => {
+  if (isQuestionGroupBy.value) return state.groupBy
+  return (
+    state.attributes.find((a) => a.attribute === state.groupBy)?.question_id ||
+    ''
+  )
+})
 
 const matchingFrequent = computed(() =>
   ql.value
@@ -115,9 +126,9 @@ function chooseFirst() {
         class="flex-1 min-w-0 py-2.5 flex items-center gap-2.5 text-left cursor-pointer outline-none"
       >
         <span
-          v-if="isQuestionGroupBy"
+          v-if="groupByCode"
           class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-[#e9d8fb] text-[#7e34c3]"
-          >{{ state.groupBy }}</span
+          >{{ groupByCode }}</span
         >
         <span
           class="flex-1 min-w-0 text-[13px] font-semibold text-[#334155] overflow-hidden text-ellipsis whitespace-nowrap"
@@ -187,7 +198,13 @@ function chooseFirst() {
             : 'text-[#334155]'
         "
       >
-        <span>{{ item.label }}</span>
+        <span>
+          <span
+            v-if="item.code"
+            class="font-mono text-xs font-normal text-[#0d9488] mr-1.5"
+            >{{ item.code }}</span
+          >{{ item.label }}</span
+        >
         <span v-if="item.hint" class="text-xs font-normal text-[#94a3b8]">{{
           item.hint
         }}</span>

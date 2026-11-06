@@ -69,6 +69,9 @@ def get_attributes(wave: str | None = None) -> list[dict]:
         {
             "attribute": k,
             "label": ATTRIBUTE_LABELS.get(k, k),
+            # La pregunta de esta ola de la que sale el atributo; la UI muestra
+            # su código para que se vea que es una pregunta más.
+            "question_id": backing.get(k),
             "numeric": backing.get(k) in numeric_qids,
             "values": v,
         }
