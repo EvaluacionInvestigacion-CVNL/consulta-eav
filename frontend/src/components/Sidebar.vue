@@ -122,7 +122,11 @@ watch(canCompareYears, (ok) => {
       </div>
 
       <!-- Query Controls -->
-      <div class="flex-1 p-4 space-y-6 overflow-y-auto">
+      <!-- Reserva el espacio de la barra de scroll: las listas flotantes la hacen
+           aparecer y, sin esto, todo el panel se encoge al abrirlas. -->
+      <div
+        class="flex-1 p-4 space-y-6 overflow-y-auto [scrollbar-gutter:stable]"
+      >
         <!-- Modo de Consulta -->
         <div>
           <label
