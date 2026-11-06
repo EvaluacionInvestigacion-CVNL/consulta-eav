@@ -343,8 +343,7 @@ export async function init() {
     ])
     state.features = features
     state.waves = waves
-    state.waveId =
-      (waves.find((w) => w.is_default) || waves[0] || {}).wave_id || ''
+    state.waveId = defaultWaveId()
     state.recodes = recodes
     applyCatalog(catalog)
     loadConversations()
@@ -541,6 +540,33 @@ export async function followQueryLink(event, href) {
   event.preventDefault()
   history.pushState(null, '', href)
   await navigateToUrl(href)
+}
+
+// La ola con `is_default`: la que abre la app sin `?w=` en la URL.
+function defaultWaveId() {
+  return (
+    (state.waves.find((w) => w.is_default) || state.waves[0] || {}).wave_id ||
+    ''
+  )
+}
+
+// El logo regresa al inicio: pantalla de bienvenida en modo manual, con la
+// consulta en blanco y la ola por defecto, igual que al abrir la app. Las
+// conversaciones del modo IA no se tocan. Ctrl/Cmd/Shift-clic abre otra pestaña.
+export async function goHome(event) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0)
+    return
+  event.preventDefault()
+  state.queryMode = 'manual'
+  state.questionId = ''
+  state.filters = []
+  state.groupBy = 'answer'
+  state.initialOnly = true
+  state.lastResult = null
+  state.error = null
+  if (location.pathname + location.search !== '/')
+    history.pushState(null, '', '/')
+  await setWave(defaultWaveId())
 }
 
 export function setQueryMode(mode) {

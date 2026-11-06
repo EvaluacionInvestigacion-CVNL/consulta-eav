@@ -20,6 +20,7 @@ import {
   canRun,
   runCurrentQuery,
   clearFilters,
+  goHome,
   removeFilter,
   filterValueLabel,
   attributeLabel,
@@ -100,17 +101,22 @@ watch(canCompareYears, (ok) => {
       <!-- Logo -->
       <div class="py-2 px-4 border-b border-[#e2e8f0]">
         <div class="flex items-center justify-between gap-3 px-2 py-2">
-          <div class="flex items-center">
+          <a
+            href="/"
+            @click="goHome"
+            title="Ir al inicio"
+            class="flex items-center rounded-lg"
+          >
             <img
               src="/minilogo.webp"
-              alt="Logo"
+              alt=""
               class="size-6 object-contain max-w-none"
             />
             <span
               class="font-extrabold text-[#7e34c3] text-center text-[20px] tracking-tight mx-1"
               >Así Vamos</span
             >
-          </div>
+          </a>
           <button
             @click="toggleSidebar"
             title="Ocultar panel"
