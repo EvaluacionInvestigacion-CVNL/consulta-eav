@@ -56,26 +56,6 @@ def fetch_categorical_question_ids(conn, wave: str) -> list[str]:
     return [r[0] for r in rows]
 
 
-def fetch_concept_option_id(conn, wave: str, question_id: str, option_id):
-    """Opción canónica (`concept_option_id`) de una opción concreta de una ola."""
-    row = conn.execute(
-        "SELECT concept_option_id FROM options "
-        "WHERE wave_id = ? AND question_id = ? AND option_id = ?",
-        [wave, question_id, option_id],
-    ).fetchone()
-    return row[0] if row else None
-
-
-def fetch_option_id_by_concept(conn, wave: str, question_id: str, concept_option_id):
-    """Inverso de `fetch_concept_option_id`: baja una opción canónica a una ola."""
-    row = conn.execute(
-        "SELECT option_id FROM options "
-        "WHERE wave_id = ? AND question_id = ? AND concept_option_id = ?",
-        [wave, question_id, concept_option_id],
-    ).fetchone()
-    return row[0] if row else None
-
-
 def fetch_question_type_and_text(conn, wave: str, question_id: str) -> tuple | None:
     """(q_type, q_text) de una pregunta, o None si no existe en esa ola."""
     return conn.execute(

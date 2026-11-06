@@ -35,12 +35,6 @@ def list_recodes():
     return catalog_service.get_recodes()
 
 
-@router.get("/presets")
-def list_presets(wave: str | None = None):
-    """Presets de análisis, traducidos a la codificación de la ola pedida."""
-    return catalog_service.get_presets(wave)
-
-
 @router.get("/cities")
 def list_cities(wave: str | None = None):
     """Ciudades (municipios) con respondientes en una ola."""

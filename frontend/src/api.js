@@ -32,12 +32,6 @@ export async function fetchRecodes() {
   return res.json()
 }
 
-export async function fetchPresets(wave) {
-  const res = await fetch(`${API}/presets${waveQuery(wave)}`)
-  if (!res.ok) throw new Error('Error al cargar presets')
-  return res.json()
-}
-
 export async function fetchCities(wave) {
   const res = await fetch(`${API}/cities${waveQuery(wave)}`)
   if (!res.ok) throw new Error('Error al cargar ciudades')

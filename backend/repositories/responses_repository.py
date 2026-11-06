@@ -22,16 +22,6 @@ def fetch_attribute_values(conn, wave: str) -> list[tuple]:
     ).fetchall()
 
 
-def fetch_attribute_question_id(conn, wave: str, attribute: str) -> str | None:
-    """La pregunta que respalda un atributo amigable (`sexo` → `p3`)."""
-    row = conn.execute(
-        "SELECT DISTINCT question_id FROM respondent_attributes "
-        "WHERE wave_id = ? AND attribute = ?",
-        [wave, attribute],
-    ).fetchone()
-    return row[0] if row else None
-
-
 def fetch_city_ids(conn, wave: str) -> list[int]:
     """`city_id`s distintos con respondientes en una ola."""
     rows = conn.execute(

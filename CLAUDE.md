@@ -209,8 +209,7 @@ percentages + Total, shared by the numeric and categorical paths).
 rollups (`AMM_ID`, `PERIFERIA_ID`, `ID_TO_CITY_NAME`), age bins, label and
 sort-order overrides (`DESIRED_ORDERS`, `ATTRIBUTE_TO_ORDER_KEY`), `RECODES` (derived group-by attributes
 that bucket an existing attribute's option codes — served by `/api/recodes`,
-compiled by `_recode_case_sql`), and `PRESETS` (canned breakdowns the sidebar
-offers). New buckets/orderings belong here, not in query code.
+compiled by `_recode_case_sql`). New buckets/orderings belong here, not in query code.
 
 Filters are `{"attribute": …}` (a friendly attribute or `city_id`) or
 `{"question": <any q_id>}` (an extra JOIN on `answers`): a categorical takes a

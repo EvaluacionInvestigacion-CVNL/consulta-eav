@@ -215,49 +215,6 @@ RECODES: dict = {
 }
 
 
-PRESETS: list = [
-    {
-        "key": "respuesta_por_unidad_geografica",
-        "label": "Municipio",
-        "group_by": "city_id",
-        "filters": [],
-    },
-    {
-        "key": "respuesta_hombres_por_unidad_geografica",
-        "label": "Hombres por municipio",
-        "group_by": "city_id",
-        "filters": [{"attribute": "sexo", "value": 0}],
-    },
-    {
-        "key": "respuesta_mujeres_por_unidad_geografica",
-        "label": "Mujeres por municipio",
-        "group_by": "city_id",
-        "filters": [{"attribute": "sexo", "value": 1}],
-    },
-    {
-        "key": "respuesta_por_sexo",
-        "label": "Sexo",
-        "group_by": "sexo",
-        "filters": [],
-    },
-    {
-        "key": "respuesta_por_edad",
-        "label": "Edad",
-        "group_by": "edad_anos",
-        "filters": [],
-    },
-    {
-        "key": "respuesta_por_ano",
-        "label": "Por año",
-        "group_by": "year",
-        "filters": [],
-        # Sólo aplica a preguntas con `concept_id`; la UI lo oculta cuando la
-        # pregunta seleccionada no tiene equivalencia entre olas.
-        "requires_concept": True,
-    },
-]
-
-
 # Motivos por los que dos preguntas de olas distintas NO se comparan (columna
 # `reason` de las filas `exclude` en concept_equivalences.csv). La UI muestra el
 # texto; la nota técnica del CSV es para el equipo y no se publica.

@@ -9,13 +9,11 @@ export const state = reactive({
   questions: [],
   attributes: [],
   recodes: [],
-  presets: [],
   cities: [],
   questionId: '',
   groupBy: 'answer',
   filters: [],
   initialOnly: true,
-  appliedPreset: '',
   lastResult: null,
   resultVersion: 0, // Cambia con cada resultado nuevo, para animar su entrada.
   activeTab: 'chart',
@@ -184,10 +182,8 @@ export const groupByQuestionMeta = computed(() =>
     : null,
 )
 
-// Elegir o quitar el desglose a mano deja de ser un atajo.
 export function setGroupBy(key) {
   state.groupBy = key
-  state.appliedPreset = ''
 }
 
 export function clearGroupBy() {
@@ -317,20 +313,18 @@ export const canRun = computed(() => !!state.questionId && !state.loading)
 // Trae los catálogos de una ola.
 // Sin `waveId` el servidor responde con la ola marcada por `is_default`.
 async function fetchCatalog(waveId) {
-  const [questions, attributes, cities, presets] = await Promise.all([
+  const [questions, attributes, cities] = await Promise.all([
     api.fetchQuestions(waveId),
     api.fetchAttributes(waveId),
     api.fetchCities(waveId),
-    api.fetchPresets(waveId),
   ])
-  return { questions, attributes, cities, presets }
+  return { questions, attributes, cities }
 }
 
 function applyCatalog(catalog) {
   state.questions = catalog.questions
   state.attributes = catalog.attributes
   state.cities = catalog.cities
-  state.presets = catalog.presets
 }
 
 // Load the wave-scoped catalogs (questions/attributes/cities) for state.waveId.
@@ -371,7 +365,6 @@ export async function setWave(waveId, { keepResult = false } = {}) {
   state.questionId = ''
   state.filters = []
   state.groupBy = 'answer'
-  state.appliedPreset = ''
   state.error = null
   if (!keepResult) {
     state.lastResult = null
@@ -396,25 +389,12 @@ export const currentWave = computed(
   () => state.waves.find((w) => w.wave_id === state.waveId) || null,
 )
 
-export function applyPreset(key) {
-  const p = state.presets.find((x) => x.key === key)
-  if (!p) {
-    state.appliedPreset = ''
-    return
-  }
-  state.groupBy = p.group_by
-  state.filters = JSON.parse(JSON.stringify(p.filters || []))
-  state.appliedPreset = key
-}
-
-export function clearPreset() {
+export function clearFilters() {
   state.filters = []
-  state.appliedPreset = ''
 }
 
 export function removeFilter(idx) {
   state.filters.splice(idx, 1)
-  state.appliedPreset = ''
 }
 
 // Agrega un filtro por atributo o por pregunta (`kind` = 'attribute' |
@@ -425,14 +405,13 @@ export function addFilter(kind, key, value) {
   if (!existing) {
     state.filters.push({ [kind]: key, value })
   } else if (Array.isArray(value) && typeof existing.value !== 'object') {
-    // Los presets pueden traer un valor suelto en vez de una lista.
+    // Links viejos (de los atajos que ya no existen) traen un valor suelto.
     existing.value = [...new Set([existing.value, ...value])]
   } else if (Array.isArray(value) && Array.isArray(existing.value)) {
     existing.value = [...new Set([...existing.value, ...value])]
   } else {
     existing.value = value
   }
-  state.appliedPreset = ''
 }
 
 function buildBody() {
@@ -533,7 +512,6 @@ async function applyUrl(search) {
   state.groupBy = p.get('g') || 'answer'
   state.filters = Array.isArray(filters) ? filters : []
   state.initialOnly = p.get('io') !== '0'
-  state.appliedPreset = ''
   return true
 }
 

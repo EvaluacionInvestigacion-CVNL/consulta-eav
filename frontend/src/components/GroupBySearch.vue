@@ -87,7 +87,7 @@ function chooseFirst() {
           @input="open = true"
           @keydown.esc="open = false"
           @keydown.enter.prevent="chooseFirst"
-          placeholder="Desglosar por…"
+          placeholder="Desglosar por… (sexo, edad, ciudad, año)"
           class="w-full bg-transparent text-sm text-[#334155] font-medium outline-none"
         />
       </div>

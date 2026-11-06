@@ -81,7 +81,7 @@ Codes `7777` / `8888` / `9999` (*Not applicable* / *Don't know* / *No answer*) a
 When grouping by an attribute, the response is two parallel tables — absolute counts and column percentages — each with totals. Percentages alone hide small cell sizes; counts alone make distributions hard to compare across unequal groups. Returning both lets the UI show either without a second round-trip.
 
 ### Geographic rollups in metadata, not SQL
-41 raw `city_id` codes are collapsed into the 11 Monterrey-metro (AMM) municipalities plus four aggregates (AMM, Periphery, Rest of NL, Nuevo León). These groupings, the canonical display orderings, value recodes, and presets all live in `backend/metadata.py` as plain data — so changing how cities roll up or how income brackets are ordered is a data edit, not a query rewrite.
+41 raw `city_id` codes are collapsed into the 11 Monterrey-metro (AMM) municipalities plus four aggregates (AMM, Periphery, Rest of NL, Nuevo León). These groupings, the canonical display orderings, and value recodes all live in `backend/metadata.py` as plain data — so changing how cities roll up or how income brackets are ordered is a data edit, not a query rewrite.
 
 ### Recodes and derived orderings as data
 Domain-specific value regroupings (e.g. collapsing transport modes into modal categories) and the canonical order of every categorical (`sexo`, `estudios`, `ingreso`, age buckets…) are declared in `metadata.py`. Age is bucketed via a SQL `CASE` rather than pivoting on individual integer years, since per-year columns are noise for analysis.
@@ -155,7 +155,7 @@ eav-queries/
 ├── backend/
 │   ├── main.py        # FastAPI app, query engine, safe SQL builder
 │   ├── chat.py        # Gemini tool-use integration (AI mode)
-│   └── metadata.py    # Geo rollups, recodes, presets, canonical orderings
+│   └── metadata.py    # Geo rollups, recodes, canonical orderings
 ├── frontend/
 │   └── src/           # Vue 3 + Vite SPA (components, store, API client)
 ├── tests/             # pytest suite (query engine + endpoints)

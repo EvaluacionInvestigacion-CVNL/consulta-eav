@@ -1,12 +1,12 @@
-"""Catálogo de la encuesta: preguntas, atributos, ciudades, recodes y presets."""
+"""Catálogo de la encuesta: preguntas, atributos, ciudades y recodes."""
 
 from functools import lru_cache
 
 from db_runtime import get_conn
-from metadata import ATTRIBUTE_LABELS, ID_TO_CITY_NAME, PRESETS, RECODES
+from metadata import ATTRIBUTE_LABELS, ID_TO_CITY_NAME, RECODES
 from repositories import responses_repository, survey_repository
 from services.ordering import ordered_question_ids
-from services.wave_service import default_wave, numeric_question_ids, resolve_wave
+from services.wave_service import numeric_question_ids, resolve_wave
 
 
 @lru_cache(maxsize=16)
@@ -105,67 +105,3 @@ def get_recodes() -> list[dict]:
         }
         for k, v in RECODES.items()
     ]
-
-
-def translate_attr_value(conn, attribute: str, value, from_wave: str, to_wave: str):
-    """Convierte un option id de un atributo entre olas mediante su id canónico."""
-    if from_wave == to_wave:
-        return value
-
-    q_from = responses_repository.fetch_attribute_question_id(
-        conn, from_wave, attribute
-    )
-    q_to = responses_repository.fetch_attribute_question_id(conn, to_wave, attribute)
-    if not q_from or not q_to:
-        return value
-
-    concept_option_id = survey_repository.fetch_concept_option_id(
-        conn, from_wave, q_from, value
-    )
-    if not concept_option_id:
-        return value
-
-    translated = survey_repository.fetch_option_id_by_concept(
-        conn, to_wave, q_to, concept_option_id
-    )
-    return translated if translated is not None else value
-
-
-def get_presets(wave: str | None = None) -> list[dict]:
-    """Presets: combinaciones de `group_by` + filtros que la UI aplica de un clic.
-
-    Cada preset es un cuerpo compatible con /api/query (menos `question_id`).
-
-    Los presets están escritos en la codificación de la ola default (p. ej.
-    sexo 0=Hombre, 1=Mujer). Como esa codificación cambia entre años, aquí se
-    traducen los valores de filtro a la ola pedida (`wave`) vía la opción
-    canónica, para que "MUJERES por unidad geográfica" filtre a mujeres en
-    CUALQUIER ola y no caiga en la categoría equivocada o en cero filas.
-    """
-    target = resolve_wave(wave)
-    default = default_wave()
-    if target == default:
-        return PRESETS
-    with get_conn() as conn:
-        out = []
-        for preset in PRESETS:
-            new_filters = []
-            for item in preset.get("filters") or []:
-                attr = item["attribute"]
-                value = item["value"]
-                if attr == "city_id":
-                    new_filters.append(item)
-                    continue
-                is_list = isinstance(value, list)
-                values = value if is_list else [value]
-                translated = [
-                    translate_attr_value(conn, attr, v, default, target) for v in values
-                ]
-                new_filters.append(
-                    {
-                        "attribute": attr,
-                        "value": translated if is_list else translated[0],
-                    }
-                )
-            out.append({**preset, "filters": new_filters})
-    return out

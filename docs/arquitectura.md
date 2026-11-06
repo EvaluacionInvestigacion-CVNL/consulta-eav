@@ -97,10 +97,10 @@ routers/      → services/      → repositories/ → db_runtime
 ```
 
 - `routers/` — endpoints delgados, cero lógica: `catalog.py` (preguntas,
-  atributos, ciudades, olas, recodes, presets), `query.py` (`/api/query` y la
+  atributos, ciudades, olas, recodes), `query.py` (`/api/query` y la
   descarga CSV) y `health.py` (diagnóstico).
 - `services/` — orquestación, reglas de negocio y **los `lru_cache`**:
-  `catalog_service.py` (arma el catálogo, traduce presets entre olas),
+  `catalog_service.py` (arma el catálogo),
   `wave_service.py` (resolución/validación de olas) y `ordering.py` (funciones
   puras de ordenamiento, no tocan la base).
 - `repositories/` — **el único lugar donde vive texto SQL fijo**:
@@ -274,7 +274,6 @@ de la pregunta consultada.
 | GET    | `/api/waves`       | Olas disponibles (marca la default)     |
 | GET    | `/api/dimensions`  | Por qué se puede filtrar una pregunta (`mode=wave\|year`) |
 | GET    | `/api/recodes`     | Definiciones de recode                  |
-| GET    | `/api/presets`     | Recetas de análisis (group_by+filtros)  |
 | POST   | `/api/query`       | Corre una consulta → JSON               |
 | POST   | `/api/query/csv`   | Corre una consulta → descarga CSV       |
 | POST   | `/api/chat`        | Consulta en lenguaje natural (modo IA)  |

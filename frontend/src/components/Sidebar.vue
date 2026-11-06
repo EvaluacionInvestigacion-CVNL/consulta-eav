@@ -19,8 +19,7 @@ import {
   sqlPreview,
   canRun,
   runCurrentQuery,
-  applyPreset,
-  clearPreset,
+  clearFilters,
   removeFilter,
   filterValueLabel,
   attributeLabel,
@@ -31,7 +30,6 @@ import {
   loadConversation,
   deleteConversation,
   canCompareYears,
-  NO_YEARS_HINT,
   toggleSidebar,
   isMobile,
   hasFeature,
@@ -74,37 +72,18 @@ async function copySQL() {
   }
 }
 
-// Un atajo llena el desglose y los filtros; un segundo clic lo quita.
 // En el teléfono el panel tapa el resultado: al ejecutar se cierra solo.
 function runAndClose() {
   runCurrentQuery()
   if (isMobile()) state.sidebarOpen = false
 }
 
-function togglePreset(key) {
-  if (state.appliedPreset === key) {
-    clearPreset()
-    state.groupBy = 'answer'
-  } else {
-    applyPreset(key)
-  }
-}
-
 // Si cambias a una pregunta sin equivalencia y tenías "Año" seleccionado, resetea.
 watch(canCompareYears, (ok) => {
   if (!ok && state.groupBy === 'year') {
     state.groupBy = 'answer'
-    state.appliedPreset = ''
   }
 })
-
-// Los presets marcados `requires_concept` (agrupar por año) siempre se ven, pero
-// deshabilitados si la pregunta no tiene equivalencia entre olas (la consulta
-// daría 400). El porqué se explica bajo el resultado.
-const availablePresets = computed(() => state.presets)
-function presetDisabled(p) {
-  return p.requires_concept && !canCompareYears.value
-}
 </script>
 
 <template>
@@ -229,7 +208,7 @@ function presetDisabled(p) {
             </button>
           </div>
 
-          <!-- Paso 2: desglose. Los atajos llenan este paso y el de filtros. -->
+          <!-- Paso 2: desglose -->
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
@@ -243,26 +222,6 @@ function presetDisabled(p) {
                   >(opcional)</span
                 ></span
               >
-            </div>
-            <div v-if="availablePresets.length" class="mb-2">
-              <span class="text-[11px] text-[#94a3b8] mr-1">Atajos:</span>
-              <div class="inline-flex flex-wrap gap-1.5 align-middle">
-                <button
-                  v-for="p in availablePresets"
-                  :key="p.key"
-                  @click="togglePreset(p.key)"
-                  :disabled="presetDisabled(p)"
-                  :title="presetDisabled(p) ? NO_YEARS_HINT : undefined"
-                  :class="[
-                    'text-xs font-medium px-2.5 py-1 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-300',
-                    state.appliedPreset === p.key
-                      ? 'bg-[#0d9488] border-[#0d9488] text-white'
-                      : 'bg-white border-gray-300 text-[#334155] hover:border-[#0d9488]',
-                  ]"
-                >
-                  {{ p.label }}
-                </button>
-              </div>
             </div>
             <GroupBySearch />
           </div>
@@ -294,7 +253,7 @@ function presetDisabled(p) {
                 Filtros
               </label>
               <button
-                @click="clearPreset"
+                @click="clearFilters"
                 class="text-xs text-[#94a3b8] hover:text-[#0d9488] font-medium"
               >
                 Limpiar
