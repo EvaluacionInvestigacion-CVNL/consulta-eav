@@ -8,7 +8,8 @@ import {
   chatLoading,
   sendChatMessage,
   retryLastMessage,
-  filterValueLabel,
+  breakdownLabel,
+  filterLabel,
 } from '../store.js'
 import ChatResults from './ChatResults.vue'
 
@@ -75,23 +76,19 @@ function useSuggestion(s) {
   submit()
 }
 
+// Pie de la respuesta: qué consultó el modelo, en palabras.
 function toolSummary(calls) {
   if (!calls || !calls.length) return ''
   return calls
     .map((c) => {
-      const y = c['año'] ? ` · ${c['año']}` : ''
-      const g =
-        !c.group_by || c.group_by === 'answer'
-          ? ''
-          : ` · agrupado por ${c.group_by}`
-      const f =
-        c.filters && c.filters.length
-          ? ' · filtros: ' +
-            c.filters
-              .map((fl) => `${fl.attribute}=${filterValueLabel(fl)}`)
-              .join(', ')
-          : ''
-      return `${c.question_id}${y}${g}${f}`
+      const parts = [c.question_id]
+      if (c['año']) parts.push(c['año'])
+      // En la vista por año, 'comparación entre años' ya lo dice.
+      const g = c.group_by === 'year' ? '' : breakdownLabel(c.group_by)
+      if (g) parts.push(g)
+      if (c.filters && c.filters.length)
+        parts.push('sólo ' + c.filters.map(filterLabel).join('; '))
+      return parts.join(' · ')
     })
     .join('  |  ')
 }

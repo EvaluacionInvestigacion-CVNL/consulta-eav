@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { attributeLabel, filterValueLabel } from '../store.js'
+import { breakdownLabel, filterValueLabel } from '../store.js'
 import ResultView from './ResultView.vue'
 
 // Los resultados de una respuesta del chat: uno por consulta que hizo el
@@ -13,14 +13,6 @@ const active = ref(0)
 const current = computed(
   () => props.results[Math.min(active.value, props.results.length - 1)],
 )
-
-function breakdownLabel(g) {
-  if (!g || g === 'answer') return ''
-  if (g === 'year') return 'por año'
-  if (g === 'city_id') return 'por municipio'
-  if (/^p\d/.test(g)) return `cruzada con ${g}`
-  return `por ${attributeLabel(g).toLowerCase()}`
-}
 
 function tabLabel(query) {
   if (!query) return 'Resultado'

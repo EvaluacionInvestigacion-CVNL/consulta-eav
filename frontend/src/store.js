@@ -263,6 +263,21 @@ export function attributeLabel(attr) {
   return a?.label || attr
 }
 
+// Desglose de una consulta del chat, en palabras ("por sexo", "por año").
+export function breakdownLabel(groupBy) {
+  if (!groupBy || groupBy === 'answer') return ''
+  if (groupBy === 'year') return 'por año'
+  if (groupBy === 'city_id') return 'por municipio'
+  if (/^p\d/.test(groupBy)) return `cruzada con ${groupBy}`
+  return `por ${attributeLabel(groupBy).toLowerCase()}`
+}
+
+// Un filtro en palabras: "Ciudad: Santa Catarina", "p12: Sí".
+export function filterLabel(filter) {
+  const name = filter.question ?? attributeLabel(filter.attribute)
+  return `${name}: ${filterValueLabel(filter)}`
+}
+
 // Frase que resume la consulta armada en el sidebar, antes de ejecutarla.
 export const querySummary = computed(() => {
   if (!state.questionId) return ''
@@ -281,10 +296,7 @@ export const querySummary = computed(() => {
   }
   const parts = [state.questionId, breakdown]
   if (state.filters.length) {
-    const filters = state.filters.map(
-      (f) =>
-        `${f.question ?? attributeLabel(f.attribute)}: ${filterValueLabel(f)}`,
-    )
+    const filters = state.filters.map(filterLabel)
     parts.push(`sólo ${filters.join('; ')}`)
   }
   parts.push(state.initialOnly ? 'población estimada' : 'muestra sin ponderar')

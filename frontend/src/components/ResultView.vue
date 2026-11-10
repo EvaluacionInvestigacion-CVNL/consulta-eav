@@ -9,7 +9,7 @@ const props = defineProps({
   data: { type: Object, required: true },
 })
 
-const tab = ref('table')
+const tab = ref('chart')
 const isPivot = computed(() => props.data?.format === 'pivot')
 </script>
 
