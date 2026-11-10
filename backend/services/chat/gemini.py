@@ -43,13 +43,19 @@ def get_client():
     return _client
 
 
-def build_config(system_instruction: str, tools: list):
+def build_config(system_instruction: str, tools: list, allow_tools: bool = True):
     """Configuración de generación: temperatura 0 para que las cifras no varíen."""
     from google.genai import types
 
+    tool_config = None
+    if not allow_tools:
+        tool_config = types.ToolConfig(
+            function_calling_config=types.FunctionCallingConfig(mode="NONE")
+        )
     return types.GenerateContentConfig(
         system_instruction=system_instruction,
         tools=tools,
+        tool_config=tool_config,
         temperature=0,
     )
 

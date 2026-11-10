@@ -3,6 +3,7 @@
 El modelo alterna entre pedir datos y redactar. Se le deja hacerlo hasta
 `MAX_TOOL_ROUNDS` veces para que pueda encadenar consultas (p. ej. pedir el
 total y luego el desglose) sin quedarse en un ciclo infinito si nunca concluye.
+En la última ronda el modelo tiene que redactar con lo que ya consultó.
 """
 
 import logging
@@ -12,7 +13,7 @@ from services.chat import gemini, prompts, query_tool
 
 logger = logging.getLogger("encuesta.chat")
 
-MAX_TOOL_ROUNDS = 4
+MAX_TOOL_ROUNDS = 5
 
 NO_ANSWER_REPLY = "No pude completar la consulta. Intenta reformular la pregunta."
 
@@ -43,23 +44,27 @@ def run_chat(message: str, history: list) -> dict:
     if new_conversation:
         instruction += prompts.NEW_CONVERSATION_RULE
     client = gemini.get_client()
-    config = gemini.build_config(
-        system_instruction=instruction,
-        tools=[query_tool.query_tool_declaration()],
+    tools = [query_tool.query_tool_declaration()]
+    config = gemini.build_config(system_instruction=instruction, tools=tools)
+    final_config = gemini.build_config(
+        system_instruction=instruction, tools=tools, allow_tools=False
     )
 
     contents = gemini.history_to_contents(history)
     contents.append(gemini.user_message(message))
 
     executed_queries: list = []
-    data_result = None
+    results: list = []  # [{query, result}]
     reply_text = ""
 
-    for _ in range(MAX_TOOL_ROUNDS):
-        response = gemini.generate(client, contents, config)
+    for round_index in range(MAX_TOOL_ROUNDS):
+        last_round = round_index == MAX_TOOL_ROUNDS - 1
+        response = gemini.generate(
+            client, contents, final_config if last_round else config
+        )
         content, function_calls = gemini.function_calls_in(response)
 
-        if not function_calls:
+        if not function_calls or last_round:
             try:
                 reply_text = response.text or ""
             except Exception:
@@ -79,18 +84,16 @@ def run_chat(message: str, history: list) -> dict:
             # Registramos la consulta EFECTIVA (q_id ya traducido a la ola + año),
             # no los args crudos del modelo, para que la tarjeta del chat sea fiel.
             executed_queries.append(effective_query)
-            if result is not None:
-                data_result = result
-                
+            if result is not None and all(
+                r["query"] != effective_query for r in results
+            ):
+                results.append({"query": effective_query, "result": result})
+
             tool_name = function_call.name or ""
             response_parts.append(
                 gemini.tool_response_part(tool_name, summary)
             )
         contents.append(gemini.tool_response_message(response_parts))
-    else:
-        # Se agotaron las rondas sin que el modelo redactara una respuesta.
-        if not reply_text:
-            reply_text = NO_ANSWER_REPLY
 
     title, reply_text = split_title(reply_text)
     if not new_conversation:
@@ -102,5 +105,5 @@ def run_chat(message: str, history: list) -> dict:
         "reply": reply_text,
         "title": title,
         "tool_calls": executed_queries,
-        "data": data_result,
+        "data": results,
     }

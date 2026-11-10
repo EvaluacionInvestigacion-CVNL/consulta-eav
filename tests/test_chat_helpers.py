@@ -71,6 +71,7 @@ def test_exec_query_bad_question_returns_error(numeric_qid):
 
 # --- título de la conversación ------------------------------------------------
 
+import itertools  # noqa: E402
 from types import SimpleNamespace  # noqa: E402
 
 from services.chat import conversation, gemini, prompts  # noqa: E402
@@ -118,3 +119,41 @@ def test_later_turns_get_no_title_and_never_show_the_line(monkeypatch):
     assert prompts.NEW_CONVERSATION_RULE not in seen["instruction"]
     assert out["title"] is None
     assert out["reply"] == "En 2022, **11.2%**."
+
+
+# --- rondas de herramientas ----------------------------------------------------
+
+
+def test_last_round_forces_an_answer_and_keeps_every_result(monkeypatch, categorical_qid):
+    """Un modelo que nunca deja de consultar: la última ronda va sin
+    herramientas, así que redacta con lo que tiene en vez de perder la
+    respuesta; `data` trae cada consulta distinta una sola vez."""
+    group_bys = itertools.cycle(["answer", "sexo"])  # de la tercera en adelante, repetidas
+    seen_modes = []
+
+    def generate(client, contents, config):
+        tool_config = config.tool_config
+        mode = tool_config.function_calling_config.mode if tool_config else None
+        seen_modes.append(mode)
+        if mode is not None:
+            text = "En 2025, **50%**."
+            part = SimpleNamespace(function_call=None, text=text)
+            return SimpleNamespace(candidates=[SimpleNamespace(content=SimpleNamespace(parts=[part]))], text=text)
+        call = SimpleNamespace(name="query", args={"question_id": categorical_qid, "group_by": next(group_bys)})
+        part = SimpleNamespace(function_call=call)
+        return SimpleNamespace(candidates=[SimpleNamespace(content=SimpleNamespace(role="model", parts=[part]))])
+
+    monkeypatch.setattr(gemini, "get_client", lambda: object())
+    monkeypatch.setattr(gemini, "generate", generate)
+    monkeypatch.setattr(conversation.gemini, "tool_response_part", lambda name, response: response)
+    monkeypatch.setattr(conversation.gemini, "tool_response_message", lambda parts: parts)
+
+    out = conversation.run_chat("algo ambiguo", [{"role": "user", "text": "hola"}])
+
+    assert len(seen_modes) == conversation.MAX_TOOL_ROUNDS
+    assert seen_modes[:-1] == [None] * (conversation.MAX_TOOL_ROUNDS - 1)
+    assert str(seen_modes[-1]).endswith("NONE")
+    assert out["reply"] == "En 2025, **50%**."
+    assert len(out["tool_calls"]) == conversation.MAX_TOOL_ROUNDS - 1
+    assert [r["query"]["group_by"] for r in out["data"]] == ["answer", "sexo"]
+    assert [r["result"]["format"] for r in out["data"]] == ["flat", "pivot"]

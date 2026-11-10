@@ -10,7 +10,7 @@ import {
   retryLastMessage,
   filterValueLabel,
 } from '../store.js'
-import ResultView from './ResultView.vue'
+import ChatResults from './ChatResults.vue'
 
 const input = ref('')
 const scroller = ref(null)
@@ -96,6 +96,14 @@ function toolSummary(calls) {
     .join('  |  ')
 }
 
+// `data` es la lista de {query, result}. Los chats guardados antes de eso
+// traen un solo resultado suelto.
+function resultsOf(m) {
+  if (Array.isArray(m.data)) return m.data
+  if (!m.data) return []
+  return [{ query: m.toolCalls?.at(-1) || null, result: m.data }]
+}
+
 // Autoscroll on new messages / loading state.
 watch(
   () => [state.chatMessages.length, chatLoading.value],
@@ -173,13 +181,8 @@ watch(
               </button>
             </div>
 
-            <!-- Result for this answer (toggle table / chart) -->
-            <div
-              v-if="m.data"
-              class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
-            >
-              <ResultView :data="m.data" />
-            </div>
+            <!-- Los resultados de esta respuesta (uno por consulta) -->
+            <ChatResults v-if="resultsOf(m).length" :results="resultsOf(m)" />
           </div>
         </template>
 

@@ -716,7 +716,7 @@ export async function sendChatMessage(text) {
       id: msgId(),
       role: 'assistant',
       text: res.reply,
-      data: res.data || null,
+      data: res.data || [],
       toolCalls: res.tool_calls || [],
     })
   } catch (e) {
