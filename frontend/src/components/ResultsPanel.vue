@@ -79,21 +79,21 @@ function setTab(t) {
 </script>
 
 <template>
-  <div ref="scroller" class="flex-1 overflow-auto p-4 md:p-8 bg-[#fcf0e4]">
+  <div ref="scroller" class="flex-1 overflow-auto p-4 md:p-8 bg-cream">
     <!-- Cargando con un resultado en pantalla: barra delgada arriba, sin
          sustituir el resultado (que se atenúa). La altura neta es 0 para que
          nada salte. -->
     <div
       v-if="state.loading && state.lastResult"
-      class="sticky top-0 z-10 -mx-4 -mt-4 mb-[calc(1rem-2px)] md:-mx-8 md:-mt-8 md:mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-[#0d9488]/15"
+      class="sticky top-0 z-10 -mx-4 -mt-4 mb-[calc(1rem-2px)] md:-mx-8 md:-mt-8 md:mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-brand/15"
     >
-      <div class="progress-bar h-full w-1/3 bg-[#0d9488]"></div>
+      <div class="progress-bar h-full w-1/3 bg-brand"></div>
     </div>
 
     <!-- Loading (primera consulta: no hay resultado que mostrar) -->
     <div
       v-if="state.loading && !state.lastResult"
-      class="flex items-center justify-center h-full gap-2.5 text-[#64748b]"
+      class="flex items-center justify-center h-full gap-2.5 text-muted"
     >
       <div class="spinner"></div>
       Consultando…
@@ -102,28 +102,26 @@ function setTab(t) {
     <!-- Error -->
     <div
       v-else-if="state.error"
-      class="flex flex-col items-center justify-center h-full text-[#94a3b8] text-center gap-3"
+      class="flex flex-col items-center justify-center h-full text-faint text-center gap-3"
     >
       <div class="text-[42px]">⚠</div>
-      <div class="font-['Manrope'] font-semibold text-lg text-[#1e293b]">
-        Error al consultar
-      </div>
+      <div class="font-semibold text-lg text-ink">Error al consultar</div>
       <div class="text-sm">{{ state.error }}</div>
     </div>
 
     <!-- Empty -->
     <div
       v-else-if="!state.lastResult"
-      class="flex flex-col items-center justify-center h-full text-[#94a3b8] text-center gap-3"
+      class="flex flex-col items-center justify-center h-full text-faint text-center gap-3"
     >
       <div class="flex-1 overflow-auto p-4 md:p-8">
         <div class="max-w-225 mx-auto">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white rounded-lg border border-[#e2e8f0] p-6">
+            <div class="bg-white rounded-lg border border-line p-6">
               <div class="flex items-start gap-4">
-                <!-- <div class="bg-[#0d9488]/10 rounded-lg p-3 shrink-0">
+                <!-- <div class="bg-brand/10 rounded-lg p-3 shrink-0">
                   <svg
-                    class="size-6 text-[#0d9488]"
+                    class="size-6 text-brand"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -137,14 +135,12 @@ function setTab(t) {
                   </svg>
                 </div> -->
                 <div>
-                  <h3 class="font-semibold text-[#1e293b] mb-2">
-                    Sobre los Datos
-                  </h3>
-                  <p class="text-sm text-[#64748b] leading-relaxed mb-3">
+                  <h3 class="font-semibold text-ink mb-2">Sobre los Datos</h3>
+                  <p class="text-sm text-muted leading-relaxed mb-3">
                     Los datos provienen de la Encuesta Así Vamos realizada
                     anualmente de 2016 a 2025 por
                     <a href="https://comovamosnl.org/" target="_blank">
-                      <span class="font-medium underline text-[#0d9488]">
+                      <span class="font-medium underline text-brand">
                         Cómo Vamos Nuevo León</span
                       >
                     </a>
@@ -154,11 +150,11 @@ function setTab(t) {
               </div>
             </div>
 
-            <div class="bg-white rounded-lg border border-[#e2e8f0] p-6">
+            <div class="bg-white rounded-lg border border-line p-6">
               <div class="flex items-start gap-4">
-                <!-- <div class="bg-[#0d9488]/10 rounded-lg p-3 shrink-0">
+                <!-- <div class="bg-brand/10 rounded-lg p-3 shrink-0">
                   <svg
-                    class="size-6 text-[#0d9488]"
+                    class="size-6 text-brand"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -172,8 +168,8 @@ function setTab(t) {
                   </svg>
                 </div> -->
                 <div>
-                  <h3 class="font-semibold text-[#1e293b] mb-2">Metodología</h3>
-                  <p class="text-sm text-[#64748b] leading-relaxed mb-3">
+                  <h3 class="font-semibold text-ink mb-2">Metodología</h3>
+                  <p class="text-sm text-muted leading-relaxed mb-3">
                     Encuestas aplicadas mediante metodología probabilística con
                     muestreo estratificado por nivel socioeconómico, edad y zona
                     geográfica.
@@ -183,10 +179,10 @@ function setTab(t) {
             </div>
           </div>
 
-          <div class="bg-[#7e34c3] rounded-lg p-5 md:p-8 text-white">
+          <div class="bg-brand rounded-lg p-5 md:p-8 text-white">
             <div class="flex items-start justify-between">
               <div class="flex-1">
-                <h3 class="font-['Manrope'] font-bold text-xl mb-2">
+                <h3 class="font-bold text-xl mb-2">
                   Acceso a Base de Datos Completa
                 </h3>
                 <div class="w-full justify-center">
@@ -201,7 +197,7 @@ function setTab(t) {
                     target="_blank"
                   >
                     <button
-                      class="bg-white text-[#303030] px-4 py-2 rounded-lg font-medium hover:bg-white/90 hover:cursor-pointer transition-colors text-sm"
+                      class="bg-white text-ink-soft px-4 py-2 rounded-lg font-medium hover:bg-white/90 hover:cursor-pointer transition-colors text-sm"
                     >
                       Descargar base de datos
                     </button>
@@ -212,14 +208,14 @@ function setTab(t) {
           </div>
 
           <div
-            class="mt-8 bg-[#fb7e50] rounded-4xl p-6 border border-[#e2e8f0] font-['Poppins'] text-center"
+            class="mt-8 bg-orange rounded-4xl p-6 border border-line text-center"
           >
             <h3
-              class="font-['Poppins'] font-extrabold text-[#ffba00] text-lg mb-3 flex items-center justify-center gap-2"
+              class="font-extrabold text-yellow text-lg mb-3 flex items-center justify-center gap-2"
             >
               ¿CÓMO USAR ESTA HERRAMIENTA?
             </h3>
-            <ol class="space-y-2 text-sm text-[#303030]">
+            <ol class="space-y-2 text-sm text-ink-soft">
               <li class="flex justify-center gap-3">
                 <span
                   >Selecciona una pregunta de la encuesta en el panel
@@ -263,10 +259,10 @@ function setTab(t) {
       >
         <!-- Data Visualization Card -->
         <div
-          class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
+          class="bg-white rounded-lg border border-line shadow-sm overflow-hidden"
         >
           <div
-            class="border-b border-[#f1f5f9] px-3 md:px-6 py-3 flex flex-wrap items-center justify-between gap-2"
+            class="border-b border-surface px-3 md:px-6 py-3 flex flex-wrap items-center justify-between gap-2"
           >
             <div class="flex gap-4 md:gap-8">
               <button
@@ -274,8 +270,8 @@ function setTab(t) {
                 class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
                 :class="
                   state.activeTab === 'table'
-                    ? 'border-[#0d9488] text-[#0d9488]'
-                    : 'border-transparent text-[#94a3b8]'
+                    ? 'border-brand text-brand'
+                    : 'border-transparent text-faint'
                 "
               >
                 <Table2 class="size-3.5" />
@@ -286,8 +282,8 @@ function setTab(t) {
                 class="flex items-center gap-2 pb-3 border-b-2 transition-colors"
                 :class="
                   state.activeTab === 'chart'
-                    ? 'border-[#0d9488] text-[#0d9488]'
-                    : 'border-transparent text-[#94a3b8]'
+                    ? 'border-brand text-brand'
+                    : 'border-transparent text-faint'
                 "
               >
                 <BarChart3 class="size-3.5" />
@@ -297,21 +293,21 @@ function setTab(t) {
             <div class="flex items-center gap-2 shrink-0">
               <button
                 @click="copyLink"
-                class="flex items-center gap-2 py-1.5 px-2 border border-[#e2e8f0] rounded hover:bg-[#f8fafc] transition-colors"
+                class="flex items-center gap-2 py-1.5 px-2 border border-line rounded hover:bg-surface-soft transition-colors"
               >
-                <Check v-if="linkCopied" class="size-3.5 text-[#0d9488]" />
-                <LinkIcon v-else class="size-3.5 text-[#475569]" />
-                <span class="font-semibold text-sm text-[#475569]">{{
+                <Check v-if="linkCopied" class="size-3.5 text-brand" />
+                <LinkIcon v-else class="size-3.5 text-ink-soft" />
+                <span class="font-semibold text-sm text-ink-soft">{{
                   linkCopied ? 'Copiado' : 'Copiar enlace'
                 }}</span>
               </button>
               <button
                 @click="exportCurrentCSV"
                 :disabled="exportDisabled"
-                class="flex items-center gap-2 py-1.5 px-2 border border-[#e2e8f0] rounded hover:bg-[#f8fafc] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                class="flex items-center gap-2 py-1.5 px-2 border border-line rounded hover:bg-surface-soft transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
               >
-                <Download class="size-3.5 text-[#475569]" />
-                <span class="font-semibold text-sm text-[#475569]"
+                <Download class="size-3.5 text-ink-soft" />
+                <span class="font-semibold text-sm text-ink-soft"
                   >Descargar CSV</span
                 >
               </button>
@@ -338,49 +334,49 @@ function setTab(t) {
            juntos y separados sólo por una divisoria interna. Vive aquí y no en
            PivotTables para que también se vea en la pestaña Gráfica. -->
         <div
-          class="bg-white border border-[#e2e8f0] rounded-lg text-sm overflow-hidden"
+          class="bg-white border border-line rounded-lg text-sm overflow-hidden"
         >
           <div class="px-5 py-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             <!-- Pregunta -->
             <span class="inline-flex items-center gap-2">
               <span
-                class="font-mono text-xs bg-[#f0fdfa] text-[#0d9488] px-2 py-0.5 rounded font-bold"
+                class="font-mono text-xs bg-brand-soft text-brand px-2 py-0.5 rounded font-bold"
                 >{{ state.lastResult.question.q_id }}</span
               >
-              <span class="text-[#64748b]">{{
+              <span class="text-muted">{{
                 state.lastResult.question.q_type
               }}</span>
             </span>
 
-            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+            <span class="w-px h-4 bg-line"></span>
 
             <!-- Año / comparación -->
             <span v-if="!isYear">
-              <span class="text-[#94a3b8]">Año</span>
-              <span class="font-semibold text-[#334155] ml-1">{{
+              <span class="text-faint">Año</span>
+              <span class="font-semibold text-ink-soft ml-1">{{
                 state.lastResult.wave_id ?? '—'
               }}</span>
             </span>
-            <span v-else class="font-semibold text-[#334155]"
+            <span v-else class="font-semibold text-ink-soft"
               >Comparación por año</span
             >
 
-            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+            <span class="w-px h-4 bg-line"></span>
 
             <!-- Agrupación -->
             <span>
-              <span class="text-[#94a3b8]">Agrupado por</span>
-              <span class="font-semibold text-[#334155] ml-1">{{
+              <span class="text-faint">Agrupado por</span>
+              <span class="font-semibold text-ink-soft ml-1">{{
                 groupByLabel
               }}</span>
             </span>
 
-            <span class="w-px h-4 bg-[#e2e8f0]"></span>
+            <span class="w-px h-4 bg-line"></span>
 
             <!-- Universo -->
             <span v-if="!isYear">
-              <span class="text-[#94a3b8]">Universo</span>
-              <span class="font-semibold text-[#334155] ml-1"
+              <span class="text-faint">Universo</span>
+              <span class="font-semibold text-ink-soft ml-1"
                 >{{ totalRespondents }} personas</span
               >
             </span>
@@ -388,26 +384,26 @@ function setTab(t) {
               v-else
               class="inline-flex flex-wrap items-center gap-x-2 gap-y-1"
             >
-              <span class="text-[#94a3b8]">Universo por año</span>
+              <span class="text-faint">Universo por año</span>
               <span
                 v-for="yb in yearBases"
                 :key="yb.year"
-                class="font-semibold text-[#334155]"
+                class="font-semibold text-ink-soft"
               >
-                <span class="text-[#64748b] font-normal">{{ yb.year }}:</span>
+                <span class="text-muted font-normal">{{ yb.year }}:</span>
                 {{ fmtNum(yb.base) }}
               </span>
             </span>
 
             <!-- Filtros -->
             <template v-if="appliedFilters.length">
-              <span class="w-px h-4 bg-[#e2e8f0]"></span>
+              <span class="w-px h-4 bg-line"></span>
               <span class="inline-flex flex-wrap items-center gap-1.5">
-                <span class="text-[#94a3b8]">Filtros</span>
+                <span class="text-faint">Filtros</span>
                 <span
                   v-for="(f, i) in appliedFilters"
                   :key="i"
-                  class="bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-0.5 rounded"
+                  class="bg-brand-soft text-brand text-xs font-medium px-2 py-0.5 rounded"
                 >
                   {{ f.question ?? attributeLabel(f.attribute) }}:
                   {{ filterValueLabel(f) }}
@@ -420,10 +416,10 @@ function setTab(t) {
                otras versiones; las que no se comparan dicen por qué. -->
           <div
             v-if="yearTexts.length"
-            class="border-t border-[#f1f5f9] px-5 py-3"
+            class="border-t border-surface px-5 py-3"
           >
             <h4
-              class="text-xs font-bold text-[#64748b] uppercase tracking-wide mb-2"
+              class="text-xs font-bold text-muted uppercase tracking-wide mb-2"
             >
               {{
                 isYear
@@ -431,21 +427,21 @@ function setTab(t) {
                   : 'Esta pregunta en otros años'
               }}
             </h4>
-            <p v-if="yearTexts.length === 1" class="text-[#475569]">
+            <p v-if="yearTexts.length === 1" class="text-ink-soft">
               Sólo se preguntó en {{ yearTexts[0].year }}.
             </p>
             <ul v-else class="space-y-1">
               <li
                 v-for="t in yearTexts"
                 :key="t.year"
-                class="text-[#475569] flex gap-2"
+                class="text-ink-soft flex gap-2"
               >
-                <span class="font-semibold text-[#1e293b] shrink-0">{{
+                <span class="font-semibold text-ink shrink-0">{{
                   t.year
                 }}</span>
                 <span
                   v-if="!isYear && t.year === state.lastResult.wave_id"
-                  class="shrink-0 font-mono text-xs text-[#64748b] bg-[#f1f5f9] rounded px-1.5 py-0.5 self-start"
+                  class="shrink-0 font-mono text-xs text-muted bg-surface rounded px-1.5 py-0.5 self-start"
                   :title="'La que estás viendo'"
                   >{{ t.q_id }}</span
                 >
@@ -462,16 +458,16 @@ function setTab(t) {
                   :class="[
                     'shrink-0 font-mono text-xs rounded px-1.5 py-0.5 self-start hover:underline',
                     t.comparable === false
-                      ? 'text-[#64748b] bg-[#f1f5f9]'
-                      : 'text-[#0d9488] bg-[#f0fdfa]',
+                      ? 'text-muted bg-surface'
+                      : 'text-brand bg-brand-soft',
                   ]"
                   >{{ t.q_id }}</a
                 >
-                <span :class="t.comparable === false ? 'text-[#94a3b8]' : ''">
+                <span :class="t.comparable === false ? 'text-faint' : ''">
                   {{ t.q_text }}
                   <span
                     v-if="t.comparable === false"
-                    class="ml-1 inline-block text-[11px] font-semibold text-[#b45309] bg-[#fef3c7] rounded px-1.5 py-0.5"
+                    class="ml-1 inline-block text-[11px] font-semibold text-warn-ink bg-warn-soft rounded px-1.5 py-0.5"
                     >No comparable: {{ t.reason_label }}</span
                   >
                 </span>
@@ -482,13 +478,13 @@ function setTab(t) {
           <!-- Preguntas del mismo bloque: links que conservan el corte actual -->
           <div
             v-if="blockSiblings.length"
-            class="border-t border-[#f1f5f9] px-5 py-3"
+            class="border-t border-surface px-5 py-3"
           >
             <h4
-              class="text-xs font-bold text-[#64748b] uppercase tracking-wide mb-2"
+              class="text-xs font-bold text-muted uppercase tracking-wide mb-2"
             >
               Del mismo bloque
-              <span class="normal-case font-normal text-[#94a3b8]"
+              <span class="normal-case font-normal text-faint"
                 >· {{ blockSiblings[0].block }}</span
               >
             </h4>
@@ -498,9 +494,9 @@ function setTab(t) {
                 :key="m.id"
                 :href="questionLink(m.id)"
                 @click="openLink($event, questionLink(m.id))"
-                class="inline-flex items-center gap-1.5 max-w-full border border-[#e2e8f0] rounded-full px-2.5 py-1 text-xs text-[#334155] hover:border-[#0d9488] transition-colors"
+                class="inline-flex items-center gap-1.5 max-w-full border border-line rounded-full px-2.5 py-1 text-xs text-ink-soft hover:border-brand transition-colors"
               >
-                <span class="font-mono text-[#0d9488]">{{ m.id }}</span>
+                <span class="font-mono text-brand">{{ m.id }}</span>
                 <span class="truncate">{{ m.main }}</span>
               </a>
             </div>

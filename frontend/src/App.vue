@@ -10,16 +10,7 @@ onMounted(init)
 </script>
 
 <template>
-  <div
-    class="flex h-dvh overflow-hidden"
-    style="
-      background: linear-gradient(
-        90deg,
-        rgb(248, 250, 252) 0%,
-        rgb(248, 250, 252) 100%
-      );
-    "
-  >
+  <div class="flex h-dvh overflow-hidden bg-cream">
     <Sidebar />
     <!-- En el teléfono el panel va encima: tocar fuera lo cierra. -->
     <div

@@ -128,15 +128,15 @@ function formatCell(cell, row, ci, stat) {
 <template>
   <div>
     <div class="flex items-center justify-between mb-3 px-2 gap-4">
-      <h3 class="text-sm font-bold text-[#1e293b]">Resultados</h3>
-      <div class="flex gap-1 bg-[#f1f5f9] p-1 rounded-2xl shrink-0">
+      <h3 class="text-sm font-bold text-ink">Resultados</h3>
+      <div class="flex gap-1 bg-surface p-1 rounded-2xl shrink-0">
         <button
           @click="mode = 'abs'"
           class="px-3 py-1 rounded-xl text-xs font-bold transition-colors"
           :class="
             mode === 'abs'
-              ? 'bg-white text-[#0d9488] shadow-sm'
-              : 'text-[#94a3b8] hover:text-[#64748b]'
+              ? 'bg-white text-brand shadow-sm'
+              : 'text-faint hover:text-muted'
           "
         >
           Absolutos
@@ -146,8 +146,8 @@ function formatCell(cell, row, ci, stat) {
           class="px-3 py-1 rounded-xl text-xs font-bold transition-colors"
           :class="
             mode === 'pct'
-              ? 'bg-white text-[#0d9488] shadow-sm'
-              : 'text-[#94a3b8] hover:text-[#64748b]'
+              ? 'bg-white text-brand shadow-sm'
+              : 'text-faint hover:text-muted'
           "
         >
           Relativos
@@ -155,14 +155,14 @@ function formatCell(cell, row, ci, stat) {
       </div>
     </div>
 
-    <div class="overflow-x-auto border border-[#e2e8f0] rounded-lg">
+    <div class="overflow-x-auto border border-line rounded-lg">
       <table class="w-full">
         <thead>
-          <tr class="bg-[rgba(248,250,252,0.5)]">
+          <tr class="bg-surface-soft">
             <th
               v-for="ci in visibleCols"
               :key="columns[ci]"
-              class="px-3 py-2 md:px-6 md:py-4 text-left text-xs font-semibold text-[#64748b] uppercase tracking-wide whitespace-nowrap"
+              class="px-3 py-2 md:px-6 md:py-4 text-left text-xs font-semibold text-muted uppercase tracking-wide whitespace-nowrap"
             >
               {{ columns[ci] }}
             </th>
@@ -174,8 +174,8 @@ function formatCell(cell, row, ci, stat) {
             :key="ri"
             :class="
               isTotalRow(cells) || stat
-                ? 'bg-[rgba(248,250,252,0.3)] border-t-2 border-[#e2e8f0]'
-                : 'border-t border-[#f1f5f9] hover:bg-[#f8fafc] transition-colors'
+                ? 'bg-surface-soft border-t-2 border-line'
+                : 'border-t border-surface hover:bg-surface-soft transition-colors'
             "
           >
             <td
@@ -184,10 +184,10 @@ function formatCell(cell, row, ci, stat) {
               class="px-3 py-2 md:px-6 md:py-4 text-sm whitespace-nowrap"
               :class="
                 isTotalRow(cells)
-                  ? 'font-bold text-[#0f172a]'
+                  ? 'font-bold text-ink'
                   : isNumeric(cellAt(cells, ci), ci)
-                    ? 'font-mono text-[#475569]'
-                    : 'text-[#1e293b] font-medium'
+                    ? 'tabular-nums text-ink-soft'
+                    : 'text-ink font-medium'
               "
             >
               <span class="inline-flex items-center gap-1.5">

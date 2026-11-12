@@ -118,9 +118,9 @@ watch(
   <div class="space-y-2">
     <div ref="root" class="relative">
       <div
-        class="flex items-center gap-2 bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5"
+        class="flex items-center gap-2 bg-surface border border-gray-300 rounded-4xl px-3 py-2.5"
       >
-        <Search class="size-4 text-[#94a3b8] shrink-0" />
+        <Search class="size-4 text-faint shrink-0" />
         <input
           v-model="query"
           type="search"
@@ -137,7 +137,7 @@ watch(
           @keydown.esc="open = false"
           @keydown.enter.prevent="chooseFirst"
           placeholder="Filtrar por…"
-          class="w-full bg-transparent text-sm text-[#334155] font-medium outline-none"
+          class="w-full bg-transparent text-sm text-ink-soft font-medium outline-none"
         />
       </div>
 
@@ -146,7 +146,7 @@ watch(
         class="mt-1 w-full bg-white border border-gray-200 rounded-xl py-1 md:absolute md:z-20 md:max-h-72 md:overflow-y-auto md:shadow-lg"
       >
         <p
-          class="px-3 pt-2 pb-1 text-[10px] font-semibold text-[#94a3b8] uppercase tracking-wide"
+          class="px-3 pt-2 pb-1 text-[10px] font-semibold text-faint uppercase tracking-wide"
         >
           {{ ql ? 'Atributos' : 'Frecuentes' }}
         </p>
@@ -154,23 +154,23 @@ watch(
           v-for="item in matchingAttributes"
           :key="`a-${item.key}`"
           @mousedown.prevent="choose(item)"
-          class="w-full text-left px-3 py-1.5 text-sm text-[#334155] hover:bg-[#f0fdfa] flex items-center justify-between"
+          class="w-full text-left px-3 py-1.5 text-sm text-ink-soft hover:bg-brand-soft flex items-center justify-between"
         >
           <span>{{ item.label }}</span>
-          <span v-if="item.type === 'range'" class="text-xs text-[#94a3b8]"
+          <span v-if="item.type === 'range'" class="text-xs text-faint"
             >rango</span
           >
         </button>
         <p
           v-if="ql && !matchingAttributes.length"
-          class="px-3 py-1.5 text-xs text-[#94a3b8]"
+          class="px-3 py-1.5 text-xs text-faint"
         >
           Ningún atributo coincide.
         </p>
 
         <template v-if="ql">
           <p
-            class="px-3 pt-3 pb-1 text-[10px] font-semibold text-[#94a3b8] uppercase tracking-wide"
+            class="px-3 pt-3 pb-1 text-[10px] font-semibold text-faint uppercase tracking-wide"
           >
             Preguntas
           </p>
@@ -178,21 +178,21 @@ watch(
             v-for="item in matchingQuestions"
             :key="`q-${item.key}`"
             @mousedown.prevent="choose(item)"
-            class="w-full text-left px-3 py-1.5 text-sm text-[#334155] hover:bg-[#f0fdfa]"
+            class="w-full text-left px-3 py-1.5 text-sm text-ink-soft hover:bg-brand-soft"
           >
-            <span class="font-mono text-xs text-[#0d9488] mr-1.5">{{
+            <span class="font-mono text-xs text-brand mr-1.5">{{
               item.key
             }}</span>
             <span>{{ item.label }}</span>
           </button>
           <p
             v-if="!matchingQuestions.length"
-            class="px-3 py-1.5 text-xs text-[#94a3b8]"
+            class="px-3 py-1.5 text-xs text-faint"
           >
             Ninguna pregunta coincide.
           </p>
         </template>
-        <p v-else class="px-3 pt-2 pb-1.5 text-xs text-[#94a3b8]">
+        <p v-else class="px-3 pt-2 pb-1.5 text-xs text-faint">
           {{
             typing()
               ? 'Escribe para buscar en todas las preguntas.'
@@ -204,16 +204,16 @@ watch(
 
     <div v-if="selected" class="space-y-2">
       <div class="flex items-center justify-between gap-2">
-        <span class="text-xs font-medium text-[#334155] truncate">
+        <span class="text-xs font-medium text-ink-soft truncate">
           <span
             v-if="selected.kind === 'question'"
-            class="font-mono text-[#0d9488] mr-1"
+            class="font-mono text-brand mr-1"
             >{{ selected.key }}</span
           >{{ selected.label }}
         </span>
         <button
           @click="selected = null"
-          class="text-[#94a3b8] hover:text-[#0d9488] shrink-0"
+          class="text-faint hover:text-brand shrink-0"
           aria-label="Cancelar filtro"
         >
           <X class="size-3.5" />
@@ -221,18 +221,18 @@ watch(
       </div>
       <template v-if="selected.type === 'options'">
         <div
-          class="max-h-48 overflow-y-auto bg-[#f1f5f9] border border-gray-300 rounded-xl px-3 py-2 space-y-1.5"
+          class="max-h-48 overflow-y-auto bg-surface border border-gray-300 rounded-xl px-3 py-2 space-y-1.5"
         >
           <label
             v-for="o in selectedOptions"
             :key="o.value"
-            class="flex items-start gap-2 text-sm text-[#334155] cursor-pointer"
+            class="flex items-start gap-2 text-sm text-ink-soft cursor-pointer"
           >
             <input
               v-model="checked"
               type="checkbox"
               :value="o.value"
-              class="mt-0.5 accent-[#0d9488] shrink-0"
+              class="mt-0.5 accent-brand shrink-0"
             />
             <span>{{ o.label }}</span>
           </label>
@@ -240,7 +240,7 @@ watch(
         <button
           @click="add"
           :disabled="!canAdd"
-          class="w-full bg-[#0d9488] hover:bg-[#00685f] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-4xl py-2 text-sm font-bold flex items-center justify-center gap-1.5 transition-colors"
+          class="w-full bg-brand hover:bg-brand-dark disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-4xl py-2 text-sm font-bold flex items-center justify-center gap-1.5 transition-colors"
         >
           <Plus class="size-4" />
           Aplicar{{ checked.length ? ` (${checked.length})` : '' }}
@@ -251,18 +251,18 @@ watch(
           v-model.number="min"
           type="number"
           placeholder="Mín"
-          class="flex-1 min-w-0 bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155]"
+          class="flex-1 min-w-0 bg-surface border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-ink-soft"
         />
         <input
           v-model.number="max"
           type="number"
           placeholder="Máx"
-          class="flex-1 min-w-0 bg-[#f1f5f9] border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-[#334155]"
+          class="flex-1 min-w-0 bg-surface border border-gray-300 rounded-4xl px-3 py-2.5 text-sm text-ink-soft"
         />
         <button
           @click="add"
           :disabled="!canAdd"
-          class="shrink-0 bg-[#0d9488] hover:bg-[#00685f] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-4xl px-3 flex items-center justify-center transition-colors"
+          class="shrink-0 bg-brand hover:bg-brand-dark disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-4xl px-3 flex items-center justify-center transition-colors"
           aria-label="Aplicar filtro"
         >
           <Plus class="size-4" />

@@ -111,10 +111,8 @@ function chooseFirst() {
   <div ref="root" class="relative">
     <!-- El desglose elegido es el botón que lo cambia, igual que la pregunta -->
     <div
-      class="flex items-center gap-2.5 bg-[#f1f5f9] border rounded-2xl px-3 transition-colors"
-      :class="
-        open ? 'border-[#0d9488]' : 'border-gray-300 hover:border-[#0d9488]'
-      "
+      class="flex items-center gap-2.5 bg-surface border rounded-2xl px-3 transition-colors"
+      :class="open ? 'border-brand' : 'border-gray-300 hover:border-brand'"
     >
       <button
         ref="trigger"
@@ -127,20 +125,20 @@ function chooseFirst() {
       >
         <span
           v-if="groupByCode"
-          class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-[#e9d8fb] text-[#7e34c3]"
+          class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-brand-soft text-brand"
           >{{ groupByCode }}</span
         >
         <span
-          class="flex-1 min-w-0 text-[13px] font-semibold text-[#334155] overflow-hidden text-ellipsis whitespace-nowrap"
+          class="flex-1 min-w-0 text-[13px] font-semibold text-ink-soft overflow-hidden text-ellipsis whitespace-nowrap"
           >{{ groupByLabel }}</span
         >
         <span
           v-if="state.groupBy === 'answer'"
-          class="shrink-0 text-[11px] text-[#94a3b8]"
+          class="shrink-0 text-[11px] text-faint"
           >sin desglose</span
         >
         <ChevronDown
-          class="size-4 text-[#94a3b8] shrink-0 transition-transform"
+          class="size-4 text-faint shrink-0 transition-transform"
           :class="open ? 'rotate-180' : ''"
         />
       </button>
@@ -148,7 +146,7 @@ function chooseFirst() {
         v-if="state.groupBy !== 'answer'"
         type="button"
         @click="clearGroupBy"
-        class="shrink-0 text-[#94a3b8] hover:text-[#b91c1c] transition-colors"
+        class="shrink-0 text-faint hover:text-danger transition-colors"
         aria-label="Quitar desglose"
       >
         <X class="size-3.5" />
@@ -162,7 +160,7 @@ function chooseFirst() {
       <div
         class="sticky top-0 bg-white flex items-center gap-2 px-3 py-2 border-b border-gray-100"
       >
-        <Search class="size-4 text-[#94a3b8] shrink-0" />
+        <Search class="size-4 text-faint shrink-0" />
         <input
           ref="input"
           v-model="query"
@@ -175,12 +173,12 @@ function chooseFirst() {
           @keydown.esc="closeAndReturn"
           @keydown.enter.prevent="chooseFirst"
           placeholder="Buscar atributo o pregunta…"
-          class="w-full bg-transparent text-sm text-[#334155] font-medium outline-none"
+          class="w-full bg-transparent text-sm text-ink-soft font-medium outline-none"
         />
       </div>
       <p
         v-if="matchingFrequent.length"
-        class="px-3 pt-2 pb-1 text-[10px] font-semibold text-[#94a3b8] uppercase tracking-wide"
+        class="px-3 pt-2 pb-1 text-[10px] font-semibold text-faint uppercase tracking-wide"
       >
         Frecuentes
       </p>
@@ -191,27 +189,27 @@ function chooseFirst() {
         @click="choose(item)"
         :disabled="item.disabled"
         :title="item.disabled ? NO_YEARS_HINT : undefined"
-        class="w-full text-left px-3 py-1.5 text-sm hover:bg-[#f0fdfa] flex items-center justify-between disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+        class="w-full text-left px-3 py-1.5 text-sm hover:bg-brand-soft flex items-center justify-between disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         :class="
           item.key === state.groupBy
-            ? 'text-[#0d9488] font-semibold'
-            : 'text-[#334155]'
+            ? 'text-brand font-semibold'
+            : 'text-ink-soft'
         "
       >
         <span>
           <span
             v-if="item.code"
-            class="font-mono text-xs font-normal text-[#0d9488] mr-1.5"
+            class="font-mono text-xs font-normal text-brand mr-1.5"
             >{{ item.code }}</span
           >{{ item.label }}</span
         >
-        <span v-if="item.hint" class="text-xs font-normal text-[#94a3b8]">{{
+        <span v-if="item.hint" class="text-xs font-normal text-faint">{{
           item.hint
         }}</span>
       </button>
       <template v-if="ql">
         <p
-          class="px-3 pt-3 pb-1 text-[10px] font-semibold text-[#94a3b8] uppercase tracking-wide"
+          class="px-3 pt-3 pb-1 text-[10px] font-semibold text-faint uppercase tracking-wide"
         >
           Preguntas
         </p>
@@ -220,26 +218,24 @@ function chooseFirst() {
           :key="`q-${item.key}`"
           type="button"
           @click="choose(item)"
-          class="w-full text-left px-3 py-1.5 text-sm text-[#334155] hover:bg-[#f0fdfa]"
+          class="w-full text-left px-3 py-1.5 text-sm text-ink-soft hover:bg-brand-soft"
         >
-          <span class="font-mono text-xs text-[#0d9488] mr-1.5">{{
+          <span class="font-mono text-xs text-brand mr-1.5">{{
             item.key
           }}</span>
           <span>{{ item.label }}</span>
-          <span
-            v-if="item.type === 'range'"
-            class="ml-1.5 text-xs text-[#94a3b8]"
+          <span v-if="item.type === 'range'" class="ml-1.5 text-xs text-faint"
             >rangos</span
           >
         </button>
         <p
           v-if="!matchingQuestions.length"
-          class="px-3 py-1.5 text-xs text-[#94a3b8]"
+          class="px-3 py-1.5 text-xs text-faint"
         >
           Ninguna pregunta coincide.
         </p>
       </template>
-      <p v-else class="px-3 pt-2 pb-1.5 text-xs text-[#94a3b8]">
+      <p v-else class="px-3 pt-2 pb-1.5 text-xs text-faint">
         Escribe arriba para cruzar con cualquier pregunta.
       </p>
     </div>

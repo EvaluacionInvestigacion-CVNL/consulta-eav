@@ -112,7 +112,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex-1 flex flex-col overflow-hidden bg-[#fcf0e4]">
+  <div class="flex-1 flex flex-col overflow-hidden bg-cream">
     <!-- Messages -->
     <div ref="scroller" class="flex-1 overflow-auto p-4 md:p-8">
       <div class="max-w-4xl mx-auto space-y-6">
@@ -121,13 +121,11 @@ watch(
           v-if="!state.chatMessages.length"
           class="flex flex-col items-center justify-center text-center gap-4 mt-16"
         >
-          <div class="bg-[#7e34c3]/10 rounded-full p-4">
-            <Sparkles class="size-8 text-[#7e34c3]" />
+          <div class="bg-brand/10 rounded-full p-4">
+            <Sparkles class="size-8 text-brand" />
           </div>
-          <h3 class="font-['Manrope'] font-bold text-xl text-[#1e293b]">
-            Pregúntale a la encuesta
-          </h3>
-          <p class="text-sm text-[#64748b] max-w-md">
+          <h3 class="font-bold text-xl text-ink">Pregúntale a la encuesta</h3>
+          <p class="text-sm text-muted max-w-md">
             Escribe tu pregunta en lenguaje natural. La IA elige la pregunta de
             la encuesta, aplica filtros y agrupaciones, y te responde con cifras
             reales.
@@ -137,7 +135,7 @@ watch(
               v-for="s in suggestions"
               :key="s"
               @click="useSuggestion(s)"
-              class="text-left text-sm text-[#475569] bg-white border border-[#e2e8f0] rounded-xl px-4 py-3 hover:border-[#7e34c3] hover:text-[#7e34c3] transition-colors"
+              class="text-left text-sm text-ink-soft bg-white border border-line rounded-xl px-4 py-3 hover:border-brand hover:text-brand transition-colors"
             >
               {{ s }}
             </button>
@@ -149,7 +147,7 @@ watch(
           <!-- User bubble -->
           <div v-if="m.role === 'user'" class="flex justify-end">
             <div
-              class="max-w-[80%] bg-[#7e34c3] text-white rounded-2xl rounded-br-sm px-4 py-2.5 text-sm font-medium shadow-sm"
+              class="max-w-[80%] bg-brand text-white rounded-2xl rounded-br-sm px-4 py-2.5 text-sm font-medium shadow-sm"
             >
               {{ m.text }}
             </div>
@@ -158,20 +156,20 @@ watch(
           <!-- Assistant bubble -->
           <div v-else class="flex flex-col gap-3">
             <div
-              class="max-w-[90%] bg-white border border-[#e2e8f0] rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed shadow-sm"
-              :class="m.error ? 'text-[#b91c1c]' : 'text-[#1e293b]'"
+              class="max-w-[90%] bg-white border border-line rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed shadow-sm"
+              :class="m.error ? 'text-danger' : 'text-ink'"
             >
               <div class="md" v-html="renderMarkdown(m.text)"></div>
               <p
                 v-if="m.toolCalls && m.toolCalls.length"
-                class="mt-2 pt-2 border-t border-[#f1f5f9] text-[11px] text-[#94a3b8] font-mono"
+                class="mt-2 pt-2 border-t border-surface text-[11px] text-faint font-mono"
               >
                 {{ toolSummary(m.toolCalls) }}
               </p>
               <button
                 v-if="m.error && !chatLoading && m.rateLimit !== 'global'"
                 @click="retryLastMessage"
-                class="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#b91c1c] hover:text-[#7f1d1d] transition-colors"
+                class="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-danger hover:text-danger-dark transition-colors"
               >
                 <RotateCw class="size-3.5" />
                 Reintentar
@@ -185,19 +183,17 @@ watch(
 
         <div v-if="chatLoading" class="flex flex-col gap-1.5">
           <div
-            class="w-fit bg-white border border-[#e2e8f0] rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm"
+            class="w-fit bg-white border border-line rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm"
           >
             <div class="typing"><span></span><span></span><span></span></div>
           </div>
-          <span class="text-xs text-[#94a3b8] pl-1"
-            >Consultando la encuesta…</span
-          >
+          <span class="text-xs text-faint pl-1">Consultando la encuesta…</span>
         </div>
       </div>
     </div>
 
     <!-- Composer -->
-    <div class="border-t border-[#e2e8f0] bg-white/70 backdrop-blur px-8 py-4">
+    <div class="border-t border-line bg-white/70 backdrop-blur px-8 py-4">
       <form
         @submit.prevent="submit"
         class="max-w-4xl mx-auto flex items-end gap-3"
@@ -207,12 +203,12 @@ watch(
           rows="1"
           placeholder="Escribe tu pregunta…"
           @keydown.enter.exact.prevent="submit"
-          class="flex-1 resize-none bg-[#f1f5f9] border border-gray-300 rounded-2xl px-4 py-3 text-sm text-[#334155] focus:outline-none focus:border-[#7e34c3] max-h-40"
+          class="flex-1 resize-none bg-surface border border-gray-300 rounded-2xl px-4 py-3 text-sm text-ink-soft focus:outline-none focus:border-brand max-h-40"
         ></textarea>
         <button
           type="submit"
           :disabled="!input.trim() || chatLoading"
-          class="bg-[#7e34c3] hover:bg-[#5e2494] disabled:opacity-45 disabled:cursor-not-allowed text-white rounded-2xl px-5 py-3 flex items-center gap-2 font-bold shadow-lg shadow-[#7e34c3]/20 transition-colors shrink-0"
+          class="bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded-2xl px-5 py-3 flex items-center gap-2 font-bold shadow-lg shadow-brand/20 transition-colors shrink-0"
         >
           <Send class="size-4 justify-center" />
         </button>
@@ -236,7 +232,7 @@ watch(
 .md :deep(strong),
 .md :deep(b) {
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-ink);
 }
 .md :deep(em),
 .md :deep(i) {
@@ -257,18 +253,18 @@ watch(
   margin: 0.125rem 0;
 }
 .md :deep(li::marker) {
-  color: #94a3b8;
+  color: var(--color-faint);
 }
 .md :deep(code) {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.85em;
-  background: #f1f5f9;
-  color: #7e34c3;
+  background: var(--color-surface);
+  color: var(--color-brand);
   padding: 0.1em 0.35em;
   border-radius: 0.3rem;
 }
 .md :deep(pre) {
-  background: #f1f5f9;
+  background: var(--color-surface);
   padding: 0.6rem 0.8rem;
   border-radius: 0.5rem;
   overflow-x: auto;
@@ -276,17 +272,17 @@ watch(
 }
 .md :deep(pre code) {
   background: none;
-  color: #334155;
+  color: var(--color-ink-soft);
   padding: 0;
 }
 .md :deep(a) {
-  color: #7e34c3;
+  color: var(--color-brand);
   text-decoration: underline;
 }
 .md :deep(blockquote) {
-  border-left: 3px solid #e2e8f0;
+  border-left: 3px solid var(--color-line);
   padding-left: 0.75rem;
-  color: #475569;
+  color: var(--color-ink-soft);
   margin: 0.5rem 0;
 }
 
@@ -299,7 +295,7 @@ watch(
   width: 7px;
   height: 7px;
   border-radius: 9999px;
-  background: #7e34c3;
+  background: var(--color-brand);
   opacity: 0.4;
   animation: typing-bounce 1.2s infinite ease-in-out;
 }

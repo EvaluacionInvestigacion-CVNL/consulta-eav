@@ -1,9 +1,36 @@
 @import 'tailwindcss';
 
+/* Identidad de Cómo Vamos Nuevo León.Todo el color de la UI sale de aquí. */
 @theme {
-  --font-sans: 'DM Sans', sans-serif;
-  --font-serif: 'Fraunces', serif;
-  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'Rubik', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  --color-brand: #7e33c3;
+  --color-brand-dark: #5e2494;
+  --color-brand-soft: #f3ebfb;
+
+  --color-coral: #fc6656;
+  --color-orange: #fb7e50;
+  --color-yellow: #ffba00;
+  --color-green: #29c19b;
+  --color-green-dark: #1f9778;
+
+  --color-cream: #fcefe4;
+  --color-surface: #f5f2ee;
+  --color-surface-soft: #faf8f5;
+  --color-line: #e9e4dd;
+  --color-line-strong: #d3cdc4;
+
+  --color-ink: #161616;
+  --color-ink-soft: #333333;
+  --color-muted: #6b6b6b;
+  --color-faint: #9a9a9a;
+
+  --color-danger: #c0392b;
+  --color-danger-dark: #8e2a1f;
+  --color-warn-soft: #fff3cf;
+  --color-warn-ink: #8a5600;
+  --color-highlight: #ffe08a;
 }
 
 /* keyframes must live outside @layer */
@@ -17,22 +44,23 @@
   body {
     font-family: var(--font-sans);
     font-size: 14px;
-    background: var(--color-bg);
+    background: var(--color-cream);
     color: var(--color-ink);
     min-height: 100vh;
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-border-strong);
-    border-radius: 4px;
+    background: var(--color-line-strong);
+    border-radius: 6px;
   }
 }
 
@@ -41,8 +69,8 @@
   .spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid var(--color-border);
-    border-top-color: var(--color-accent);
+    border: 2px solid var(--color-line);
+    border-top-color: var(--color-brand);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
   }

@@ -16,14 +16,14 @@ const isPivot = computed(() => props.data?.format === 'pivot')
 <template>
   <div class="overflow-hidden">
     <!-- Tab header -->
-    <div class="border-b border-[#f1f5f9] px-5 py-3 flex gap-8">
+    <div class="border-b border-surface px-5 py-3 flex gap-8">
       <button
         @click="tab = 'table'"
         class="flex items-center gap-2 pb-2 border-b-2 transition-colors"
         :class="
           tab === 'table'
-            ? 'border-[#7e34c3] text-[#7e34c3]'
-            : 'border-transparent text-[#94a3b8]'
+            ? 'border-brand text-brand'
+            : 'border-transparent text-faint'
         "
       >
         <Table2 class="size-3.5" />
@@ -34,8 +34,8 @@ const isPivot = computed(() => props.data?.format === 'pivot')
         class="flex items-center gap-2 pb-2 border-b-2 transition-colors"
         :class="
           tab === 'chart'
-            ? 'border-[#7e34c3] text-[#7e34c3]'
-            : 'border-transparent text-[#94a3b8]'
+            ? 'border-brand text-brand'
+            : 'border-transparent text-faint'
         "
       >
         <BarChart3 class="size-3.5" />

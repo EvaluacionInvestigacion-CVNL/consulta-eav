@@ -96,10 +96,10 @@ watch(canCompareYears, (ok) => {
   >
     <aside
       v-show="state.sidebarOpen"
-      class="w-70 shrink-0 bg-white border-r border-[#e2e8f0] flex flex-col max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:shadow-2xl"
+      class="w-70 shrink-0 bg-white border-r border-line flex flex-col max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:shadow-2xl"
     >
       <!-- Logo -->
-      <div class="py-2 px-4 border-b border-[#e2e8f0]">
+      <div class="py-2 px-4 border-b border-line">
         <div class="flex items-center justify-between gap-3 px-2 py-2">
           <a
             href="/"
@@ -113,14 +113,14 @@ watch(canCompareYears, (ok) => {
               class="size-6 object-contain max-w-none"
             />
             <span
-              class="font-extrabold text-[#7e34c3] text-center text-[20px] tracking-tight mx-1"
+              class="font-extrabold text-brand text-center text-[20px] tracking-tight mx-1"
               >Así Vamos</span
             >
           </a>
           <button
             @click="toggleSidebar"
             title="Ocultar panel"
-            class="shrink-0 p-2 rounded-lg text-[#64748b] hover:text-[#fb7e50] hover:bg-[#f8fafc] transition-colors cursor-pointer"
+            class="shrink-0 p-2 rounded-lg text-muted hover:text-orange hover:bg-surface-soft transition-colors cursor-pointer"
           >
             <PanelLeft class="size-5" />
           </button>
@@ -136,18 +136,18 @@ watch(canCompareYears, (ok) => {
         <!-- Modo de Consulta -->
         <div>
           <label
-            class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
+            class="text-xs font-medium text-muted uppercase tracking-wide mb-2 block"
           >
             Modo de Consulta
           </label>
-          <div class="grid grid-cols-2 gap-2 bg-[#f1f5f9] p-1 rounded-2xl">
+          <div class="grid grid-cols-2 gap-2 bg-surface p-1 rounded-2xl">
             <button
               @click="setQueryMode('manual')"
               class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-bold transition-colors"
               :class="
                 state.queryMode === 'manual'
-                  ? 'bg-white text-[#0d9488] shadow-sm'
-                  : 'text-[#94a3b8] hover:text-[#64748b]'
+                  ? 'bg-white text-brand shadow-sm'
+                  : 'text-faint hover:text-muted'
               "
             >
               <SlidersHorizontal class="size-4" />
@@ -158,8 +158,8 @@ watch(canCompareYears, (ok) => {
               class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-bold transition-colors"
               :class="
                 state.queryMode === 'ai'
-                  ? 'bg-white text-[#7e34c3] shadow-sm'
-                  : 'text-[#94a3b8] hover:text-[#64748b]'
+                  ? 'bg-white text-brand shadow-sm'
+                  : 'text-faint hover:text-muted'
               "
             >
               <Sparkles class="size-4" />
@@ -174,26 +174,26 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
                 >1</span
               >
               <span
-                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                class="text-xs font-medium text-muted uppercase tracking-wide"
                 >Pregunta</span
               >
             </div>
             <button
               @click="pickerOpen = true"
-              class="w-full text-left bg-[#f1f5f9] border border-gray-300 rounded-2xl px-3 py-2.5 cursor-pointer flex items-center gap-2.5 hover:border-[#0d9488] transition-colors"
+              class="w-full text-left bg-surface border border-gray-300 rounded-2xl px-3 py-2.5 cursor-pointer flex items-center gap-2.5 hover:border-brand transition-colors"
             >
               <span
                 v-if="selectedQuestionMeta"
-                class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-[#e9d8fb] text-[#7e34c3]"
+                class="shrink-0 font-mono text-[11px] font-medium px-1.5 py-0.5 rounded bg-brand-soft text-brand"
                 >{{ selectedQuestionMeta.id }}</span
               >
               <span class="flex-1 min-w-0">
                 <span
-                  class="block text-[13px] font-semibold text-[#334155] overflow-hidden text-ellipsis whitespace-nowrap"
+                  class="block text-[13px] font-semibold text-ink-soft overflow-hidden text-ellipsis whitespace-nowrap"
                   >{{
                     selectedQuestionMeta
                       ? selectedQuestionMeta.main
@@ -201,7 +201,7 @@ watch(canCompareYears, (ok) => {
                   }}</span
                 >
                 <span
-                  class="block text-[11px] text-[#94a3b8] overflow-hidden text-ellipsis whitespace-nowrap mt-px"
+                  class="block text-[11px] text-faint overflow-hidden text-ellipsis whitespace-nowrap mt-px"
                   >{{
                     selectedQuestionMeta
                       ? selectedQuestionMeta.note ||
@@ -214,7 +214,7 @@ watch(canCompareYears, (ok) => {
                 v-if="selectedQuestionMeta && selectedQuestionMeta.info"
                 :text="selectedQuestionMeta.info"
               />
-              <Search class="size-4 text-[#94a3b8] shrink-0" />
+              <Search class="size-4 text-faint shrink-0" />
             </button>
           </div>
 
@@ -222,13 +222,13 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
                 >2</span
               >
               <span
-                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                class="text-xs font-medium text-muted uppercase tracking-wide"
                 >Desglosar por
-                <span class="normal-case font-normal text-[#94a3b8]"
+                <span class="normal-case font-normal text-faint"
                   >(opcional)</span
                 ></span
               >
@@ -240,13 +240,13 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
                 >3</span
               >
               <span
-                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                class="text-xs font-medium text-muted uppercase tracking-wide"
                 >Filtrar
-                <span class="normal-case font-normal text-[#94a3b8]"
+                <span class="normal-case font-normal text-faint"
                   >(opcional)</span
                 ></span
               >
@@ -258,13 +258,13 @@ watch(canCompareYears, (ok) => {
           <div v-if="state.filters.length">
             <div class="flex items-center justify-between mb-2">
               <label
-                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                class="text-xs font-medium text-muted uppercase tracking-wide"
               >
                 Filtros
               </label>
               <button
                 @click="clearFilters"
-                class="text-xs text-[#94a3b8] hover:text-[#0d9488] font-medium"
+                class="text-xs text-faint hover:text-brand font-medium"
               >
                 Limpiar
               </button>
@@ -273,7 +273,7 @@ watch(canCompareYears, (ok) => {
               <span
                 v-for="(f, i) in state.filters"
                 :key="i"
-                class="inline-flex items-center gap-1 bg-[#f0fdfa] text-[#0d9488] text-xs font-medium px-2 py-1 rounded"
+                class="inline-flex items-center gap-1 bg-brand-soft text-brand text-xs font-medium px-2 py-1 rounded"
               >
                 <span
                   >{{ f.question ?? attributeLabel(f.attribute) }}:
@@ -281,7 +281,7 @@ watch(canCompareYears, (ok) => {
                 >
                 <button
                   @click="removeFilter(i)"
-                  class="hover:text-[#00685f]"
+                  class="hover:text-brand-dark"
                   aria-label="Quitar filtro"
                 >
                   <X class="size-3" />
@@ -296,9 +296,9 @@ watch(canCompareYears, (ok) => {
               <input
                 type="checkbox"
                 v-model="state.initialOnly"
-                class="size-4 accent-[#0d9488] cursor-pointer"
+                class="size-4 accent-brand cursor-pointer"
               />
-              <span class="flex-1 text-sm font-medium text-[#1e293b]">
+              <span class="flex-1 text-sm font-medium text-ink">
                 Proyectar a la población
               </span>
               <InfoTooltip
@@ -311,26 +311,21 @@ watch(canCompareYears, (ok) => {
           <div v-if="hasFeature('mostrar_sql')">
             <button
               @click="showSQL = !showSQL"
-              class="w-full flex items-center justify-between p-3 bg-[#f8fafc] hover:bg-[#f1f5f9] rounded-lg transition-colors"
+              class="w-full flex items-center justify-between p-3 bg-surface-soft hover:bg-surface rounded-lg transition-colors"
             >
               <span
-                class="text-xs font-medium text-[#64748b] uppercase tracking-wide"
+                class="text-xs font-medium text-muted uppercase tracking-wide"
               >
                 SQL generado
               </span>
-              <Eye
-                :class="[
-                  'size-4',
-                  showSQL ? 'text-[#0d9488]' : 'text-[#94a3b8]',
-                ]"
-              />
+              <Eye :class="['size-4', showSQL ? 'text-brand' : 'text-faint']" />
             </button>
 
             <div v-if="showSQL" class="mt-2">
               <div class="flex items-center justify-end mb-2">
                 <button
                   @click="copySQL"
-                  class="flex items-center gap-1 text-[#0d9488] hover:text-[#00685f] transition-colors"
+                  class="flex items-center gap-1 text-brand hover:text-brand-dark transition-colors"
                 >
                   <template v-if="sqlCopied">
                     <Check class="size-3" />
@@ -342,11 +337,9 @@ watch(canCompareYears, (ok) => {
                   </template>
                 </button>
               </div>
-              <div
-                class="bg-[#0f172a] rounded-lg p-4 border border-[#1e293b] shadow-inner"
-              >
+              <div class="bg-ink rounded-lg p-4 border border-ink shadow-inner">
                 <pre
-                  class="text-xs font-mono leading-relaxed text-code-fg whitespace-pre-wrap break-all m-0 text-[rgba(45,212,191,0.9)]"
+                  class="text-xs font-mono leading-relaxed whitespace-pre-wrap break-all m-0 text-green"
                   >{{ sqlPreview }}</pre
                 >
               </div>
@@ -358,7 +351,7 @@ watch(canCompareYears, (ok) => {
         <template v-else>
           <button
             @click="newConversation"
-            class="w-full flex items-center justify-center gap-2 bg-[#7e34c3] hover:bg-[#5e2494] text-white rounded-2xl px-4 py-2.5 text-sm font-bold shadow-sm transition-colors"
+            class="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-white rounded-2xl px-4 py-2.5 text-sm font-bold shadow-sm transition-colors"
           >
             <Plus class="size-4" />
             Nueva conversación
@@ -366,14 +359,14 @@ watch(canCompareYears, (ok) => {
 
           <div>
             <label
-              class="text-xs font-medium text-[#64748b] uppercase tracking-wide mb-2 block"
+              class="text-xs font-medium text-muted uppercase tracking-wide mb-2 block"
             >
               Conversaciones recientes
             </label>
 
             <p
               v-if="!state.conversations.length"
-              class="text-xs text-[#94a3b8] leading-snug"
+              class="text-xs text-faint leading-snug"
             >
               Tus conversaciones aparecerán aquí. Se guardan las 5 más recientes
               en este navegador.
@@ -387,8 +380,8 @@ watch(canCompareYears, (ok) => {
                 class="group flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-colors"
                 :class="
                   c.id === state.currentConversationId
-                    ? 'bg-[#7e34c3]/10 text-[#7e34c3]'
-                    : 'text-[#475569] hover:bg-[#f1f5f9]'
+                    ? 'bg-brand/10 text-brand'
+                    : 'text-ink-soft hover:bg-surface'
                 "
               >
                 <MessageSquare class="size-4 shrink-0" />
@@ -398,17 +391,17 @@ watch(canCompareYears, (ok) => {
                      preguntó, aunque el usuario se haya cambiado de chat. -->
                   <p
                     v-if="state.pendingChats.includes(c.id)"
-                    class="text-[10px] text-[#7e34c3] animate-pulse"
+                    class="text-[10px] text-brand animate-pulse"
                   >
                     Respondiendo…
                   </p>
-                  <p v-else class="text-[10px] text-[#94a3b8]">
+                  <p v-else class="text-[10px] text-faint">
                     {{ relativeTime(c.updatedAt) }}
                   </p>
                 </div>
                 <button
                   @click.stop="deleteConversation(c.id)"
-                  class="opacity-0 group-hover:opacity-100 text-[#94a3b8] hover:text-[#b91c1c] transition-opacity shrink-0"
+                  class="opacity-0 group-hover:opacity-100 text-faint hover:text-danger transition-opacity shrink-0"
                   aria-label="Eliminar conversación"
                 >
                   <Trash2 class="size-3.5" />
@@ -422,19 +415,19 @@ watch(canCompareYears, (ok) => {
       <!-- Execute Button (manual mode only) -->
       <div
         v-if="state.queryMode === 'manual'"
-        class="p-4 border-t border-[#e2e8f0] space-y-3"
+        class="p-4 border-t border-line space-y-3"
       >
         <p
           v-if="querySummary"
-          class="text-xs text-[#475569] bg-[#f8fafc] border border-[#e2e8f0] rounded-lg px-3 py-2 leading-relaxed"
+          class="text-xs text-ink-soft bg-surface-soft border border-line rounded-lg px-3 py-2 leading-relaxed"
         >
-          <span class="font-semibold text-[#334155]">Verás:</span>
+          <span class="font-semibold text-ink-soft">Verás:</span>
           {{ querySummary }}
         </p>
         <button
           @click="runAndClose"
           :disabled="!canRun"
-          class="w-full bg-[#0d9488] hover:bg-[#00685f] disabled:opacity-45 disabled:cursor-not-allowed text-white rounded px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-lg shadow-[#0d9488]/20 transition-colors"
+          class="w-full bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-lg shadow-brand/20 transition-colors"
         >
           <Play class="size-4 fill-white" />
           Ejecutar consulta

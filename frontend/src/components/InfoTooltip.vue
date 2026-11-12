@@ -33,7 +33,7 @@ function close() {
     @mouseenter="open"
     @mouseleave="close"
     @click.stop
-    class="shrink-0 flex text-[#94a3b8] hover:text-[#0d9488] cursor-help"
+    class="shrink-0 flex text-faint hover:text-brand cursor-help"
     aria-label="Información de la pregunta"
   >
     <Info class="size-4" />
@@ -42,7 +42,7 @@ function close() {
     <div
       v-if="show && text"
       :style="{ top: pos.top + 'px', left: pos.left + 'px' }"
-      class="fixed z-60 max-w-xs px-3 py-2 rounded-lg bg-[#1e293b] text-white text-xs leading-snug shadow-xl pointer-events-none whitespace-pre-line"
+      class="fixed z-60 max-w-xs px-3 py-2 rounded-lg bg-ink text-white text-xs leading-snug shadow-xl pointer-events-none whitespace-pre-line"
       :class="above ? '-translate-x-1/2 -translate-y-full' : '-translate-x-1/2'"
     >
       {{ text }}

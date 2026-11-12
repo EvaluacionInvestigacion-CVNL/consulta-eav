@@ -30,8 +30,8 @@ function setPieRef(el, i) {
 }
 
 const FLAT_COLORS = [
-  '#28c19b',
-  '#7e34c3',
+  '#29c19b',
+  '#7e33c3',
   '#ffba00',
   '#fb7e50',
   '#1f9778',
@@ -39,8 +39,8 @@ const FLAT_COLORS = [
   '#cc9500',
 ]
 const PIVOT_COLORS = [
-  '#28c19b',
-  '#7e34c3',
+  '#29c19b',
+  '#7e33c3',
   '#ffba00',
   '#fb7e50',
   '#1f9778',
@@ -120,12 +120,12 @@ function buildFlat(data) {
       scales: {
         x: {
           grid: { display: false },
-          ticks: { font: { family: 'DM Sans', size: 11 } },
+          ticks: { font: { family: 'Rubik', size: 11 } },
         },
         y: {
           grid: { color: 'rgba(0,0,0,0.05)' },
           ticks: {
-            font: { family: 'DM Sans', size: 11 },
+            font: { family: 'Rubik', size: 11 },
             callback: (v) => v + '%',
           },
         },
@@ -167,7 +167,7 @@ function buildPivot(data) {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { font: { family: 'DM Sans', size: 11 }, boxWidth: 12 },
+          labels: { font: { family: 'Rubik', size: 11 }, boxWidth: 12 },
         },
         tooltip: {
           callbacks: {
@@ -180,7 +180,7 @@ function buildPivot(data) {
           stacked: true,
           grid: { display: false },
           ticks: {
-            font: { family: 'DM Sans', size: 10 },
+            font: { family: 'Rubik', size: 10 },
             autoSkip: false,
             maxRotation: 60,
             minRotation: 30,
@@ -191,7 +191,7 @@ function buildPivot(data) {
           max: 100,
           grid: { color: 'rgba(0,0,0,0.05)' },
           ticks: {
-            font: { family: 'DM Sans', size: 11 },
+            font: { family: 'Rubik', size: 11 },
             callback: (v) => v + '%',
           },
         },
@@ -259,7 +259,7 @@ function buildNumericMeans(data) {
         x: {
           grid: { display: false },
           ticks: {
-            font: { family: 'DM Sans', size: 10 },
+            font: { family: 'Rubik', size: 10 },
             autoSkip: false,
             maxRotation: 60,
             minRotation: 30,
@@ -268,7 +268,7 @@ function buildNumericMeans(data) {
         y: {
           beginAtZero: true,
           grid: { color: 'rgba(0,0,0,0.05)' },
-          ticks: { font: { family: 'DM Sans', size: 11 } },
+          ticks: { font: { family: 'Rubik', size: 11 } },
         },
       },
     },
@@ -317,7 +317,7 @@ function buildPie(data, groupIdx) {
         legend: {
           position: 'bottom',
           labels: {
-            font: { family: 'DM Sans', size: 10 },
+            font: { family: 'Rubik', size: 10 },
             boxWidth: 10,
             padding: 8,
           },
@@ -392,19 +392,19 @@ onBeforeUnmount(() => {
   <div class="space-y-8">
     <div>
       <div class="flex items-center justify-between mb-3 px-2 gap-4">
-        <h3 class="text-sm font-bold text-[#1e293b]">Resultados</h3>
+        <h3 class="text-sm font-bold text-ink">Resultados</h3>
         <!-- El toggle sólo aparece cuando la distribución es menor a DIST_MAX_VALUES -->
         <div
           v-if="isNumericPivot && canShowDistribution"
-          class="flex gap-1 bg-[#f1f5f9] p-1 rounded-2xl shrink-0"
+          class="flex gap-1 bg-surface p-1 rounded-2xl shrink-0"
         >
           <button
             @click="numericMode = 'promedio'"
             class="px-3 py-1 rounded-xl text-xs font-bold transition-colors"
             :class="
               numericMode === 'promedio'
-                ? 'bg-white text-[#0d9488] shadow-sm'
-                : 'text-[#94a3b8] hover:text-[#64748b]'
+                ? 'bg-white text-brand shadow-sm'
+                : 'text-faint hover:text-muted'
             "
           >
             Promedio
@@ -414,8 +414,8 @@ onBeforeUnmount(() => {
             class="px-3 py-1 rounded-xl text-xs font-bold transition-colors"
             :class="
               numericMode === 'distribucion'
-                ? 'bg-white text-[#0d9488] shadow-sm'
-                : 'text-[#94a3b8] hover:text-[#64748b]'
+                ? 'bg-white text-brand shadow-sm'
+                : 'text-faint hover:text-muted'
             "
           >
             Distribución
@@ -431,7 +431,7 @@ onBeforeUnmount(() => {
     <div v-if="pieGroupLabels.length" class="space-y-4">
       <button
         @click="showPieCharts = !showPieCharts"
-        class="flex items-center gap-2 text-sm font-semibold text-[#7e34c3] hover:text-[#5e2494] transition-colors"
+        class="flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-dark transition-colors"
       >
         <PieChart class="size-4" />
         {{ showPieCharts ? 'Ocultar' : 'Mostrar' }} distribución por columna
@@ -448,7 +448,7 @@ onBeforeUnmount(() => {
           class="bg-white border border-gray-300 rounded-lg p-4"
         >
           <p
-            class="text-xs font-bold text-[#64748b] uppercase tracking-wider mb-2 text-center"
+            class="text-xs font-bold text-muted uppercase tracking-wider mb-2 text-center"
           >
             {{ label }}
           </p>

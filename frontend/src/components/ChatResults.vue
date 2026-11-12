@@ -27,12 +27,10 @@ function tabLabel(query) {
 </script>
 
 <template>
-  <div
-    class="bg-white rounded-lg border border-[#e2e8f0] shadow-sm overflow-hidden"
-  >
+  <div class="bg-white rounded-lg border border-line shadow-sm overflow-hidden">
     <div
       v-if="results.length > 1"
-      class="flex gap-1 overflow-x-auto px-3 pt-3 border-b border-[#f1f5f9]"
+      class="flex gap-1 overflow-x-auto px-3 pt-3 border-b border-surface"
       role="tablist"
     >
       <button
@@ -44,8 +42,8 @@ function tabLabel(query) {
         class="shrink-0 whitespace-nowrap px-3 py-1.5 rounded-t-md text-xs font-mono border-b-2 transition-colors"
         :class="
           i === active
-            ? 'border-[#7e34c3] text-[#7e34c3] bg-[#7e34c3]/5'
-            : 'border-transparent text-[#64748b] hover:text-[#334155]'
+            ? 'border-brand text-brand bg-brand/5'
+            : 'border-transparent text-muted hover:text-ink-soft'
         "
       >
         {{ tabLabel(r.query) }}
@@ -53,9 +51,9 @@ function tabLabel(query) {
     </div>
     <p
       v-if="results.length > 1 && current.result.question?.q_text"
-      class="px-5 pt-3 text-sm text-[#334155]"
+      class="px-5 pt-3 text-sm text-ink-soft"
     >
-      <span class="font-mono text-xs text-[#7e34c3] mr-1">{{
+      <span class="font-mono text-xs text-brand mr-1">{{
         current.result.question.q_id
       }}</span>
       {{ current.result.question.q_text }}
