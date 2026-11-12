@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { Calendar, PanelLeft } from 'lucide-vue-next'
-import { state, selectedQuestion, setWave, toggleSidebar } from '../store.js'
+import { PanelLeft } from 'lucide-vue-next'
+import { state, selectedQuestion, toggleSidebar } from '../store.js'
 
 const questionText = computed(() =>
   state.queryMode === 'ai'
@@ -10,16 +10,15 @@ const questionText = computed(() =>
       'Selecciona una pregunta en el panel izquierdo',
 )
 
-// Antelínea sobre la pregunta: qué estás viendo.
+// Antelínea sobre la pregunta: qué estás viendo y de qué año. El año se elige
+// en el panel; aquí se repite para que se vea aunque el panel esté cerrado.
 const eyebrow = computed(() => {
   if (state.queryMode === 'ai') return 'Modo IA'
   const q = selectedQuestion.value
-  return q ? `Pregunta ${q.q_id}` : 'Consulta manual'
+  const parts = [q ? `Pregunta ${q.q_id}` : 'Consulta manual']
+  if (state.waveId) parts.push(state.waveId)
+  return parts.join(' · ')
 })
-
-function onWaveChange(e) {
-  setWave(e.target.value)
-}
 </script>
 
 <template>
@@ -48,29 +47,6 @@ function onWaveChange(e) {
           {{ questionText }}
         </h2>
       </div>
-    </div>
-
-    <div
-      v-if="state.waves.length > 1"
-      class="flex items-center gap-2 shrink-0"
-      title="Levantamiento de la encuesta"
-    >
-      <Calendar class="size-4 text-faint max-md:hidden" />
-      <label
-        class="text-xs font-medium text-muted uppercase tracking-wide max-md:hidden"
-      >
-        Encuesta
-      </label>
-      <select
-        :value="state.waveId"
-        :disabled="state.loading"
-        @change="onWaveChange"
-        class="text-sm font-semibold text-ink-soft bg-white border border-line rounded-full px-4 py-1.5 cursor-pointer hover:border-brand focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        <option v-for="w in state.waves" :key="w.wave_id" :value="w.wave_id">
-          {{ w.label || w.year }}
-        </option>
-      </select>
     </div>
   </header>
 </template>

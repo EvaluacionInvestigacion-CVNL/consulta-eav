@@ -27,6 +27,7 @@ import {
   querySummary,
   questionPicker,
   setQueryMode,
+  setWave,
   newConversation,
   loadConversation,
   deleteConversation,
@@ -56,6 +57,30 @@ function relativeTime(ts) {
   const d = Math.floor(h / 24)
   if (d === 1) return 'ayer'
   return `hace ${d} d`
+}
+
+// Una píldora por año, del primero al último que hay cargados. Los años sin
+// ola en medio (2020) salen apagados: ese año no se levantó la encuesta.
+// Cambiar de año reinicia la consulta: ver setWave.
+const yearPills = computed(() => {
+  const byYear = new Map(state.waves.map((w) => [Number(w.year), w]))
+  if (!byYear.size) return []
+  const years = [...byYear.keys()]
+  const pills = []
+  for (let y = Math.min(...years); y <= Math.max(...years); y++) {
+    pills.push({ year: y, wave: byYear.get(y) || null })
+  }
+  return pills
+})
+// Filas parejas de hasta cinco píldoras (lo que cabe en 280 px): 6 años →
+// 3+3, 7 → 4+3, 11 → 4+4+3. Agregar un año nunca deja una píldora sola.
+const pillColumns = computed(() => {
+  const n = yearPills.value.length
+  return n ? Math.ceil(n / Math.ceil(n / 5)) : 5
+})
+function waveTitle(w) {
+  const n = (w.n_respondents ?? 0).toLocaleString('es-MX')
+  return `${n} personas encuestadas en ${w.year}`
 }
 
 const sqlCopied = ref(false)
@@ -175,6 +200,50 @@ watch(canCompareYears, (ok) => {
 
         <!-- Manual query builder controls -->
         <template v-if="state.queryMode === 'manual'">
+          <!-- Encuesta: el año define qué preguntas hay, por eso va antes del
+               paso 1. En modo IA no se muestra: el modelo elige el año. -->
+          <div v-if="state.waves.length > 1">
+            <label
+              class="text-xs font-medium text-muted uppercase tracking-wide mb-2 block"
+            >
+              Encuesta
+            </label>
+            <div
+              class="grid gap-1.5"
+              :style="{
+                gridTemplateColumns: `repeat(${pillColumns}, minmax(0, 1fr))`,
+              }"
+            >
+              <template v-for="p in yearPills" :key="p.year">
+                <button
+                  v-if="p.wave"
+                  @click="setWave(p.wave.wave_id)"
+                  :disabled="state.loading"
+                  :aria-pressed="p.wave.wave_id === state.waveId"
+                  :title="waveTitle(p.wave)"
+                  class="py-1.5 rounded-full text-[13px] font-semibold text-center transition-colors disabled:cursor-not-allowed"
+                  :class="
+                    p.wave.wave_id === state.waveId
+                      ? 'bg-brand text-white shadow-sm'
+                      : 'bg-surface text-ink-soft hover:bg-line'
+                  "
+                >
+                  {{ p.year }}
+                </button>
+                <!-- Un span y no un button deshabilitado: el tooltip nativo no
+                     sale sobre botones deshabilitados en todos los navegadores. -->
+                <span
+                  v-else
+                  aria-disabled="true"
+                  :title="`En ${p.year} no se levantó la encuesta.`"
+                  class="py-1.5 rounded-full text-[13px] font-semibold text-center text-faint border border-dashed border-line-strong cursor-not-allowed select-none"
+                >
+                  {{ p.year }}
+                </span>
+              </template>
+            </div>
+          </div>
+
           <!-- Pregunta -->
           <div>
             <div class="flex items-center gap-2 mb-2">
