@@ -10,6 +10,13 @@ const questionText = computed(() =>
       'Selecciona una pregunta en el panel izquierdo',
 )
 
+// Antelínea sobre la pregunta: qué estás viendo.
+const eyebrow = computed(() => {
+  if (state.queryMode === 'ai') return 'Modo IA'
+  const q = selectedQuestion.value
+  return q ? `Pregunta ${q.q_id}` : 'Consulta manual'
+})
+
 function onWaveChange(e) {
   setWave(e.target.value)
 }
@@ -24,15 +31,23 @@ function onWaveChange(e) {
         v-if="!state.sidebarOpen"
         @click="toggleSidebar"
         title="Mostrar panel"
-        class="shrink-0 p-2 rounded-lg text-muted hover:text-orange hover:bg-surface-soft transition-colors cursor-pointer"
+        class="shrink-0 p-2 rounded-lg text-muted hover:text-brand hover:bg-brand-soft transition-colors cursor-pointer"
       >
         <PanelLeft class="size-5" />
       </button>
-      <h2
-        class="text-base md:text-lg whitespace-nowrap overflow-x-auto min-w-0 uppercase text-orange font-extrabold"
-      >
-        {{ questionText }}
-      </h2>
+      <div class="min-w-0">
+        <p
+          class="text-[11px] font-semibold uppercase tracking-wider text-brand leading-none mb-1"
+        >
+          {{ eyebrow }}
+        </p>
+        <h2
+          class="text-sm md:text-base font-semibold text-ink leading-snug line-clamp-2"
+          :title="questionText"
+        >
+          {{ questionText }}
+        </h2>
+      </div>
     </div>
 
     <div
@@ -50,7 +65,7 @@ function onWaveChange(e) {
         :value="state.waveId"
         :disabled="state.loading"
         @change="onWaveChange"
-        class="text-sm font-semibold text-ink-soft bg-surface-soft border border-line rounded-lg px-3 py-1.5 cursor-pointer hover:border-orange focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        class="text-sm font-semibold text-ink-soft bg-white border border-line rounded-full px-4 py-1.5 cursor-pointer hover:border-brand focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <option v-for="w in state.waves" :key="w.wave_id" :value="w.wave_id">
           {{ w.label || w.year }}

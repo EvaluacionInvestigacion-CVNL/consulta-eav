@@ -27,7 +27,9 @@ function tabLabel(query) {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg border border-line shadow-sm overflow-hidden">
+  <div
+    class="bg-white rounded-2xl border border-line shadow-sm overflow-hidden"
+  >
     <div
       v-if="results.length > 1"
       class="flex gap-1 overflow-x-auto px-3 pt-3 border-b border-surface"

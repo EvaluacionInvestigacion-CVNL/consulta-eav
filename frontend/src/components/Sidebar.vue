@@ -99,28 +99,33 @@ watch(canCompareYears, (ok) => {
       class="w-70 shrink-0 bg-white border-r border-line flex flex-col max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:shadow-2xl"
     >
       <!-- Logo -->
-      <div class="py-2 px-4 border-b border-line">
-        <div class="flex items-center justify-between gap-3 px-2 py-2">
+      <div class="px-4 py-3 border-b border-line">
+        <div class="flex items-center justify-between gap-3">
           <a
             href="/"
             @click="goHome"
             title="Ir al inicio"
-            class="flex items-center rounded-lg"
+            class="flex items-center gap-2.5 min-w-0 rounded-lg"
           >
             <img
-              src="/minilogo.webp"
-              alt=""
-              class="size-6 object-contain max-w-none"
+              src="/logo.webp"
+              alt="Cómo Vamos Nuevo León"
+              class="h-10 w-auto max-w-none"
             />
-            <span
-              class="font-extrabold text-brand text-center text-[20px] tracking-tight mx-1"
-              >Así Vamos</span
-            >
+            <span class="min-w-0 leading-tight">
+              <span
+                class="block text-[15px] font-bold text-brand tracking-tight"
+                >Así Vamos</span
+              >
+              <span class="block text-[11px] text-muted"
+                >Consulta de datos</span
+              >
+            </span>
           </a>
           <button
             @click="toggleSidebar"
             title="Ocultar panel"
-            class="shrink-0 p-2 rounded-lg text-muted hover:text-orange hover:bg-surface-soft transition-colors cursor-pointer"
+            class="shrink-0 p-2 rounded-lg text-muted hover:text-brand hover:bg-brand-soft transition-colors cursor-pointer"
           >
             <PanelLeft class="size-5" />
           </button>
@@ -140,14 +145,14 @@ watch(canCompareYears, (ok) => {
           >
             Modo de Consulta
           </label>
-          <div class="grid grid-cols-2 gap-2 bg-surface p-1 rounded-2xl">
+          <div class="grid grid-cols-2 gap-1 bg-surface p-1 rounded-full">
             <button
               @click="setQueryMode('manual')"
-              class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-bold transition-colors"
+              class="flex items-center justify-center gap-1.5 py-2 rounded-full text-sm font-semibold transition-colors"
               :class="
                 state.queryMode === 'manual'
-                  ? 'bg-white text-brand shadow-sm'
-                  : 'text-faint hover:text-muted'
+                  ? 'bg-brand text-white shadow-sm'
+                  : 'text-muted hover:text-ink'
               "
             >
               <SlidersHorizontal class="size-4" />
@@ -155,11 +160,11 @@ watch(canCompareYears, (ok) => {
             </button>
             <button
               @click="setQueryMode('ai')"
-              class="flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-bold transition-colors"
+              class="flex items-center justify-center gap-1.5 py-2 rounded-full text-sm font-semibold transition-colors"
               :class="
                 state.queryMode === 'ai'
-                  ? 'bg-white text-brand shadow-sm'
-                  : 'text-faint hover:text-muted'
+                  ? 'bg-brand text-white shadow-sm'
+                  : 'text-muted hover:text-ink'
               "
             >
               <Sparkles class="size-4" />
@@ -174,7 +179,7 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-yellow text-ink text-[11px] font-bold flex items-center justify-center"
                 >1</span
               >
               <span
@@ -222,7 +227,7 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-yellow text-ink text-[11px] font-bold flex items-center justify-center"
                 >2</span
               >
               <span
@@ -240,7 +245,7 @@ watch(canCompareYears, (ok) => {
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span
-                class="size-5 shrink-0 rounded-full bg-brand text-white text-[11px] font-bold flex items-center justify-center"
+                class="size-5 shrink-0 rounded-full bg-yellow text-ink text-[11px] font-bold flex items-center justify-center"
                 >3</span
               >
               <span
@@ -351,7 +356,7 @@ watch(canCompareYears, (ok) => {
         <template v-else>
           <button
             @click="newConversation"
-            class="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-white rounded-2xl px-4 py-2.5 text-sm font-bold shadow-sm transition-colors"
+            class="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-white rounded-full px-4 py-2.5 text-sm font-bold shadow-sm transition-colors"
           >
             <Plus class="size-4" />
             Nueva conversación
@@ -427,7 +432,7 @@ watch(canCompareYears, (ok) => {
         <button
           @click="runAndClose"
           :disabled="!canRun"
-          class="w-full bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-lg shadow-brand/20 transition-colors"
+          class="w-full bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded-full px-4 py-3 flex items-center justify-center gap-2 font-bold shadow-lg shadow-brand/20 transition-colors"
         >
           <Play class="size-4 fill-white" />
           Ejecutar consulta

@@ -135,7 +135,7 @@ watch(
               v-for="s in suggestions"
               :key="s"
               @click="useSuggestion(s)"
-              class="text-left text-sm text-ink-soft bg-white border border-line rounded-xl px-4 py-3 hover:border-brand hover:text-brand transition-colors"
+              class="text-left text-sm text-ink-soft bg-white border border-line rounded-2xl px-4 py-3 hover:border-brand hover:text-brand transition-colors"
             >
               {{ s }}
             </button>
@@ -193,7 +193,9 @@ watch(
     </div>
 
     <!-- Composer -->
-    <div class="border-t border-line bg-white/70 backdrop-blur px-8 py-4">
+    <div
+      class="border-t border-line bg-white/70 backdrop-blur px-4 md:px-8 py-4"
+    >
       <form
         @submit.prevent="submit"
         class="max-w-4xl mx-auto flex items-end gap-3"
@@ -203,12 +205,12 @@ watch(
           rows="1"
           placeholder="Escribe tu pregunta…"
           @keydown.enter.exact.prevent="submit"
-          class="flex-1 resize-none bg-surface border border-gray-300 rounded-2xl px-4 py-3 text-sm text-ink-soft focus:outline-none focus:border-brand max-h-40"
+          class="flex-1 resize-none bg-surface border border-line rounded-3xl px-4 py-3 text-sm text-ink focus:outline-none focus:border-brand focus:bg-white max-h-40 transition-colors"
         ></textarea>
         <button
           type="submit"
           :disabled="!input.trim() || chatLoading"
-          class="bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded-2xl px-5 py-3 flex items-center gap-2 font-bold shadow-lg shadow-brand/20 transition-colors shrink-0"
+          class="bg-brand hover:bg-brand-dark disabled:opacity-45 disabled:cursor-not-allowed text-white rounded-full size-11 flex items-center justify-center shadow-lg shadow-brand/20 transition-colors shrink-0"
         >
           <Send class="size-4 justify-center" />
         </button>

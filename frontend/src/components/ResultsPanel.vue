@@ -6,6 +6,7 @@ import {
   Download,
   Link as LinkIcon,
   Check,
+  ExternalLink,
 } from 'lucide-vue-next'
 import {
   state,
@@ -15,6 +16,7 @@ import {
   questionPicker,
   questionLink,
   followQueryLink,
+  toggleSidebar,
 } from '../store.js'
 import DataTable from './DataTable.vue'
 import PivotTables from './PivotTables.vue'
@@ -59,6 +61,28 @@ async function copyLink() {
   setTimeout(() => (linkCopied.value = false), 1500)
 }
 const appliedFilters = computed(() => state.lastResult?.filters_applied ?? [])
+
+// Pantalla de inicio: el rango de años disponible y los tres pasos.
+const waveSpan = computed(() => {
+  const years = state.waves.map((w) => Number(w.year)).filter(Boolean)
+  if (!years.length) return ''
+  return `${Math.min(...years)}–${Math.max(...years)}`
+})
+const steps = [
+  {
+    title: 'Elige una pregunta',
+    text: 'Búscala por tema, palabra o código en el panel izquierdo.',
+  },
+  {
+    title: 'Desglosa y filtra',
+    text: 'Cruza por sexo, edad, municipio o cualquier otra pregunta, y compara entre años.',
+  },
+  {
+    title: 'Ejecuta y descarga',
+    text: 'Mira la tabla o la gráfica, copia el enlace o baja el CSV.',
+  },
+]
+
 const fmtNum = (n) => (n == null ? '—' : Number(n).toLocaleString('es-MX'))
 const groupByLabel = computed(() => {
   const g = state.lastResult?.group_by
@@ -85,7 +109,7 @@ function setTab(t) {
          nada salte. -->
     <div
       v-if="state.loading && state.lastResult"
-      class="sticky top-0 z-10 -mx-4 -mt-4 mb-[calc(1rem-2px)] md:-mx-8 md:-mt-8 md:mb-[calc(2rem-2px)] h-0.5 overflow-hidden bg-brand/15"
+      class="sticky top-0 z-10 -mx-4 -mt-4 mb-3.5 md:-mx-8 md:-mt-8 md:mb-7.5 h-0.5 overflow-hidden bg-brand/15"
     >
       <div class="progress-bar h-full w-1/3 bg-brand"></div>
     </div>
@@ -109,138 +133,91 @@ function setTab(t) {
       <div class="text-sm">{{ state.error }}</div>
     </div>
 
-    <!-- Empty -->
-    <div
-      v-else-if="!state.lastResult"
-      class="flex flex-col items-center justify-center h-full text-faint text-center gap-3"
-    >
-      <div class="flex-1 overflow-auto p-4 md:p-8">
-        <div class="max-w-225 mx-auto">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white rounded-lg border border-line p-6">
-              <div class="flex items-start gap-4">
-                <!-- <div class="bg-brand/10 rounded-lg p-3 shrink-0">
-                  <svg
-                    class="size-6 text-brand"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div> -->
-                <div>
-                  <h3 class="font-semibold text-ink mb-2">Sobre los Datos</h3>
-                  <p class="text-sm text-muted leading-relaxed mb-3">
-                    Los datos provienen de la Encuesta Así Vamos realizada
-                    anualmente de 2016 a 2025 por
-                    <a href="https://comovamosnl.org/" target="_blank">
-                      <span class="font-medium underline text-brand">
-                        Cómo Vamos Nuevo León</span
-                      >
-                    </a>
-                    en colaboración con la UANL.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-lg border border-line p-6">
-              <div class="flex items-start gap-4">
-                <!-- <div class="bg-brand/10 rounded-lg p-3 shrink-0">
-                  <svg
-                    class="size-6 text-brand"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                    />
-                  </svg>
-                </div> -->
-                <div>
-                  <h3 class="font-semibold text-ink mb-2">Metodología</h3>
-                  <p class="text-sm text-muted leading-relaxed mb-3">
-                    Encuestas aplicadas mediante metodología probabilística con
-                    muestreo estratificado por nivel socioeconómico, edad y zona
-                    geográfica.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-brand rounded-lg p-5 md:p-8 text-white">
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <h3 class="font-bold text-xl mb-2">
-                  Acceso a Base de Datos Completa
-                </h3>
-                <div class="w-full justify-center">
-                  <p class="text-white/90 mb-4 text-center">
-                    ¿Necesitas acceso a los datos en bruto o realizar análisis
-                    personalizados? Aquí puedes descargar la base de datos.
-                  </p>
-                </div>
-                <div class="flex gap-3 justify-center">
-                  <a
-                    href="https://comovamosnl.org/encuesta-asi-vamos/"
-                    target="_blank"
-                  >
-                    <button
-                      class="bg-white text-ink-soft px-4 py-2 rounded-lg font-medium hover:bg-white/90 hover:cursor-pointer transition-colors text-sm"
-                    >
-                      Descargar base de datos
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="mt-8 bg-orange rounded-4xl p-6 border border-line text-center"
+    <!-- Inicio: qué es esto y cómo se usa -->
+    <div v-else-if="!state.lastResult" class="h-full">
+      <div class="max-w-225 mx-auto py-2 md:py-6">
+        <div class="mb-8 md:mb-10">
+          <p
+            class="text-[11px] font-semibold uppercase tracking-wider text-brand mb-2"
           >
-            <h3
-              class="font-extrabold text-yellow text-lg mb-3 flex items-center justify-center gap-2"
+            Encuesta Así Vamos<template v-if="waveSpan">
+              · {{ waveSpan }}</template
             >
-              ¿CÓMO USAR ESTA HERRAMIENTA?
-            </h3>
-            <ol class="space-y-2 text-sm text-ink-soft">
-              <li class="flex justify-center gap-3">
-                <span
-                  >Selecciona una pregunta de la encuesta en el panel
-                  izquierdo</span
-                >
-              </li>
-              <li class="flex justify-center gap-3">
-                <span
-                  >Elige cómo agrupar los resultados (por edad, zona, nivel
-                  socioeconómico, etc.)</span
-                >
-              </li>
-              <li class="flex justify-center gap-3">
-                <span
-                  >Haz clic en "Ejecutar consulta" para ver los resultados</span
-                >
-              </li>
-              <li class="flex justify-center gap-3">
-                <span
-                  >Visualiza los datos en formato de tabla o gráfica y descarga
-                  en CSV si lo necesitas</span
-                >
-              </li>
-            </ol>
+          </p>
+          <h1
+            class="text-[26px] md:text-[34px] leading-[1.15] font-bold text-ink mb-3"
+          >
+            Explora qué opina Nuevo León
+          </h1>
+          <button
+            @click="toggleSidebar"
+            class="md:hidden mt-4 inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white rounded-full px-5 py-2.5 text-sm font-bold shadow-lg shadow-brand/20 transition-colors"
+          >
+            Empezar una consulta
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div
+            v-for="(s, i) in steps"
+            :key="s.title"
+            class="bg-white rounded-3xl border border-line p-5"
+          >
+            <span
+              class="size-8 rounded-full bg-yellow text-ink text-sm font-bold flex items-center justify-center mb-3"
+              >{{ i + 1 }}</span
+            >
+            <h3 class="font-semibold text-ink mb-1">{{ s.title }}</h3>
+            <p class="text-sm text-muted leading-relaxed">{{ s.text }}</p>
           </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-white rounded-3xl border border-line p-5">
+            <h3 class="font-semibold text-ink mb-1.5">Sobre los datos</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Los datos provienen de la Encuesta Así Vamos, que
+              <a
+                href="https://comovamosnl.org/"
+                target="_blank"
+                rel="noopener"
+                class="font-medium text-brand underline underline-offset-2"
+                >Cómo Vamos Nuevo León</a
+              >
+              levanta cada año desde 2016 en colaboración con la UANL.
+            </p>
+          </div>
+          <div class="bg-white rounded-3xl border border-line p-5">
+            <h3 class="font-semibold text-ink mb-1.5">Metodología</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Encuesta probabilística con muestreo estratificado por nivel
+              socioeconómico, edad y zona geográfica. Los resultados se
+              proyectan a la población con el factor de expansión oficial.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-brand rounded-3xl p-6 md:p-8 text-white flex flex-col md:flex-row md:items-center gap-4 md:gap-8"
+        >
+          <div class="flex-1">
+            <h3 class="font-bold text-lg md:text-xl mb-1">
+              ¿Necesitas la base de datos completa?
+            </h3>
+            <p class="text-sm text-white/85 leading-relaxed">
+              Los microdatos de la encuesta están en el sitio de Cómo Vamos
+              Nuevo León.
+            </p>
+          </div>
+          <a
+            href="https://comovamosnl.org/encuesta-asi-vamos/"
+            target="_blank"
+            rel="noopener"
+            class="shrink-0 inline-flex items-center justify-center gap-2 bg-yellow hover:bg-[#ffc933] text-ink font-bold rounded-full px-5 py-2.5 text-sm transition-colors"
+          >
+            Descargar base de datos
+            <ExternalLink class="size-4" />
+          </a>
         </div>
       </div>
     </div>
@@ -259,7 +236,7 @@ function setTab(t) {
       >
         <!-- Data Visualization Card -->
         <div
-          class="bg-white rounded-lg border border-line shadow-sm overflow-hidden"
+          class="bg-white rounded-2xl border border-line shadow-sm overflow-hidden"
         >
           <div
             class="border-b border-surface px-3 md:px-6 py-3 flex flex-wrap items-center justify-between gap-2"
@@ -293,7 +270,7 @@ function setTab(t) {
             <div class="flex items-center gap-2 shrink-0">
               <button
                 @click="copyLink"
-                class="flex items-center gap-2 py-1.5 px-2 border border-line rounded hover:bg-surface-soft transition-colors"
+                class="flex items-center gap-2 py-1.5 px-3 border border-line rounded-full hover:bg-surface-soft transition-colors"
               >
                 <Check v-if="linkCopied" class="size-3.5 text-brand" />
                 <LinkIcon v-else class="size-3.5 text-ink-soft" />
@@ -304,7 +281,7 @@ function setTab(t) {
               <button
                 @click="exportCurrentCSV"
                 :disabled="exportDisabled"
-                class="flex items-center gap-2 py-1.5 px-2 border border-line rounded hover:bg-surface-soft transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                class="flex items-center gap-2 py-1.5 px-3 border border-line rounded-full hover:bg-surface-soft transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
               >
                 <Download class="size-3.5 text-ink-soft" />
                 <span class="font-semibold text-sm text-ink-soft"
@@ -334,8 +311,15 @@ function setTab(t) {
            juntos y separados sólo por una divisoria interna. Vive aquí y no en
            PivotTables para que también se vea en la pestaña Gráfica. -->
         <div
-          class="bg-white border border-line rounded-lg text-sm overflow-hidden"
+          class="bg-white border border-line rounded-2xl text-sm overflow-hidden"
         >
+          <!-- En el teléfono la barra superior recorta la pregunta: aquí va
+               completa. -->
+          <p
+            class="md:hidden px-5 pt-3 text-sm font-medium text-ink leading-snug"
+          >
+            {{ state.lastResult.question.q_text }}
+          </p>
           <div class="px-5 py-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             <!-- Pregunta -->
             <span class="inline-flex items-center gap-2">
