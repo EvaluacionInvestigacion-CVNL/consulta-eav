@@ -102,8 +102,16 @@ def year_comparability(wave: str, q_id: str) -> list[dict]:
     Las versiones comparables (el concepto, o sólo la propia pregunta si no
     tiene) llevan `comparable: True`. Las que el equipo revisó y declaró NO
     comparables llevan `comparable: False` y el motivo, para que la UI explique
-    por qué no se comparan. Una ola ya cubierta por una versión comparable no se
-    repite, y los encabezados de batería sin datos (`sin_datos`) no se listan.
+    por qué no se comparan.
+
+    Una exclusión se declara contra UNA pregunta de UN año, pero esa pregunta
+    suele ser la misma en varios años (su concepto). Por eso la entrada cubre
+    toda esa familia: `years` trae sus olas, sin las que ya cubre una versión
+    comparable, y `year`/`q_id` son la más reciente de ellas, para que el enlace
+    abra esa versión y ahí se vean las demás. Así no quedan años sin explicar y
+    la lista no crece con cada ola nueva. Una familia sale una sola vez aunque
+    la alcancen varias exclusiones. Los encabezados de batería sin datos
+    (`sin_datos`) no se listan.
     """
     catalog = _catalog()
     _, concept_id, _ = catalog.question[(wave, q_id)]
@@ -111,22 +119,45 @@ def year_comparability(wave: str, q_id: str) -> list[dict]:
         catalog.members_by_concept.get(concept_id, {}) if concept_id else {wave: q_id}
     )
 
-    def entry(w, q, **extra):
-        return {"year": w, "q_id": q, "q_text": catalog.question[(w, q)][2] or "", **extra}
+    def entry(w, q, years, **extra):
+        return {
+            "year": w,
+            "q_id": q,
+            "q_text": catalog.question[(w, q)][2] or "",
+            "years": years,
+            **extra,
+        }
 
-    versions = {w: entry(w, q, comparable=True) for w, q in members.items()}
+    rows = [entry(w, q, [w], comparable=True) for w, q in members.items()]
+    seen_families = set()
     for member in members.items():
         for (other_wave, other_q), reason in catalog.exclusions.get(member, []):
-            if other_wave in versions or reason == "sin_datos":
+            if reason == "sin_datos":
                 continue
-            versions[other_wave] = entry(
-                other_wave,
-                other_q,
-                comparable=False,
-                reason=reason,
-                reason_label=EXCLUSION_REASONS.get(reason, reason),
+            other_concept = catalog.question[(other_wave, other_q)][1]
+            family = (
+                catalog.members_by_concept.get(other_concept) if other_concept else None
+            ) or {other_wave: other_q}
+            key = other_concept or (other_wave, other_q)
+            if key in seen_families:
+                continue
+            seen_families.add(key)
+            years = sorted(w for w in family if w not in members)
+            if not years:
+                continue
+            newest = years[-1]
+            rows.append(
+                entry(
+                    newest,
+                    family[newest],
+                    years,
+                    comparable=False,
+                    reason=reason,
+                    reason_label=EXCLUSION_REASONS.get(reason, reason),
+                )
             )
-    return [versions[w] for w in sorted(versions)]
+    rows.sort(key=lambda r: (r["year"], r["q_id"]))
+    return rows
 
 
 # ---------------------------------------------------------------------------

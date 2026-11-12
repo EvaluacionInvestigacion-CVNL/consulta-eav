@@ -558,6 +558,71 @@ def test_year_texts_explain_non_comparable_versions():
     assert by_year["2024"]["comparable"] is False
     assert by_year["2024"]["reason"] == "base"
     assert by_year["2024"]["reason_label"]
+    assert by_year["2024"]["years"][-1] == "2024"
+
+
+def test_year_texts_cover_the_whole_excluded_family():
+    """`2025 p91` sólo está excluida contra `2024 p79_3`, pero p79_3 es la misma
+    pregunta desde 2021: la fila cubre todos esos años, enlaza la versión más
+    reciente, y no deja a 2021–2023 sin explicar."""
+    result = run_query(QueryRequest(question_id="p91"))
+    excluded = [t for t in result["year_texts"] if not t["comparable"]]
+    assert len(excluded) == 1
+    row = excluded[0]
+    assert (row["year"], row["q_id"]) == ("2024", "p79_3")
+    assert {"2021", "2022", "2023", "2024"} <= set(row["years"])
+    assert "2025" not in row["years"]
+    assert row["years"] == sorted(row["years"])
+
+
+def test_year_texts_families_are_deduplicated_and_non_contiguous(monkeypatch):
+    """Con un catálogo de juguete: dos exclusiones a la misma familia dan una
+    fila; la familia puede tener huecos (sin 2023); un año ya cubierto por una
+    versión comparable no se repite (ni como parte de una familia ni como
+    exclusión suelta); dos familias que terminan el mismo año dan dos filas;
+    `sin_datos` no sale."""
+    from types import SimpleNamespace
+
+    from services import dimension_service
+
+    question = {
+        ("2025", "a25"): ("categorica", "cA", "A en 2025"),
+        ("2024", "a24"): ("categorica", "cA", "A en 2024"),
+        ("2021", "f21"): ("categorica", "cF", "F en 2021"),
+        ("2022", "f22"): ("categorica", "cF", "F en 2022"),
+        ("2024", "f24"): ("categorica", "cF", "F en 2024"),
+        ("2022", "g22"): ("categorica", None, "G suelta"),
+        ("2024", "g24"): ("categorica", None, "otra de 2024"),
+        ("2023", "h23"): ("categorica", None, "encabezado sin datos"),
+    }
+    members = {
+        "cA": {"2024": "a24", "2025": "a25"},
+        "cF": {"2021": "f21", "2022": "f22", "2024": "f24"},
+    }
+    exclusions = {
+        ("2025", "a25"): [
+            (("2024", "f24"), "opciones"),
+            (("2022", "f22"), "opciones"),  # misma familia: no repite
+            (("2022", "g22"), "escala"),
+            (("2024", "g24"), "escala"),  # 2024 ya lo cubre a24: no sale
+            (("2023", "h23"), "sin_datos"),
+        ],
+    }
+    monkeypatch.setattr(
+        dimension_service,
+        "_catalog",
+        lambda: SimpleNamespace(
+            question=question, members_by_concept=members, exclusions=exclusions
+        ),
+    )
+    rows = dimension_service.year_comparability("2025", "a25")
+    assert [(r["year"], r["q_id"], r["years"], r["comparable"]) for r in rows] == [
+        ("2022", "f22", ["2021", "2022"], False),  # 2024 ya es comparable (a24)
+        ("2022", "g22", ["2022"], False),
+        ("2024", "a24", ["2024"], True),
+        ("2025", "a25", ["2025"], True),
+    ]
+    assert rows[0]["reason"] == "opciones" and rows[1]["reason"] == "escala"
 
 
 def test_year_question_filter_without_concept_raises_400():

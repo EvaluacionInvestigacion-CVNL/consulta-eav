@@ -257,6 +257,26 @@ export function filterValueLabel(filter) {
   return inner?.get(v) ?? String(v)
 }
 
+// "2019–2024", "2021, 2023–2024" o "2019 y 2024": agrupa años consecutivos
+// según las olas cargadas, así que un año sin encuesta (2020) no corta el rango.
+export function yearRangeLabel(years) {
+  const order = state.waves.map((w) => String(w.wave_id)).sort()
+  const idx = (y) => order.indexOf(y)
+  const sorted = [...new Set((years || []).map(String))].sort()
+  const groups = []
+  for (const y of sorted) {
+    const last = groups[groups.length - 1]
+    const prev = last?.[last.length - 1]
+    if (prev && idx(prev) >= 0 && idx(y) === idx(prev) + 1) last.push(y)
+    else groups.push([y])
+  }
+  const parts = groups.map((g) =>
+    g.length > 1 ? `${g[0]}–${g[g.length - 1]}` : g[0],
+  )
+  if (parts.length <= 1) return parts[0] || ''
+  return `${parts.slice(0, -1).join(', ')} y ${parts[parts.length - 1]}`
+}
+
 export function attributeLabel(attr) {
   if (attr === 'city_id') return 'Ciudad'
   const a = state.attributes.find((x) => x.attribute === attr)

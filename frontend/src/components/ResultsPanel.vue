@@ -17,6 +17,7 @@ import {
   questionLink,
   followQueryLink,
   toggleSidebar,
+  yearRangeLabel,
 } from '../store.js'
 import DataTable from './DataTable.vue'
 import PivotTables from './PivotTables.vue'
@@ -30,6 +31,13 @@ const totalRespondents = computed(
 const isYear = computed(() => state.lastResult?.group_by === 'year')
 const yearBases = computed(() => state.lastResult?.year_bases ?? [])
 const yearTexts = computed(() => state.lastResult?.year_texts ?? [])
+// Olas cargadas que ninguna fila cubre: ahí la pregunta no se hizo.
+const yearsNotAsked = computed(() => {
+  const covered = new Set(yearTexts.value.flatMap((t) => t.years || [t.year]))
+  return state.waves
+    .map((w) => String(w.wave_id))
+    .filter((y) => !covered.has(y))
+})
 
 // Las otras preguntas del mismo bloque (p. ej. los incisos de una batería).
 const blockSiblings = computed(() => {
@@ -417,11 +425,11 @@ function setTab(t) {
             <ul v-else class="space-y-1">
               <li
                 v-for="t in yearTexts"
-                :key="t.year"
+                :key="`${t.year}-${t.q_id}`"
                 class="text-ink-soft flex gap-2"
               >
                 <span class="font-semibold text-ink shrink-0">{{
-                  t.year
+                  yearRangeLabel(t.years || [t.year])
                 }}</span>
                 <span
                   v-if="!isYear && t.year === state.lastResult.wave_id"
@@ -438,7 +446,11 @@ function setTab(t) {
                       questionLink(t.q_id, { w: t.year, keepCut: false }),
                     )
                   "
-                  :title="`Abrir ${t.q_id} en ${t.year}`"
+                  :title="
+                    t.years && t.years.length > 1
+                      ? `Abrir ${t.q_id} en ${t.year}, la versión más reciente de esa pregunta`
+                      : `Abrir ${t.q_id} en ${t.year}`
+                  "
                   :class="[
                     'shrink-0 font-mono text-xs rounded px-1.5 py-0.5 self-start hover:underline',
                     t.comparable === false
@@ -457,6 +469,12 @@ function setTab(t) {
                 </span>
               </li>
             </ul>
+            <p
+              v-if="yearTexts.length > 1 && yearsNotAsked.length"
+              class="mt-1.5 text-xs text-faint"
+            >
+              No se preguntó en {{ yearRangeLabel(yearsNotAsked) }}.
+            </p>
           </div>
 
           <!-- Preguntas del mismo bloque: links que conservan el corte actual -->
