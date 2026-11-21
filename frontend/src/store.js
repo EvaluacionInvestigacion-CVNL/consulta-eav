@@ -29,7 +29,7 @@ export const state = reactive({
 })
 
 const CHAT_STORAGE_KEY = 'eav-chat-conversations'
-const MAX_CONVERSATIONS = 5
+const MAX_CONVERSATIONS = 10
 
 export const selectedQuestion = computed(
   () => state.questions.find((q) => q.q_id === state.questionId) || null,
