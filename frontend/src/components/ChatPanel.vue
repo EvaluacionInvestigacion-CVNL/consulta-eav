@@ -76,7 +76,8 @@ function useSuggestion(s) {
   submit()
 }
 
-// Pie de la respuesta: qué consultó el modelo, en palabras.
+// Pie de la respuesta: qué consultó el modelo, en palabras. Sólo se muestra
+// cuando no hay tarjeta de resultados; si la hay, la tarjeta ya lo dice.
 function toolSummary(calls) {
   if (!calls || !calls.length) return ''
   return calls
@@ -161,7 +162,7 @@ watch(
             >
               <div class="md" v-html="renderMarkdown(m.text)"></div>
               <p
-                v-if="m.toolCalls && m.toolCalls.length"
+                v-if="m.toolCalls?.length && !resultsOf(m).length"
                 class="mt-2 pt-2 border-t border-surface text-[11px] text-faint font-mono"
               >
                 {{ toolSummary(m.toolCalls) }}

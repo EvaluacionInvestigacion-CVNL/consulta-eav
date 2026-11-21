@@ -51,8 +51,17 @@ function tabLabel(query) {
         {{ tabLabel(r.query) }}
       </button>
     </div>
+    <!-- Con una sola consulta no hay pestañas, pero se dice igual qué se
+         consultó: esta tarjeta es el único lugar donde aparece. -->
+    <div v-else class="px-3 pt-3 border-b border-surface">
+      <span
+        class="inline-block px-3 py-1.5 text-xs font-mono text-brand border-b-2 border-brand"
+      >
+        {{ tabLabel(results[0].query) }}
+      </span>
+    </div>
     <p
-      v-if="results.length > 1 && current.result.question?.q_text"
+      v-if="current.result.question?.q_text"
       class="px-5 pt-3 text-sm text-ink-soft"
     >
       <span class="font-mono text-xs text-brand mr-1">{{
