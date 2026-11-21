@@ -12,7 +12,7 @@ from fastapi import HTTPException
 
 from db_runtime import get_conn
 from repositories import survey_repository
-from services import wave_service
+from services import dimension_service, wave_service
 from services.query.models import QueryRequest
 from services.query.runner import run_query
 
@@ -148,6 +148,22 @@ def resolve_question_for_wave(question_id: str, target_wave: str) -> str | None:
         )
 
 
+def translate_filters_to_wave(filters: list[dict], target_wave: str) -> list[dict]:
+    """Reexpresa los filtros del modelo en la codificación de `target_wave`.
+
+    El modelo sólo ve el catálogo de atributos del año default, pero los códigos
+    cambian entre olas (en 2021 y 2022 `sexo` 1 es Hombre, no Mujer). Se traduce
+    por opción canónica, igual que la vista por año; un valor sin equivalente en
+    esa ola es un 400 que el modelo recibe como error, nunca el código crudo."""
+    default_wave = wave_service.default_wave()
+    if not filters or target_wave == default_wave:
+        return filters
+    translated = dimension_service.translate_filters_across_waves(
+        filters, default_wave, [target_wave], target_concept_id=""
+    )
+    return translated[target_wave]
+
+
 # ---------------------------------------------------------------------------
 # Ejecución y resumen para el modelo
 # ---------------------------------------------------------------------------
@@ -212,6 +228,7 @@ def execute(args: dict) -> tuple[dict | None, dict[str, Any], dict[str, Any]]:
 
         # Para un año específico (no la comparación 'year') hay que traducir el q_id
         # a la numeración de esa ola. 'year' usa el q_id default y se alinea solo.
+        wave_filters = filters
         if wave_id and group_by != "year":
             resolved = resolve_question_for_wave(question_id, wave_id)
             if resolved is None:
@@ -222,12 +239,13 @@ def execute(args: dict) -> tuple[dict | None, dict[str, Any], dict[str, Any]]:
                     },
                     effective_query(question_id),
                 )
+            wave_filters = translate_filters_to_wave(filters, wave_id)
             question_id = resolved
 
         result = run_query(
             QueryRequest(
                 question_id=question_id,
-                filters=filters,
+                filters=wave_filters,
                 group_by=group_by,
                 initial_only=args.get("initial_only", True),
                 wave_id=wave_id,
@@ -244,5 +262,7 @@ def execute(args: dict) -> tuple[dict | None, dict[str, Any], dict[str, Any]]:
 
     summary = summarize_result(result)
     summary["año"] = year_label
-    # El q_id resuelto (traducido a la ola pedida) para la tarjeta del chat.
+    # El q_id resuelto (traducido a la ola pedida) para la tarjeta del chat. Los
+    # filtros van en los códigos del catálogo default, que es con el que el
+    # frontend les pone nombre.
     return result, summary, effective_query(question_id, filters)

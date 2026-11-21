@@ -157,3 +157,54 @@ def test_last_round_forces_an_answer_and_keeps_every_result(monkeypatch, categor
     assert len(out["tool_calls"]) == conversation.MAX_TOOL_ROUNDS - 1
     assert [r["query"]["group_by"] for r in out["data"]] == ["answer", "sexo"]
     assert [r["result"]["format"] for r in out["data"]] == ["flat", "pivot"]
+
+
+def test_exec_query_translates_attribute_codes_to_the_requested_wave():
+    """El modelo filtra con los códigos del año default, pero cambian entre olas
+    (en 2021 y 2022 `sexo` 1 es Hombre). "Mujeres en 2022" tiene que traer a las
+    mujeres, no al código 1 crudo de esa ola."""
+    from services import wave_service
+    from services.catalog_service import get_attributes
+
+    sexo = next(a for a in get_attributes() if a["attribute"] == "sexo")
+    mujer = next(v["value"] for v in sexo["values"] if v["label"] == "Mujer")
+    checked = 0
+    for wave in wave_service.wave_ids():
+        if query_tool.resolve_question_for_wave("p111", wave) is None:
+            continue
+        result, summary, effective = query_tool.execute(
+            {
+                "question_id": "p111",
+                "wave_id": wave,
+                "group_by": "sexo",
+                "filters": [{"attribute": "sexo", "value": [mujer]}],
+            }
+        )
+        assert result is not None, (wave, summary)
+        assert result["counts"]["columns"][2:-1] in (["Mujer"], ["Femenino"]), wave
+        # La tarjeta del chat conserva los códigos del catálogo default.
+        assert effective["filters"] == [{"attribute": "sexo", "value": [mujer]}]
+        checked += 1
+    assert checked >= 2
+
+
+def test_exec_query_untranslatable_filter_is_an_error_not_a_raw_code():
+    from services import wave_service
+
+    default = wave_service.default_wave()
+    older = [
+        w
+        for w in wave_service.wave_ids()
+        if w != default and query_tool.resolve_question_for_wave("p111", w)
+    ]
+    if not older:
+        pytest.skip("p111 no está en otra ola cargada")
+    result, summary, _ = query_tool.execute(
+        {
+            "question_id": "p111",
+            "wave_id": min(older),
+            "filters": [{"attribute": "sexo", "value": [424242]}],
+        }
+    )
+    assert result is None
+    assert "equivalencia" in summary["error"]
