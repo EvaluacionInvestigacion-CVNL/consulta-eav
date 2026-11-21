@@ -1,8 +1,8 @@
-fastapi>=0.110
-python-dotenv>=1.0
-uvicorn[standard]>=0.30
-duckdb>=1.0
-pydantic>=2.0
-python-multipart>=0.0.9
-google-genai>=1.0
-sentry-sdk>=2.0
+fastapi==0.136.1
+python-dotenv==1.2.3
+uvicorn[standard]==0.46.0
+duckdb==1.5.2
+pydantic==2.13.3
+python-multipart==0.0.27
+google-genai==2.8.0
+sentry-sdk==2.68.1
